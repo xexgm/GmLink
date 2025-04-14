@@ -9,9 +9,9 @@ option java_multiple_files = true;
 option java_outer_classname = "ProtoHBOuter";
 
 message ProtoHB {
-  fixed32 magic = 1;         // 4字节魔数(0xDEADBEEF)
-  uint32 version = 2;        // 协议版本
-  uint32 cmd = 3;            // 固定为0x0003
+  fixed32 magic = 1;        // 固定4字节魔数(0xDEADBEEF)
+  int32 version = 2;       // 协议版本
+  int32 cmd = 3;           // 2字节命令字,0x0001-业务消息，0x0002-ack，0x0003-心跳
 
   string from_machine_id = 4; // 发送端机器标识
   string to_machine_id = 5;   // 接收端机器标识
