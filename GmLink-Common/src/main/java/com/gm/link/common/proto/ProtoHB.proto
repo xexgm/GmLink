@@ -1,10 +1,11 @@
 // ProtoHB.proto
 syntax = "proto3";
 
-package com.gm.link.common.proto;
+package com.gm.link.common.domain.protobuf;
 
 // ProtoHB.proto
-option java_package = "com.gm.link.common.protobuf";
+option java_package = "com.gm.link.common.domain.protobuf";
+option java_multiple_files = true;
 option java_outer_classname = "ProtoHBOuter";
 
 message ProtoHB {

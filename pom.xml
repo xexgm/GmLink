@@ -35,11 +35,18 @@
 
   <dependencies>
 
+      <!--netty-->
+      <dependency>
+          <groupId>io.netty</groupId>
+          <artifactId>netty-all</artifactId>
+          <version>${netty.version}</version>
+      </dependency>
+
 <!--    protobuf-java库-->
     <dependency>
       <groupId>com.google.protobuf</groupId>
       <artifactId>protobuf-java</artifactId>
-      <version>3.25.1</version> <!-- 使用最新版本 -->
+      <version>3.19.4</version>
     </dependency>
 
     <!--lombok-->
