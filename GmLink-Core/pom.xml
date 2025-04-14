@@ -8,11 +8,20 @@
     </parent>
 
     <artifactId>GmLink-Core</artifactId>
-    <name>GmLink-Core</name>
 
     <properties>
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
+
+    <!-- 依赖Common模块 -->
+    <dependencies>
+        <dependency>
+            <groupId>com.gm</groupId>  <!-- 必须与Common模块的groupId完全一致 -->
+            <artifactId>GmLink-Common</artifactId>  <!-- 必须与Common模块的artifactId一致 -->
+            <version>${project.version}</version>  <!-- 正确变量引用格式 -->
+        </dependency>
+    </dependencies>
+
 </project>

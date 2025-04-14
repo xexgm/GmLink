@@ -1,0 +1,21 @@
+// ProtoHB.proto
+syntax = "proto3";
+
+package com.gm.link.common.proto;
+
+// ProtoHB.proto
+option java_package = "com.gm.link.common.protobuf";
+option java_outer_classname = "ProtoHB";
+
+message ProtoHB {
+  fixed32 magic = 1;         // 4字节魔数(0xDEADBEEF)
+  uint32 version = 2;        // 协议版本
+  uint32 cmd = 3;            // 固定为0x0003
+
+  string from_machine_id = 4; // 发送端机器标识
+  string to_machine_id = 5;   // 接收端机器标识
+
+  // 心跳扩展信息
+  int64 timestamp = 6;        // 心跳发送时间
+  fixed32 check_sum = 7;      // 校验码(时间戳+机器ID)
+}

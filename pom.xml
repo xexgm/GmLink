@@ -11,8 +11,8 @@
   <packaging>pom</packaging>
 
   <modules>
+      <module>GmLink-Common</module>
     <module>GmLink-Core</module>
-    <module>GmLink-Common</module>
     <module>GmLink-Bootstrap</module>
   </modules>
 
@@ -32,7 +32,15 @@
     <commons-beanutils.version>1.9.4</commons-beanutils.version>
   </properties>
 
+
   <dependencies>
+
+<!--    protobuf-java库-->
+    <dependency>
+      <groupId>com.google.protobuf</groupId>
+      <artifactId>protobuf-java</artifactId>
+      <version>3.25.1</version> <!-- 使用最新版本 -->
+    </dependency>
 
     <!--lombok-->
     <dependency>
@@ -67,4 +75,6 @@
     </dependency>
 
   </dependencies>
+
+
 </project>
