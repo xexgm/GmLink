@@ -39,14 +39,6 @@
                     <protoSourceRoot>src/main/java/com/gm/link/common/proto</protoSourceRoot>
                     <!-- 生成 Java 代码的目录 -->
                     <outputDirectory>src/main/java</outputDirectory>
-                    <!-- 启用proto3语法支持 -->
-                    <protocPlugins>
-                        <protocPlugin>
-                            <id>java</id>
-                            <groupId>org.apache.maven.plugins</groupId>
-                            <artifactId>maven-antrun-plugin</artifactId>
-                        </protocPlugin>
-                    </protocPlugins>
                 </configuration>
             </plugin>
         </plugins>

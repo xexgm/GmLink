@@ -5,7 +5,7 @@ package com.gm.link.common.proto;
 
 // ProtoHB.proto
 option java_package = "com.gm.link.common.protobuf";
-option java_outer_classname = "ProtoHB";
+option java_outer_classname = "ProtoHBOuter";
 
 message ProtoHB {
   fixed32 magic = 1;         // 4字节魔数(0xDEADBEEF)
