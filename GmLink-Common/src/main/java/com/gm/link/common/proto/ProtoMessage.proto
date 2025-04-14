@@ -11,7 +11,7 @@ option java_outer_classname = "ProtoMessageOuter";
 message ProtoMessage {
   // 固定头
   fixed32 magic = 1;        // 固定4字节魔数(0xDEADBEEF)
-  int32 version = 2;       // 协议版本
+  int32 version = 2;       // 2字节协议版本
   int32 cmd = 3;           // 2字节命令字,0x0001-业务消息，0x0002-ack，0x0003-心跳
 
   // 业务标识
