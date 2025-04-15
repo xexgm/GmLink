@@ -19,7 +19,7 @@ public interface ProtoMessageOrBuilder extends
 
   /**
    * <pre>
-   * 协议版本
+   * 2字节协议版本
    * </pre>
    *
    * <code>int32 version = 2;</code>

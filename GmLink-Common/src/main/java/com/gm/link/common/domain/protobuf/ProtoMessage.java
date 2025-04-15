@@ -240,7 +240,7 @@ private static final long serialVersionUID = 0L;
   private int version_;
   /**
    * <pre>
-   * 协议版本
+   * 2字节协议版本
    * </pre>
    *
    * <code>int32 version = 2;</code>
@@ -1378,7 +1378,7 @@ private static final long serialVersionUID = 0L;
     private int version_ ;
     /**
      * <pre>
-     * 协议版本
+     * 2字节协议版本
      * </pre>
      *
      * <code>int32 version = 2;</code>
@@ -1390,7 +1390,7 @@ private static final long serialVersionUID = 0L;
     }
     /**
      * <pre>
-     * 协议版本
+     * 2字节协议版本
      * </pre>
      *
      * <code>int32 version = 2;</code>
@@ -1405,7 +1405,7 @@ private static final long serialVersionUID = 0L;
     }
     /**
      * <pre>
-     * 协议版本
+     * 2字节协议版本
      * </pre>
      *
      * <code>int32 version = 2;</code>

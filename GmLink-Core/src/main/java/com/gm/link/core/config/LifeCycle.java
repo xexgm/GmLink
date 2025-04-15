@@ -13,7 +13,7 @@ public interface LifeCycle {
     /**
      * 启动
      */
-    void start();
+    void start() throws InterruptedException;
 
     /**
      * 关闭
