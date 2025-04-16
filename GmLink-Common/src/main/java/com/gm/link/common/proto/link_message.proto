@@ -11,7 +11,7 @@ message PacketHeader {
   string token = 3; // 用户凭证，验证用户身份，16字节，可根据业务调整
   int32 compression = 4;  // 1字节，压缩方式，标识是否启用压缩，0-不压缩，1-gzip
   int32 encryption = 5; // 1字节，加密方式，标识是否启用加密，0-不加密，1-aes
-  int32 messageType = 6;  // 2字节，数据类型标识，标识数据类型，0-文本，1-图片，2-语音，3-视频，4-文件，5-控制命令，6-ack，7-心跳，8-其他
+  int32 messageType = 6;  // 2字节，数据类型标识，标识数据类型，0-登录，1-心跳，2-ack，3-强制下线,4-私聊，5-群聊，6-系统消息，待扩展
 }
 
 message PacketBody {

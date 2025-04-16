@@ -17,7 +17,7 @@ public class LinkConfig {
     /**
      * 监听端口
      */
-    private int port = DEFAULT_PORT;
+    private int port = LISTENING_PORT;
 
     /**
      * 运行环境

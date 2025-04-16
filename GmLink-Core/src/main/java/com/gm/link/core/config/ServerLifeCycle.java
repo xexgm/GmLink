@@ -3,7 +3,7 @@ package com.gm.link.core.config;
 /**
  * @Author: xexgm
  */
-public interface LifeCycle {
+public interface ServerLifeCycle {
 
     /**
      * 初始化

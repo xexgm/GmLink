@@ -7,7 +7,7 @@ public interface LinkConfigConstant {
 
     String DEFAULT_SERVICE_NAME = "gm-link";
 
-    int DEFAULT_PORT = 9999;
+    int LISTENING_PORT = 9999;
 
     String DEFAULT_ENV = "dev";
 }
