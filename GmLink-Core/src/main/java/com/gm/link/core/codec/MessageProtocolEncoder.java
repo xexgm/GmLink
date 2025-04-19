@@ -22,7 +22,7 @@ public class MessageProtocolEncoder extends MessageToByteEncoder<CompleteMessage
 
     @Override
     protected void encode(ChannelHandlerContext ctx, CompleteMessage message, ByteBuf out) throws Exception {
-        log.info("[Outbound-encodeData] 发送者uid: " + message.getPacketHeader().getUid());
+        log.info("[Outbound-encodeData] 发送消息: {}", message);
         // 依次序列化
         // 包边界
         out.writeShort(ProtoConstant.MAGIC);

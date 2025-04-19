@@ -49,6 +49,7 @@ public class MessageProtocolDecoderTest {
         PacketHeader header = PacketHeader.newBuilder()
                 .setUid(10001)         // 用户ID
                 .setAppId(1)    // 协议类型
+                .setMessageType((short) 1)
                 .build();
 
         // 构建消息体内容

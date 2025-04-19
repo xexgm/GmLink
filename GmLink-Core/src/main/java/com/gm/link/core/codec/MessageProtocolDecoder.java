@@ -67,7 +67,7 @@ public class MessageProtocolDecoder extends ByteToMessageDecoder {
         // parseFrom
         PacketHeader packetHeader = PacketHeader.parseFrom(headerBytes);
 
-        log.info("[DecodeMessageProtocol] 解析 uid: {} 发送的数据", packetHeader.getUid());
+        log.info("[DecodeMessageProtocol] 解析包头: {} ", packetHeader);
 
         // 对 dataBytes 先解密
         if (packetHeader.getEncryption() == 1) {

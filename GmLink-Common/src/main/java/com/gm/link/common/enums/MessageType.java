@@ -22,4 +22,13 @@ public enum MessageType {
     MessageType(short type) {
         this.type = type;
     }
+
+    public static MessageType fromType(short type) {
+        for (MessageType typeEnum : values()) {
+            if (typeEnum.getType() == type) {
+                return typeEnum;
+            }
+        }
+        return null;
+    }
 }
