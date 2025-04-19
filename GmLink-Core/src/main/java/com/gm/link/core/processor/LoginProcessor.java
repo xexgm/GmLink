@@ -3,12 +3,23 @@ package com.gm.link.core.processor;
 import com.gm.link.common.constant.ChannelAttrKey;
 import com.gm.link.common.domain.model.CompleteMessage;
 import com.gm.link.common.domain.model.MessageBody;
+import com.gm.link.common.domain.model.RedisOperationMessage;
 import com.gm.link.common.domain.protobuf.PacketHeader;
 import com.gm.link.common.enums.AppId;
+import com.gm.link.common.utils.JsonUtil;
+import com.gm.link.core.config.KafkaConfig;
+import com.gm.link.core.config.RedisConfig;
+import com.gm.link.core.kafka.KafkaProducerManager;
 import com.gm.link.core.netty.UserChannelCtxMap;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.util.AttributeKey;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.kafka.clients.producer.KafkaProducer;
+import org.apache.kafka.clients.producer.ProducerRecord;
+import org.apache.kafka.clients.producer.RecordMetadata;
+
+import java.util.concurrent.Future;
 
 import static com.gm.link.common.enums.AppId.LINK_SERVER;
 import static com.gm.link.common.enums.MessageType.LOGIN_MESSAGE;
@@ -16,6 +27,7 @@ import static com.gm.link.common.enums.MessageType.LOGIN_MESSAGE;
 /**
  * @Author: xexgm
  */
+@Slf4j
 public class LoginProcessor extends AbstractMessageProcessor<CompleteMessage>{
 
     /********* 单例 ********/
@@ -44,26 +56,57 @@ public class LoginProcessor extends AbstractMessageProcessor<CompleteMessage>{
         // 初始化心跳次数属性
         AttributeKey<Long> heartBeatTimesKey = AttributeKey.valueOf(ChannelAttrKey.HEARTBEAT_TIMES);
         ctx.channel().attr(heartBeatTimesKey).set(0L);
-        // 3.往kafka 发登录消息
+        // 3.往kafka 发登录消息,redis保存 userid - 机器id，以表示在线状态
 
+        // 获取 producer
+        KafkaProducer<String, String> producer = KafkaProducerManager.getProducer();
 
-        // 响应客户端已登录
-        CompleteMessage rspMessage = CompleteMessage.builder()
-                // 包头携带 业务线id、userId、messageType
-                .packetHeader(
-                        PacketHeader.newBuilder()
-                                .setAppId(LINK_SERVER.getId())
-                                .setUid(userId)
-                                .setMessageType(LOGIN_MESSAGE.getType())
-                                .build()
+        // 构造 kafka 消息
+        ProducerRecord<String, String> record = new ProducerRecord<>(
+                // topic
+                KafkaConfig.LINK_TOPIC,
+                // value: 对redis进行操作，添加 userId 机器id，过期时间为300s
+                JsonUtil.toJson(RedisOperationMessage
+                        .builder()
+                        .op(RedisConfig.OP_SETNX)
+                        .key(RedisConfig.PREFIX_USER_ID+userId)
+                        // todo 机器id的生成
+                        .value("")
+                        .expireSeconds(Integer.parseInt(RedisConfig.KEY_EXPIRE_TIME))
+                        .build()
                 )
-                .messageBody(
-                        MessageBody.builder()
-                                .timestamp(System.currentTimeMillis())
-                                .content("登录成功")
-                                .build()
-                ).build();
-        ctx.channel().writeAndFlush(rspMessage);
+        );
+
+        // 异步发送到 kafka
+        Future<RecordMetadata> future = producer.send(record, (metadata, exception) -> {
+            if (ctx.channel().isActive()) {
+                // 响应客户端
+                ctx.channel().writeAndFlush(
+                        CompleteMessage.builder()
+                                // 包头携带 业务线id、userId、messageType
+                                .packetHeader(
+                                        PacketHeader.newBuilder()
+                                                .setAppId(LINK_SERVER.getId())
+                                                .setUid(userId)
+                                                .setMessageType(LOGIN_MESSAGE.getType())
+                                                .build()
+                                )
+                                .messageBody(
+                                        MessageBody.builder()
+                                                .timestamp(System.currentTimeMillis())
+                                                .content(exception == null ? "登录成功" : "登陆失败: " + exception.getMessage())
+                                                .build()
+                                ).build()
+                );
+            }
+            // 日志输出
+            if (exception != null) {
+                log.error("[sendKafka] 发送消息失败: " + exception.getMessage());
+            } else {
+                log.info("[sendKafka] 发送消息成功,Topic: {}", metadata.topic());
+            }
+        });
+
     }
 
 }
