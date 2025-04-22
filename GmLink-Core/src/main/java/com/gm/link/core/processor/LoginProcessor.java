@@ -5,13 +5,11 @@ import com.gm.link.common.domain.model.CompleteMessage;
 import com.gm.link.common.domain.model.MessageBody;
 import com.gm.link.common.domain.model.RedisOperationMessage;
 import com.gm.link.common.domain.protobuf.PacketHeader;
-import com.gm.link.common.enums.AppId;
 import com.gm.link.common.utils.JsonUtil;
 import com.gm.link.core.config.KafkaConfig;
 import com.gm.link.core.config.RedisConfig;
 import com.gm.link.core.kafka.KafkaProducerManager;
-import com.gm.link.core.netty.UserChannelCtxMap;
-import io.netty.channel.Channel;
+import com.gm.link.core.map.UserChannelCtxMap;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.util.AttributeKey;
 import lombok.extern.slf4j.Slf4j;
@@ -26,6 +24,7 @@ import static com.gm.link.common.enums.MessageType.LOGIN_MESSAGE;
 
 /**
  * @Author: xexgm
+ * descrption: 登录处理器
  */
 @Slf4j
 public class LoginProcessor extends AbstractMessageProcessor<CompleteMessage>{

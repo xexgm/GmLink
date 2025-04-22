@@ -1,6 +1,5 @@
-package com.gm.link.core.netty;
+package com.gm.link.core.map;
 
-import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 
 import java.util.concurrent.ConcurrentHashMap;

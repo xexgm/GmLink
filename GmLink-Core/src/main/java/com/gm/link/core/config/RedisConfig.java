@@ -9,5 +9,7 @@ public class RedisConfig {
 
     public static String OP_SETNX = "SETNX";
 
+    public static String OP_EXPIRE = "EXPIRE";
+
     public static String PREFIX_USER_ID = "user:";
 }

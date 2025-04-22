@@ -6,7 +6,7 @@ import com.gm.link.core.codec.MessageProtocolEncoder;
 import com.gm.link.core.config.LinkConfig;
 import com.gm.link.core.config.NettyConfig;
 import com.gm.link.core.config.ServerLifeCycle;
-import com.gm.link.core.netty.handler.LinkChannelHandler;
+import com.gm.link.core.handler.LinkChannelHandler;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelInitializer;
@@ -128,6 +128,7 @@ public class NettyServer implements ServerLifeCycle {
         if (workerEventLoopGroup != null) {
             workerEventLoopGroup.shutdownGracefully();
         }
+        this.started.compareAndSet(true, false);
     }
 
     @Override
