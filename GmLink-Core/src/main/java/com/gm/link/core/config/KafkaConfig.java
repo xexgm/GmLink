@@ -9,4 +9,9 @@ public class KafkaConfig {
 
     public static String LINK_TOPIC = "link_topic";
 
+    /**
+     * 中台机器处理下行消息的 kafka 分区格式: down_link_topic_${machineId}
+     */
+    public static String DOWN_LINK_TOPIC_PREFIX = "down_link_topic_";
+
 }

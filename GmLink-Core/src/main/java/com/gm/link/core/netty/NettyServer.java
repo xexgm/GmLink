@@ -7,6 +7,7 @@ import com.gm.link.core.config.LinkConfig;
 import com.gm.link.core.config.NettyConfig;
 import com.gm.link.core.config.ServerLifeCycle;
 import com.gm.link.core.handler.LinkChannelHandler;
+import com.gm.link.core.redis.MachineIdGenerator;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelInitializer;
@@ -33,10 +34,6 @@ import static com.gm.link.common.constant.LinkConfigConstant.LISTENING_PORT;
 @Slf4j
 public class NettyServer implements ServerLifeCycle {
 
-    private final LinkConfig config;
-
-    // todo 自定义 netty 处理器
-
     private final AtomicBoolean started = new AtomicBoolean(false);
 
     private ServerBootstrap serverBootstrap;
@@ -44,13 +41,15 @@ public class NettyServer implements ServerLifeCycle {
     private EventLoopGroup workerEventLoopGroup;
 
     public NettyServer() {
-        config = new LinkConfig();
-        // todo 创建 自定义 netty 管道处理器
         init();
     }
 
     @Override
     public void init() {
+        // 通过 reids 自增的 key，分配得到 机器id
+        LinkConfig.MACHINE_ID = MachineIdGenerator.getMachineId();
+        log.info("[InitServer] getMachineId: {}", LinkConfig.MACHINE_ID);
+
         serverBootstrap = new ServerBootstrap();
         if (SystemUtil.useEpollMode()) {
             bossEventLoopGroup = new EpollEventLoopGroup(NettyConfig.bossEventLoopGroupNum,
@@ -63,11 +62,12 @@ public class NettyServer implements ServerLifeCycle {
             workerEventLoopGroup = new NioEventLoopGroup(NettyConfig.workerEventLoopGroupNum,
                     new DefaultThreadFactory("default-netty-worker-nio"));
         }
+        log.info("[InitEventLoopGroup] bossEventLoopGroup: {}, workerEventLoopGroup: {}",
+                bossEventLoopGroup.getClass().getName(), workerEventLoopGroup.getClass().getName());
     }
 
     @Override
     public void start() throws InterruptedException {
-
         serverBootstrap
                 // 设置 主从Reactor多线程模型
                 .group(bossEventLoopGroup, workerEventLoopGroup)
@@ -112,7 +112,7 @@ public class NettyServer implements ServerLifeCycle {
                 log.info("NettyServer 关闭");
             });
         } catch (InterruptedException e) {
-            log.info("server 初始化异常", e);
+            log.info("server 初始化异常: {}", e.getMessage());
         }
 
     }

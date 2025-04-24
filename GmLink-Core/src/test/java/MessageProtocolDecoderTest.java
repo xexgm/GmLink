@@ -7,6 +7,7 @@ import com.gm.link.core.codec.MessageProtocolEncoder;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.embedded.EmbeddedChannel;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 
 import static com.gm.link.common.constant.ProtoConstant.MAGIC;
@@ -16,6 +17,7 @@ import static org.junit.Assert.assertNotNull;
 /**
  * @Author: xexgm
  */
+@Slf4j
 public class MessageProtocolDecoderTest {
     @Test
     public void testDecode() throws Exception {
@@ -79,4 +81,5 @@ public class MessageProtocolDecoderTest {
         CompleteMessage decoded = decodeChannel.readInbound();
         assertEquals(testMessage, decoded);
     }
+
 }

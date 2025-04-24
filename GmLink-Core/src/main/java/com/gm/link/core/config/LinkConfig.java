@@ -12,19 +12,21 @@ public class LinkConfig {
     /**
      * 服务名称
      */
-    private String serviceName = DEFAULT_SERVICE_NAME;
+    public static String serviceName = DEFAULT_SERVICE_NAME;
 
     /**
      * 监听端口
      */
-    private int port = LISTENING_PORT;
+    public static int port = LISTENING_PORT;
 
     /**
      * 运行环境
      */
-    private String env = DEFAULT_ENV;
+    public static String env = DEFAULT_ENV;
 
-    // netty 配置信息
-    private NettyConfig nettyConfig = new NettyConfig();
+    /**
+     * 机器id
+     */
+    public static Integer MACHINE_ID;
 
 }

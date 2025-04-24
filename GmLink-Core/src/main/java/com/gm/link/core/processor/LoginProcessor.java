@@ -7,6 +7,7 @@ import com.gm.link.common.domain.model.RedisOperationMessage;
 import com.gm.link.common.domain.protobuf.PacketHeader;
 import com.gm.link.common.utils.JsonUtil;
 import com.gm.link.core.config.KafkaConfig;
+import com.gm.link.core.config.LinkConfig;
 import com.gm.link.core.config.RedisConfig;
 import com.gm.link.core.kafka.KafkaProducerManager;
 import com.gm.link.core.map.UserChannelCtxMap;
@@ -69,8 +70,7 @@ public class LoginProcessor extends AbstractMessageProcessor<CompleteMessage>{
                         .builder()
                         .op(RedisConfig.OP_SETNX)
                         .key(RedisConfig.PREFIX_USER_ID+userId)
-                        // todo 机器id的生成
-                        .value("")
+                        .value(String.valueOf(LinkConfig.MACHINE_ID))
                         .expireSeconds(Integer.parseInt(RedisConfig.KEY_EXPIRE_TIME))
                         .build()
                 )
