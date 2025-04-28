@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+option java_package = "com.gm.link.common.grpc";
+
+
+service PushService {
+  rpc Push2Link (PushRequest) returns (PushResponse);
+}
+
+message PushRequest {
+  fixed64 fromUserId = 1;
+  fixed64 timeStamp  = 2;
+  fixed64 toId = 3;
+  int32 messageType = 4; // 2字节，数据类型标识，标识数据类型，0-登录，1-心跳，2-ack，3-强制下线,4-私聊，5-群聊，6-系统消息，待扩展
+  string content = 5;
+}
+
+message PushResponse {
+  bool success = 1;
+  string error = 2;
+}

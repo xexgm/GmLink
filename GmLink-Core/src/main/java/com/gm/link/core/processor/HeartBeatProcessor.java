@@ -89,7 +89,7 @@ public class HeartBeatProcessor extends AbstractMessageProcessor<CompleteMessage
                                 )
                                 .messageBody(
                                         MessageBody.builder()
-                                                .timestamp(System.currentTimeMillis())
+                                                .timeStamp(System.currentTimeMillis())
                                                 .content(exception == null ? "心跳续期成功" : "心跳续期失败: " + exception.getMessage())
                                                 .build()
                                 ).build()

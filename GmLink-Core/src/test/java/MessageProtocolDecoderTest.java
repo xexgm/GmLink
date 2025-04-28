@@ -57,7 +57,7 @@ public class MessageProtocolDecoderTest {
         // 构建消息体内容
         MessageBody body = new MessageBody();
         body.setContent("灵码测试消息");  // 根据你的 MessageBody 类实际结构调整
-        body.setTimestamp(System.currentTimeMillis());
+        body.setTimeStamp(System.currentTimeMillis());
 
         // 构建完整消息对象
         CompleteMessage testMessage = CompleteMessage.builder()

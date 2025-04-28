@@ -43,7 +43,7 @@ public class HeartBeatHandler extends ChannelInboundHandlerAdapter {
                 // 包体可以带一下时间戳，设定超时等待的事件
                 MessageBody
                         .builder()
-                        .timestamp(timestamp)
+                        .timeStamp(timestamp)
                         .build()
         );
         return heartBeatMessage;

@@ -92,7 +92,7 @@ public class LoginProcessor extends AbstractMessageProcessor<CompleteMessage>{
                                 )
                                 .messageBody(
                                         MessageBody.builder()
-                                                .timestamp(System.currentTimeMillis())
+                                                .timeStamp(System.currentTimeMillis())
                                                 .content(exception == null ? "登录成功" : "登陆失败: " + exception.getMessage())
                                                 .build()
                                 ).build()

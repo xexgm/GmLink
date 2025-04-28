@@ -17,9 +17,9 @@ public class MessageBody {
 
     long fromUserId;
 
-    long timestamp;
+    long timeStamp;
 
-    long toUserId;
+    long toId;
 
     short messageType;
 
