@@ -18,4 +18,9 @@ public class PushServiceImpl extends PushServiceGrpc.PushServiceImplBase {
         // 接收消息
         // 判断长连接是否在该台机器上，如果不是，则转发
     }
+
+    @Override
+    public void batchPush2Link(PushGrpc.BatchPushRequest request, StreamObserver<PushGrpc.BatchPushResponse> responseObserver) {
+        super.batchPush2Link(request, responseObserver);
+    }
 }

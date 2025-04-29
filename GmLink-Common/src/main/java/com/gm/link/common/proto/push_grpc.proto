@@ -4,7 +4,11 @@ option java_package = "com.gm.link.common.grpc";
 
 
 service PushService {
+  // 单次推送接口
   rpc Push2Link (PushRequest) returns (PushResponse);
+
+  // 新增批量推送接口
+  rpc BatchPush2Link (BatchPushRequest) returns (BatchPushResponse);
 }
 
 message PushRequest {
@@ -16,6 +20,25 @@ message PushRequest {
 }
 
 message PushResponse {
-  bool success = 1;
-  string error = 2;
+  bool success = 2;
+  string error = 3;
+}
+
+// 新增批量推送请求（复用单次推送字段，仅修改 toIds 为列表）
+message BatchPushRequest {
+  fixed64 fromUserId = 1;
+  fixed64 timeStamp = 2;
+  repeated fixed64 toIds = 3;  // 批量目标ID列表
+  int32 messageType = 4;
+  string content = 5;          // 所有用户接收相同内容
+}
+
+// 新增批量推送响应（返回每个目标的推送结果）
+message BatchPushResponse {
+  message Result {
+    fixed64 toId = 1;
+    bool success = 2;
+    string error = 3;
+  }
+  repeated Result results = 1; // 每个目标的推送结果
 }

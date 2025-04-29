@@ -46,6 +46,37 @@ public final class PushServiceGrpc {
     return getPush2LinkMethod;
   }
 
+  private static volatile io.grpc.MethodDescriptor<com.gm.link.common.grpc.PushGrpc.BatchPushRequest,
+      com.gm.link.common.grpc.PushGrpc.BatchPushResponse> getBatchPush2LinkMethod;
+
+  @io.grpc.stub.annotations.RpcMethod(
+      fullMethodName = SERVICE_NAME + '/' + "BatchPush2Link",
+      requestType = com.gm.link.common.grpc.PushGrpc.BatchPushRequest.class,
+      responseType = com.gm.link.common.grpc.PushGrpc.BatchPushResponse.class,
+      methodType = io.grpc.MethodDescriptor.MethodType.UNARY)
+  public static io.grpc.MethodDescriptor<com.gm.link.common.grpc.PushGrpc.BatchPushRequest,
+      com.gm.link.common.grpc.PushGrpc.BatchPushResponse> getBatchPush2LinkMethod() {
+    io.grpc.MethodDescriptor<com.gm.link.common.grpc.PushGrpc.BatchPushRequest, com.gm.link.common.grpc.PushGrpc.BatchPushResponse> getBatchPush2LinkMethod;
+    if ((getBatchPush2LinkMethod = PushServiceGrpc.getBatchPush2LinkMethod) == null) {
+      synchronized (PushServiceGrpc.class) {
+        if ((getBatchPush2LinkMethod = PushServiceGrpc.getBatchPush2LinkMethod) == null) {
+          PushServiceGrpc.getBatchPush2LinkMethod = getBatchPush2LinkMethod =
+              io.grpc.MethodDescriptor.<com.gm.link.common.grpc.PushGrpc.BatchPushRequest, com.gm.link.common.grpc.PushGrpc.BatchPushResponse>newBuilder()
+              .setType(io.grpc.MethodDescriptor.MethodType.UNARY)
+              .setFullMethodName(generateFullMethodName(SERVICE_NAME, "BatchPush2Link"))
+              .setSampledToLocalTracing(true)
+              .setRequestMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
+                  com.gm.link.common.grpc.PushGrpc.BatchPushRequest.getDefaultInstance()))
+              .setResponseMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
+                  com.gm.link.common.grpc.PushGrpc.BatchPushResponse.getDefaultInstance()))
+              .setSchemaDescriptor(new PushServiceMethodDescriptorSupplier("BatchPush2Link"))
+              .build();
+        }
+      }
+    }
+    return getBatchPush2LinkMethod;
+  }
+
   /**
    * Creates a new async stub that supports all call types for the service
    */
@@ -95,10 +126,23 @@ public final class PushServiceGrpc {
   public interface AsyncService {
 
     /**
+     * <pre>
+     * 单次推送接口
+     * </pre>
      */
     default void push2Link(com.gm.link.common.grpc.PushGrpc.PushRequest request,
         io.grpc.stub.StreamObserver<com.gm.link.common.grpc.PushGrpc.PushResponse> responseObserver) {
       io.grpc.stub.ServerCalls.asyncUnimplementedUnaryCall(getPush2LinkMethod(), responseObserver);
+    }
+
+    /**
+     * <pre>
+     * 新增批量推送接口
+     * </pre>
+     */
+    default void batchPush2Link(com.gm.link.common.grpc.PushGrpc.BatchPushRequest request,
+        io.grpc.stub.StreamObserver<com.gm.link.common.grpc.PushGrpc.BatchPushResponse> responseObserver) {
+      io.grpc.stub.ServerCalls.asyncUnimplementedUnaryCall(getBatchPush2LinkMethod(), responseObserver);
     }
   }
 
@@ -130,11 +174,25 @@ public final class PushServiceGrpc {
     }
 
     /**
+     * <pre>
+     * 单次推送接口
+     * </pre>
      */
     public void push2Link(com.gm.link.common.grpc.PushGrpc.PushRequest request,
         io.grpc.stub.StreamObserver<com.gm.link.common.grpc.PushGrpc.PushResponse> responseObserver) {
       io.grpc.stub.ClientCalls.asyncUnaryCall(
           getChannel().newCall(getPush2LinkMethod(), getCallOptions()), request, responseObserver);
+    }
+
+    /**
+     * <pre>
+     * 新增批量推送接口
+     * </pre>
+     */
+    public void batchPush2Link(com.gm.link.common.grpc.PushGrpc.BatchPushRequest request,
+        io.grpc.stub.StreamObserver<com.gm.link.common.grpc.PushGrpc.BatchPushResponse> responseObserver) {
+      io.grpc.stub.ClientCalls.asyncUnaryCall(
+          getChannel().newCall(getBatchPush2LinkMethod(), getCallOptions()), request, responseObserver);
     }
   }
 
@@ -155,10 +213,23 @@ public final class PushServiceGrpc {
     }
 
     /**
+     * <pre>
+     * 单次推送接口
+     * </pre>
      */
     public com.gm.link.common.grpc.PushGrpc.PushResponse push2Link(com.gm.link.common.grpc.PushGrpc.PushRequest request) {
       return io.grpc.stub.ClientCalls.blockingUnaryCall(
           getChannel(), getPush2LinkMethod(), getCallOptions(), request);
+    }
+
+    /**
+     * <pre>
+     * 新增批量推送接口
+     * </pre>
+     */
+    public com.gm.link.common.grpc.PushGrpc.BatchPushResponse batchPush2Link(com.gm.link.common.grpc.PushGrpc.BatchPushRequest request) {
+      return io.grpc.stub.ClientCalls.blockingUnaryCall(
+          getChannel(), getBatchPush2LinkMethod(), getCallOptions(), request);
     }
   }
 
@@ -179,15 +250,30 @@ public final class PushServiceGrpc {
     }
 
     /**
+     * <pre>
+     * 单次推送接口
+     * </pre>
      */
     public com.google.common.util.concurrent.ListenableFuture<com.gm.link.common.grpc.PushGrpc.PushResponse> push2Link(
         com.gm.link.common.grpc.PushGrpc.PushRequest request) {
       return io.grpc.stub.ClientCalls.futureUnaryCall(
           getChannel().newCall(getPush2LinkMethod(), getCallOptions()), request);
     }
+
+    /**
+     * <pre>
+     * 新增批量推送接口
+     * </pre>
+     */
+    public com.google.common.util.concurrent.ListenableFuture<com.gm.link.common.grpc.PushGrpc.BatchPushResponse> batchPush2Link(
+        com.gm.link.common.grpc.PushGrpc.BatchPushRequest request) {
+      return io.grpc.stub.ClientCalls.futureUnaryCall(
+          getChannel().newCall(getBatchPush2LinkMethod(), getCallOptions()), request);
+    }
   }
 
   private static final int METHODID_PUSH2LINK = 0;
+  private static final int METHODID_BATCH_PUSH2LINK = 1;
 
   private static final class MethodHandlers<Req, Resp> implements
       io.grpc.stub.ServerCalls.UnaryMethod<Req, Resp>,
@@ -209,6 +295,10 @@ public final class PushServiceGrpc {
         case METHODID_PUSH2LINK:
           serviceImpl.push2Link((com.gm.link.common.grpc.PushGrpc.PushRequest) request,
               (io.grpc.stub.StreamObserver<com.gm.link.common.grpc.PushGrpc.PushResponse>) responseObserver);
+          break;
+        case METHODID_BATCH_PUSH2LINK:
+          serviceImpl.batchPush2Link((com.gm.link.common.grpc.PushGrpc.BatchPushRequest) request,
+              (io.grpc.stub.StreamObserver<com.gm.link.common.grpc.PushGrpc.BatchPushResponse>) responseObserver);
           break;
         default:
           throw new AssertionError();
@@ -235,6 +325,13 @@ public final class PushServiceGrpc {
               com.gm.link.common.grpc.PushGrpc.PushRequest,
               com.gm.link.common.grpc.PushGrpc.PushResponse>(
                 service, METHODID_PUSH2LINK)))
+        .addMethod(
+          getBatchPush2LinkMethod(),
+          io.grpc.stub.ServerCalls.asyncUnaryCall(
+            new MethodHandlers<
+              com.gm.link.common.grpc.PushGrpc.BatchPushRequest,
+              com.gm.link.common.grpc.PushGrpc.BatchPushResponse>(
+                service, METHODID_BATCH_PUSH2LINK)))
         .build();
   }
 
@@ -284,6 +381,7 @@ public final class PushServiceGrpc {
           serviceDescriptor = result = io.grpc.ServiceDescriptor.newBuilder(SERVICE_NAME)
               .setSchemaDescriptor(new PushServiceFileDescriptorSupplier())
               .addMethod(getPush2LinkMethod())
+              .addMethod(getBatchPush2LinkMethod())
               .build();
         }
       }
