@@ -15,11 +15,6 @@ public class LinkConfig {
     public static String serviceName = DEFAULT_SERVICE_NAME;
 
     /**
-     * 监听端口
-     */
-    public static int port = LISTENING_PORT;
-
-    /**
      * 运行环境
      */
     public static String env = DEFAULT_ENV;
@@ -28,5 +23,8 @@ public class LinkConfig {
      * 机器id
      */
     public static Integer MACHINE_ID;
+
+    // todo 机器ip
+    public static String LINK_HOST = "";
 
 }

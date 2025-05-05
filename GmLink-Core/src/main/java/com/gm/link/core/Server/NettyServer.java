@@ -1,4 +1,4 @@
-package com.gm.link.core.netty;
+package com.gm.link.core.Server;
 
 import com.gm.link.common.utils.SystemUtil;
 import com.gm.link.core.codec.MessageProtocolDecoder;
