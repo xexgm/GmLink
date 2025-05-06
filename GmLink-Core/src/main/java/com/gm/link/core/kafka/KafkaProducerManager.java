@@ -21,7 +21,7 @@ public class KafkaProducerManager {
         props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
         // 批处理核心参数
         props.put(ProducerConfig.BATCH_SIZE_CONFIG, 1 * 1024 * 1024); // 批次大小 1Mb
-        props.put(ProducerConfig.LINGER_MS_CONFIG, 1000); // 批次等待时间 1s
+        props.put(ProducerConfig.LINGER_MS_CONFIG, 500); // 批次等待时间 500ms
         props.put(ProducerConfig.BUFFER_MEMORY_CONFIG, 32 * 1024 * 1024);
         // 可选优化配置
         props.put(ProducerConfig.ACKS_CONFIG, "all"); // 高可靠性

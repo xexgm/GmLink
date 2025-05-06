@@ -1,4 +1,4 @@
-package com.gm.link.core.map;
+package com.gm.link.core.cache;
 
 import java.util.concurrent.ConcurrentHashMap;
 

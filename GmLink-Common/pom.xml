@@ -42,7 +42,7 @@
                 <configuration>
                     <!--          有个插件可识别机器操作系统版本，后续可增加，自动选择可执行文件版本-->
                     <!-- 指定 protoc 可执行文件版本 -->
-                    <protocArtifact>com.google.protobuf:protoc:3.19.4:exe:osx-x86_64</protocArtifact>
+                    <protocArtifact>com.google.protobuf:protoc:3.19.4:exe:windows-x86_64</protocArtifact>
                     <!-- 指定你的proto文件目录 -->
                     <protoSourceRoot>${project.basedir}/src/main/java/com/gm/link/common/proto</protoSourceRoot>
                     <!-- 生成 Java 代码的目录 -->
@@ -50,7 +50,7 @@
                     <clearOutputDirectory>false</clearOutputDirectory>
                     <!-- 指定 gRPC 插件 -->
                     <pluginId>grpc-java</pluginId>
-                    <pluginArtifact>io.grpc:protoc-gen-grpc-java:1.55.1:exe:osx-x86_64</pluginArtifact>
+                    <pluginArtifact>io.grpc:protoc-gen-grpc-java:1.55.1:exe:windows-x86_64</pluginArtifact>
                 </configuration>
             </plugin>
         </plugins>

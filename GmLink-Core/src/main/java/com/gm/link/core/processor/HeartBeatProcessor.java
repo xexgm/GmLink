@@ -9,7 +9,7 @@ import com.gm.link.common.utils.JsonUtil;
 import com.gm.link.core.config.KafkaConfig;
 import com.gm.link.core.config.RedisConfig;
 import com.gm.link.core.kafka.KafkaProducerManager;
-import com.gm.link.core.map.UserChannelCtxMap;
+import com.gm.link.core.cache.UserChannelCtxMap;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.util.AttributeKey;
 import lombok.extern.slf4j.Slf4j;

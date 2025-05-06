@@ -16,6 +16,14 @@
     </properties>
 
     <dependencies>
+
+        <!-- 依赖Nacos -->
+        <dependency>
+            <groupId>com.alibaba.nacos</groupId>
+            <artifactId>nacos-client</artifactId>
+            <version>2.2.1</version>
+        </dependency>
+
         <!-- 依赖Common模块 -->
         <dependency>
             <groupId>com.gm</groupId>  <!-- 必须与Common模块的groupId完全一致 -->

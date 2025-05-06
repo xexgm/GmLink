@@ -17,11 +17,11 @@ public class RedisConfig {
     /** redis userId key 前缀 **/
     public static String PREFIX_USER_ID = "user:";
 
-    /** redis 获取机器id 地址 **/
+    /** redis 获取机器id 地址 todo **/
     public static String REDIS_HOST = "";
 
     /** redis 获取机器id 端口 **/
-    public static Integer REDIS_PORT;
+    public static Integer REDIS_PORT = 6379;
 
     /** redis 机器id 前缀**/
     public static String MACHINE_ID_KEY = "machine:id:generator";

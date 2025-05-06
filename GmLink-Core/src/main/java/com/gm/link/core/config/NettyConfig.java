@@ -14,7 +14,7 @@ public class NettyConfig {
     public static int maxContentSize = 64 * 1024 * 1024; // 64Mb
 
     /**
-     * 监听端口
+     * 监听端口 9999
      */
     public static int port = LISTENING_PORT;
 }

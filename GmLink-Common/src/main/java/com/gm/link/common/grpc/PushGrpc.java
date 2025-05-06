@@ -890,22 +890,26 @@ public final class PushGrpc {
       com.google.protobuf.MessageOrBuilder {
 
     /**
-     * <code>bool success = 2;</code>
+     * <pre>
+     * 成功与否
+     * </pre>
+     *
+     * <code>bool success = 1;</code>
      * @return The success.
      */
     boolean getSuccess();
 
     /**
-     * <code>string error = 3;</code>
-     * @return The error.
+     * <code>string msg = 2;</code>
+     * @return The msg.
      */
-    java.lang.String getError();
+    java.lang.String getMsg();
     /**
-     * <code>string error = 3;</code>
-     * @return The bytes for error.
+     * <code>string msg = 2;</code>
+     * @return The bytes for msg.
      */
     com.google.protobuf.ByteString
-        getErrorBytes();
+        getMsgBytes();
   }
   /**
    * Protobuf type {@code PushResponse}
@@ -920,7 +924,7 @@ public final class PushGrpc {
       super(builder);
     }
     private PushResponse() {
-      error_ = "";
+      msg_ = "";
     }
 
     @java.lang.Override
@@ -953,15 +957,15 @@ public final class PushGrpc {
             case 0:
               done = true;
               break;
-            case 16: {
+            case 8: {
 
               success_ = input.readBool();
               break;
             }
-            case 26: {
+            case 18: {
               java.lang.String s = input.readStringRequireUtf8();
 
-              error_ = s;
+              msg_ = s;
               break;
             }
             default: {
@@ -996,10 +1000,14 @@ public final class PushGrpc {
               com.gm.link.common.grpc.PushGrpc.PushResponse.class, com.gm.link.common.grpc.PushGrpc.PushResponse.Builder.class);
     }
 
-    public static final int SUCCESS_FIELD_NUMBER = 2;
+    public static final int SUCCESS_FIELD_NUMBER = 1;
     private boolean success_;
     /**
-     * <code>bool success = 2;</code>
+     * <pre>
+     * 成功与否
+     * </pre>
+     *
+     * <code>bool success = 1;</code>
      * @return The success.
      */
     @java.lang.Override
@@ -1007,38 +1015,38 @@ public final class PushGrpc {
       return success_;
     }
 
-    public static final int ERROR_FIELD_NUMBER = 3;
-    private volatile java.lang.Object error_;
+    public static final int MSG_FIELD_NUMBER = 2;
+    private volatile java.lang.Object msg_;
     /**
-     * <code>string error = 3;</code>
-     * @return The error.
+     * <code>string msg = 2;</code>
+     * @return The msg.
      */
     @java.lang.Override
-    public java.lang.String getError() {
-      java.lang.Object ref = error_;
+    public java.lang.String getMsg() {
+      java.lang.Object ref = msg_;
       if (ref instanceof java.lang.String) {
         return (java.lang.String) ref;
       } else {
         com.google.protobuf.ByteString bs = 
             (com.google.protobuf.ByteString) ref;
         java.lang.String s = bs.toStringUtf8();
-        error_ = s;
+        msg_ = s;
         return s;
       }
     }
     /**
-     * <code>string error = 3;</code>
-     * @return The bytes for error.
+     * <code>string msg = 2;</code>
+     * @return The bytes for msg.
      */
     @java.lang.Override
     public com.google.protobuf.ByteString
-        getErrorBytes() {
-      java.lang.Object ref = error_;
+        getMsgBytes() {
+      java.lang.Object ref = msg_;
       if (ref instanceof java.lang.String) {
         com.google.protobuf.ByteString b = 
             com.google.protobuf.ByteString.copyFromUtf8(
                 (java.lang.String) ref);
-        error_ = b;
+        msg_ = b;
         return b;
       } else {
         return (com.google.protobuf.ByteString) ref;
@@ -1060,10 +1068,10 @@ public final class PushGrpc {
     public void writeTo(com.google.protobuf.CodedOutputStream output)
                         throws java.io.IOException {
       if (success_ != false) {
-        output.writeBool(2, success_);
+        output.writeBool(1, success_);
       }
-      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(error_)) {
-        com.google.protobuf.GeneratedMessageV3.writeString(output, 3, error_);
+      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(msg_)) {
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 2, msg_);
       }
       unknownFields.writeTo(output);
     }
@@ -1076,10 +1084,10 @@ public final class PushGrpc {
       size = 0;
       if (success_ != false) {
         size += com.google.protobuf.CodedOutputStream
-          .computeBoolSize(2, success_);
+          .computeBoolSize(1, success_);
       }
-      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(error_)) {
-        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(3, error_);
+      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(msg_)) {
+        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(2, msg_);
       }
       size += unknownFields.getSerializedSize();
       memoizedSize = size;
@@ -1098,8 +1106,8 @@ public final class PushGrpc {
 
       if (getSuccess()
           != other.getSuccess()) return false;
-      if (!getError()
-          .equals(other.getError())) return false;
+      if (!getMsg()
+          .equals(other.getMsg())) return false;
       if (!unknownFields.equals(other.unknownFields)) return false;
       return true;
     }
@@ -1114,8 +1122,8 @@ public final class PushGrpc {
       hash = (37 * hash) + SUCCESS_FIELD_NUMBER;
       hash = (53 * hash) + com.google.protobuf.Internal.hashBoolean(
           getSuccess());
-      hash = (37 * hash) + ERROR_FIELD_NUMBER;
-      hash = (53 * hash) + getError().hashCode();
+      hash = (37 * hash) + MSG_FIELD_NUMBER;
+      hash = (53 * hash) + getMsg().hashCode();
       hash = (29 * hash) + unknownFields.hashCode();
       memoizedHashCode = hash;
       return hash;
@@ -1251,7 +1259,7 @@ public final class PushGrpc {
         super.clear();
         success_ = false;
 
-        error_ = "";
+        msg_ = "";
 
         return this;
       }
@@ -1280,7 +1288,7 @@ public final class PushGrpc {
       public com.gm.link.common.grpc.PushGrpc.PushResponse buildPartial() {
         com.gm.link.common.grpc.PushGrpc.PushResponse result = new com.gm.link.common.grpc.PushGrpc.PushResponse(this);
         result.success_ = success_;
-        result.error_ = error_;
+        result.msg_ = msg_;
         onBuilt();
         return result;
       }
@@ -1332,8 +1340,8 @@ public final class PushGrpc {
         if (other.getSuccess() != false) {
           setSuccess(other.getSuccess());
         }
-        if (!other.getError().isEmpty()) {
-          error_ = other.error_;
+        if (!other.getMsg().isEmpty()) {
+          msg_ = other.msg_;
           onChanged();
         }
         this.mergeUnknownFields(other.unknownFields);
@@ -1367,7 +1375,11 @@ public final class PushGrpc {
 
       private boolean success_ ;
       /**
-       * <code>bool success = 2;</code>
+       * <pre>
+       * 成功与否
+       * </pre>
+       *
+       * <code>bool success = 1;</code>
        * @return The success.
        */
       @java.lang.Override
@@ -1375,7 +1387,11 @@ public final class PushGrpc {
         return success_;
       }
       /**
-       * <code>bool success = 2;</code>
+       * <pre>
+       * 成功与否
+       * </pre>
+       *
+       * <code>bool success = 1;</code>
        * @param value The success to set.
        * @return This builder for chaining.
        */
@@ -1386,7 +1402,11 @@ public final class PushGrpc {
         return this;
       }
       /**
-       * <code>bool success = 2;</code>
+       * <pre>
+       * 成功与否
+       * </pre>
+       *
+       * <code>bool success = 1;</code>
        * @return This builder for chaining.
        */
       public Builder clearSuccess() {
@@ -1396,78 +1416,78 @@ public final class PushGrpc {
         return this;
       }
 
-      private java.lang.Object error_ = "";
+      private java.lang.Object msg_ = "";
       /**
-       * <code>string error = 3;</code>
-       * @return The error.
+       * <code>string msg = 2;</code>
+       * @return The msg.
        */
-      public java.lang.String getError() {
-        java.lang.Object ref = error_;
+      public java.lang.String getMsg() {
+        java.lang.Object ref = msg_;
         if (!(ref instanceof java.lang.String)) {
           com.google.protobuf.ByteString bs =
               (com.google.protobuf.ByteString) ref;
           java.lang.String s = bs.toStringUtf8();
-          error_ = s;
+          msg_ = s;
           return s;
         } else {
           return (java.lang.String) ref;
         }
       }
       /**
-       * <code>string error = 3;</code>
-       * @return The bytes for error.
+       * <code>string msg = 2;</code>
+       * @return The bytes for msg.
        */
       public com.google.protobuf.ByteString
-          getErrorBytes() {
-        java.lang.Object ref = error_;
+          getMsgBytes() {
+        java.lang.Object ref = msg_;
         if (ref instanceof String) {
           com.google.protobuf.ByteString b = 
               com.google.protobuf.ByteString.copyFromUtf8(
                   (java.lang.String) ref);
-          error_ = b;
+          msg_ = b;
           return b;
         } else {
           return (com.google.protobuf.ByteString) ref;
         }
       }
       /**
-       * <code>string error = 3;</code>
-       * @param value The error to set.
+       * <code>string msg = 2;</code>
+       * @param value The msg to set.
        * @return This builder for chaining.
        */
-      public Builder setError(
+      public Builder setMsg(
           java.lang.String value) {
         if (value == null) {
     throw new NullPointerException();
   }
   
-        error_ = value;
+        msg_ = value;
         onChanged();
         return this;
       }
       /**
-       * <code>string error = 3;</code>
+       * <code>string msg = 2;</code>
        * @return This builder for chaining.
        */
-      public Builder clearError() {
+      public Builder clearMsg() {
         
-        error_ = getDefaultInstance().getError();
+        msg_ = getDefaultInstance().getMsg();
         onChanged();
         return this;
       }
       /**
-       * <code>string error = 3;</code>
-       * @param value The bytes for error to set.
+       * <code>string msg = 2;</code>
+       * @param value The bytes for msg to set.
        * @return This builder for chaining.
        */
-      public Builder setErrorBytes(
+      public Builder setMsgBytes(
           com.google.protobuf.ByteString value) {
         if (value == null) {
     throw new NullPointerException();
   }
   checkByteStringIsUtf8(value);
         
-        error_ = value;
+        msg_ = value;
         onChanged();
         return this;
       }
@@ -2748,22 +2768,26 @@ public final class PushGrpc {
       long getToId();
 
       /**
+       * <pre>
+       * 成功与否
+       * </pre>
+       *
        * <code>bool success = 2;</code>
        * @return The success.
        */
       boolean getSuccess();
 
       /**
-       * <code>string error = 3;</code>
-       * @return The error.
+       * <code>string msg = 3;</code>
+       * @return The msg.
        */
-      java.lang.String getError();
+      java.lang.String getMsg();
       /**
-       * <code>string error = 3;</code>
-       * @return The bytes for error.
+       * <code>string msg = 3;</code>
+       * @return The bytes for msg.
        */
       com.google.protobuf.ByteString
-          getErrorBytes();
+          getMsgBytes();
     }
     /**
      * Protobuf type {@code BatchPushResponse.Result}
@@ -2778,7 +2802,7 @@ public final class PushGrpc {
         super(builder);
       }
       private Result() {
-        error_ = "";
+        msg_ = "";
       }
 
       @java.lang.Override
@@ -2824,7 +2848,7 @@ public final class PushGrpc {
               case 26: {
                 java.lang.String s = input.readStringRequireUtf8();
 
-                error_ = s;
+                msg_ = s;
                 break;
               }
               default: {
@@ -2873,6 +2897,10 @@ public final class PushGrpc {
       public static final int SUCCESS_FIELD_NUMBER = 2;
       private boolean success_;
       /**
+       * <pre>
+       * 成功与否
+       * </pre>
+       *
        * <code>bool success = 2;</code>
        * @return The success.
        */
@@ -2881,38 +2909,38 @@ public final class PushGrpc {
         return success_;
       }
 
-      public static final int ERROR_FIELD_NUMBER = 3;
-      private volatile java.lang.Object error_;
+      public static final int MSG_FIELD_NUMBER = 3;
+      private volatile java.lang.Object msg_;
       /**
-       * <code>string error = 3;</code>
-       * @return The error.
+       * <code>string msg = 3;</code>
+       * @return The msg.
        */
       @java.lang.Override
-      public java.lang.String getError() {
-        java.lang.Object ref = error_;
+      public java.lang.String getMsg() {
+        java.lang.Object ref = msg_;
         if (ref instanceof java.lang.String) {
           return (java.lang.String) ref;
         } else {
           com.google.protobuf.ByteString bs = 
               (com.google.protobuf.ByteString) ref;
           java.lang.String s = bs.toStringUtf8();
-          error_ = s;
+          msg_ = s;
           return s;
         }
       }
       /**
-       * <code>string error = 3;</code>
-       * @return The bytes for error.
+       * <code>string msg = 3;</code>
+       * @return The bytes for msg.
        */
       @java.lang.Override
       public com.google.protobuf.ByteString
-          getErrorBytes() {
-        java.lang.Object ref = error_;
+          getMsgBytes() {
+        java.lang.Object ref = msg_;
         if (ref instanceof java.lang.String) {
           com.google.protobuf.ByteString b = 
               com.google.protobuf.ByteString.copyFromUtf8(
                   (java.lang.String) ref);
-          error_ = b;
+          msg_ = b;
           return b;
         } else {
           return (com.google.protobuf.ByteString) ref;
@@ -2939,8 +2967,8 @@ public final class PushGrpc {
         if (success_ != false) {
           output.writeBool(2, success_);
         }
-        if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(error_)) {
-          com.google.protobuf.GeneratedMessageV3.writeString(output, 3, error_);
+        if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(msg_)) {
+          com.google.protobuf.GeneratedMessageV3.writeString(output, 3, msg_);
         }
         unknownFields.writeTo(output);
       }
@@ -2959,8 +2987,8 @@ public final class PushGrpc {
           size += com.google.protobuf.CodedOutputStream
             .computeBoolSize(2, success_);
         }
-        if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(error_)) {
-          size += com.google.protobuf.GeneratedMessageV3.computeStringSize(3, error_);
+        if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(msg_)) {
+          size += com.google.protobuf.GeneratedMessageV3.computeStringSize(3, msg_);
         }
         size += unknownFields.getSerializedSize();
         memoizedSize = size;
@@ -2981,8 +3009,8 @@ public final class PushGrpc {
             != other.getToId()) return false;
         if (getSuccess()
             != other.getSuccess()) return false;
-        if (!getError()
-            .equals(other.getError())) return false;
+        if (!getMsg()
+            .equals(other.getMsg())) return false;
         if (!unknownFields.equals(other.unknownFields)) return false;
         return true;
       }
@@ -3000,8 +3028,8 @@ public final class PushGrpc {
         hash = (37 * hash) + SUCCESS_FIELD_NUMBER;
         hash = (53 * hash) + com.google.protobuf.Internal.hashBoolean(
             getSuccess());
-        hash = (37 * hash) + ERROR_FIELD_NUMBER;
-        hash = (53 * hash) + getError().hashCode();
+        hash = (37 * hash) + MSG_FIELD_NUMBER;
+        hash = (53 * hash) + getMsg().hashCode();
         hash = (29 * hash) + unknownFields.hashCode();
         memoizedHashCode = hash;
         return hash;
@@ -3139,7 +3167,7 @@ public final class PushGrpc {
 
           success_ = false;
 
-          error_ = "";
+          msg_ = "";
 
           return this;
         }
@@ -3169,7 +3197,7 @@ public final class PushGrpc {
           com.gm.link.common.grpc.PushGrpc.BatchPushResponse.Result result = new com.gm.link.common.grpc.PushGrpc.BatchPushResponse.Result(this);
           result.toId_ = toId_;
           result.success_ = success_;
-          result.error_ = error_;
+          result.msg_ = msg_;
           onBuilt();
           return result;
         }
@@ -3224,8 +3252,8 @@ public final class PushGrpc {
           if (other.getSuccess() != false) {
             setSuccess(other.getSuccess());
           }
-          if (!other.getError().isEmpty()) {
-            error_ = other.error_;
+          if (!other.getMsg().isEmpty()) {
+            msg_ = other.msg_;
             onChanged();
           }
           this.mergeUnknownFields(other.unknownFields);
@@ -3290,6 +3318,10 @@ public final class PushGrpc {
 
         private boolean success_ ;
         /**
+         * <pre>
+         * 成功与否
+         * </pre>
+         *
          * <code>bool success = 2;</code>
          * @return The success.
          */
@@ -3298,6 +3330,10 @@ public final class PushGrpc {
           return success_;
         }
         /**
+         * <pre>
+         * 成功与否
+         * </pre>
+         *
          * <code>bool success = 2;</code>
          * @param value The success to set.
          * @return This builder for chaining.
@@ -3309,6 +3345,10 @@ public final class PushGrpc {
           return this;
         }
         /**
+         * <pre>
+         * 成功与否
+         * </pre>
+         *
          * <code>bool success = 2;</code>
          * @return This builder for chaining.
          */
@@ -3319,78 +3359,78 @@ public final class PushGrpc {
           return this;
         }
 
-        private java.lang.Object error_ = "";
+        private java.lang.Object msg_ = "";
         /**
-         * <code>string error = 3;</code>
-         * @return The error.
+         * <code>string msg = 3;</code>
+         * @return The msg.
          */
-        public java.lang.String getError() {
-          java.lang.Object ref = error_;
+        public java.lang.String getMsg() {
+          java.lang.Object ref = msg_;
           if (!(ref instanceof java.lang.String)) {
             com.google.protobuf.ByteString bs =
                 (com.google.protobuf.ByteString) ref;
             java.lang.String s = bs.toStringUtf8();
-            error_ = s;
+            msg_ = s;
             return s;
           } else {
             return (java.lang.String) ref;
           }
         }
         /**
-         * <code>string error = 3;</code>
-         * @return The bytes for error.
+         * <code>string msg = 3;</code>
+         * @return The bytes for msg.
          */
         public com.google.protobuf.ByteString
-            getErrorBytes() {
-          java.lang.Object ref = error_;
+            getMsgBytes() {
+          java.lang.Object ref = msg_;
           if (ref instanceof String) {
             com.google.protobuf.ByteString b = 
                 com.google.protobuf.ByteString.copyFromUtf8(
                     (java.lang.String) ref);
-            error_ = b;
+            msg_ = b;
             return b;
           } else {
             return (com.google.protobuf.ByteString) ref;
           }
         }
         /**
-         * <code>string error = 3;</code>
-         * @param value The error to set.
+         * <code>string msg = 3;</code>
+         * @param value The msg to set.
          * @return This builder for chaining.
          */
-        public Builder setError(
+        public Builder setMsg(
             java.lang.String value) {
           if (value == null) {
     throw new NullPointerException();
   }
   
-          error_ = value;
+          msg_ = value;
           onChanged();
           return this;
         }
         /**
-         * <code>string error = 3;</code>
+         * <code>string msg = 3;</code>
          * @return This builder for chaining.
          */
-        public Builder clearError() {
+        public Builder clearMsg() {
           
-          error_ = getDefaultInstance().getError();
+          msg_ = getDefaultInstance().getMsg();
           onChanged();
           return this;
         }
         /**
-         * <code>string error = 3;</code>
-         * @param value The bytes for error to set.
+         * <code>string msg = 3;</code>
+         * @param value The bytes for msg to set.
          * @return This builder for chaining.
          */
-        public Builder setErrorBytes(
+        public Builder setMsgBytes(
             com.google.protobuf.ByteString value) {
           if (value == null) {
     throw new NullPointerException();
   }
   checkByteStringIsUtf8(value);
           
-          error_ = value;
+          msg_ = value;
           onChanged();
           return this;
         }
@@ -4254,17 +4294,17 @@ public final class PushGrpc {
       "\n\017push_grpc.proto\"h\n\013PushRequest\022\022\n\nfrom" +
       "UserId\030\001 \001(\006\022\021\n\ttimeStamp\030\002 \001(\006\022\014\n\004toId\030" +
       "\003 \001(\006\022\023\n\013messageType\030\004 \001(\005\022\017\n\007content\030\005 " +
-      "\001(\t\".\n\014PushResponse\022\017\n\007success\030\002 \001(\010\022\r\n\005" +
-      "error\030\003 \001(\t\"n\n\020BatchPushRequest\022\022\n\nfromU" +
-      "serId\030\001 \001(\006\022\021\n\ttimeStamp\030\002 \001(\006\022\r\n\005toIds\030" +
-      "\003 \003(\006\022\023\n\013messageType\030\004 \001(\005\022\017\n\007content\030\005 " +
-      "\001(\t\"w\n\021BatchPushResponse\022*\n\007results\030\001 \003(" +
-      "\0132\031.BatchPushResponse.Result\0326\n\006Result\022\014" +
-      "\n\004toId\030\001 \001(\006\022\017\n\007success\030\002 \001(\010\022\r\n\005error\030\003" +
-      " \001(\t2p\n\013PushService\022(\n\tPush2Link\022\014.PushR" +
-      "equest\032\r.PushResponse\0227\n\016BatchPush2Link\022" +
-      "\021.BatchPushRequest\032\022.BatchPushResponseB\031" +
-      "\n\027com.gm.link.common.grpcb\006proto3"
+      "\001(\t\",\n\014PushResponse\022\017\n\007success\030\001 \001(\010\022\013\n\003" +
+      "msg\030\002 \001(\t\"n\n\020BatchPushRequest\022\022\n\nfromUse" +
+      "rId\030\001 \001(\006\022\021\n\ttimeStamp\030\002 \001(\006\022\r\n\005toIds\030\003 " +
+      "\003(\006\022\023\n\013messageType\030\004 \001(\005\022\017\n\007content\030\005 \001(" +
+      "\t\"u\n\021BatchPushResponse\022*\n\007results\030\001 \003(\0132" +
+      "\031.BatchPushResponse.Result\0324\n\006Result\022\014\n\004" +
+      "toId\030\001 \001(\006\022\017\n\007success\030\002 \001(\010\022\013\n\003msg\030\003 \001(\t" +
+      "2p\n\013PushService\022(\n\tPush2Link\022\014.PushReque" +
+      "st\032\r.PushResponse\0227\n\016BatchPush2Link\022\021.Ba" +
+      "tchPushRequest\032\022.BatchPushResponseB\031\n\027co" +
+      "m.gm.link.common.grpcb\006proto3"
     };
     descriptor = com.google.protobuf.Descriptors.FileDescriptor
       .internalBuildGeneratedFileFrom(descriptorData,
@@ -4281,7 +4321,7 @@ public final class PushGrpc {
     internal_static_PushResponse_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_PushResponse_descriptor,
-        new java.lang.String[] { "Success", "Error", });
+        new java.lang.String[] { "Success", "Msg", });
     internal_static_BatchPushRequest_descriptor =
       getDescriptor().getMessageTypes().get(2);
     internal_static_BatchPushRequest_fieldAccessorTable = new
@@ -4299,7 +4339,7 @@ public final class PushGrpc {
     internal_static_BatchPushResponse_Result_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_BatchPushResponse_Result_descriptor,
-        new java.lang.String[] { "ToId", "Success", "Error", });
+        new java.lang.String[] { "ToId", "Success", "Msg", });
   }
 
   // @@protoc_insertion_point(outer_class_scope)

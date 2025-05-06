@@ -7,5 +7,5 @@ package com.gm.link.core.config;
  */
 public class GrpcConfig {
 
-    public static int GRPC_PORT;
+    public static int GRPC_PORT = 10001;
 }
