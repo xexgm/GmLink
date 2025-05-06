@@ -18,7 +18,7 @@ public class LinkChannelHandler extends SimpleChannelInboundHandler<CompleteMess
         if (messageType == null) {
             return;
         }
-        AbstractMessageProcessor processor = ProcessorFactory.getProcessor(messageType);
+        AbstractMessageProcessor<CompleteMessage> processor = ProcessorFactory.getProcessor(messageType);
         processor.process(channelHandlerContext, completeMessage);
     }
 }

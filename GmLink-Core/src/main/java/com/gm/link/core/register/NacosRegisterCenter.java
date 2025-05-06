@@ -19,9 +19,11 @@ import java.util.concurrent.atomic.AtomicBoolean;
  * @Author: xexgm
  */
 @Slf4j
-public class NacosRegisterCenter implements RegisterCenterProcessor{
+public class NacosRegisterCenter implements RegisterCenterProcessor {
 
-    /** 用于维护服务实例信息 **/
+    /**
+     * 用于维护服务实例信息
+     **/
     private NamingService namingService;
 
     private final AtomicBoolean initialized = new AtomicBoolean(false);
@@ -47,7 +49,7 @@ public class NacosRegisterCenter implements RegisterCenterProcessor{
         Map<String, String> metadata = new HashMap<>();
         metadata.put("netty_port", "9999");
         metadata.put("grpc_port", "10001");
-        metadata.put("machine_id", LinkConfig.MACHINE_ID + "");
+        metadata.put(NacosRegisterConfig.MACHINE_ID_KEY, LinkConfig.MACHINE_ID + "");
         metadata.put("service_type", "composite"); // 标记复合型服务
 
         namingService.registerInstance(LinkConfig.SERVICENAME, NacosRegisterConfig.DEFAULT_GROUP, instance);
@@ -58,6 +60,14 @@ public class NacosRegisterCenter implements RegisterCenterProcessor{
          * List<Instance> instances = namingService.getAllInstances(LinkConfig.SERVICENAME);
          */
 
+
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+            try {
+                namingService.deregisterInstance(LinkConfig.SERVICENAME, NacosRegisterConfig.DEFAULT_GROUP, instance);
+            } catch (NacosException e) {
+                log.info("[shutdownRegister] error: {}", e.getMessage());
+            }
+        }));
         /**
          * 优雅下线处理
          * Runtime.getRuntime().addShutdownHook(new Thread(() -> {

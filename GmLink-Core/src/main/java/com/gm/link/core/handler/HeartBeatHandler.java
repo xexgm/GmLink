@@ -21,8 +21,7 @@ public class HeartBeatHandler extends ChannelInboundHandlerAdapter {
     @Override
     public void userEventTriggered(ChannelHandlerContext ctx, Object evt) throws Exception {
         // 触发空闲事件
-        if (evt instanceof IdleStateEvent) {
-            IdleStateEvent event = (IdleStateEvent) evt;
+        if (evt instanceof IdleStateEvent event) {
             // 读空闲事件
             if (READER_IDLE.equals(event.state())) {
                 // 发送心跳消息
@@ -34,7 +33,8 @@ public class HeartBeatHandler extends ChannelInboundHandlerAdapter {
 
     // 构造心跳消息
     private static CompleteMessage getHeartBeatMessage(long timestamp) {
-        CompleteMessage heartBeatMessage = new CompleteMessage(
+        // 包体可以带一下时间戳，设定超时等待的事件
+        return new CompleteMessage(
                 PacketHeader
                         .newBuilder()
                         .setAppId(LINK_SERVER.getId())
@@ -46,6 +46,5 @@ public class HeartBeatHandler extends ChannelInboundHandlerAdapter {
                         .timeStamp(timestamp)
                         .build()
         );
-        return heartBeatMessage;
     }
 }

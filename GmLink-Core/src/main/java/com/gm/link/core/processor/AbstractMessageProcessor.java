@@ -8,6 +8,6 @@ import io.netty.channel.ChannelHandlerContext;
  */
 public abstract class AbstractMessageProcessor<T> {
 
-    public void process(ChannelHandlerContext ctx, T msg){}
+    public abstract void process(ChannelHandlerContext ctx, T msg);
 
 }

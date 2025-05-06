@@ -6,7 +6,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @Author: xexgm
- * description: 保存 userId - channelHandlerCtx 的映射关系
+ * description: 保存当前机器的连接 userId - channelHandlerCtx 的映射关系
  */
 public class UserChannelCtxMap {
 
@@ -23,7 +23,6 @@ public class UserChannelCtxMap {
     }
 
     public static ChannelHandlerContext getChannelCtx(Long userId) {
-        ChannelHandlerContext channelHandlerContext = channelMap.get(userId);
-        return channelHandlerContext;
+        return channelMap.get(userId);
     }
 }

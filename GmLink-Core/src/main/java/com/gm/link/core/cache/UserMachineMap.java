@@ -10,7 +10,7 @@ import java.util.concurrent.ConcurrentHashMap;
 // todo kafka分区广播，建立连接，断开连接，都需要维护
 public class UserMachineMap {
 
-    public static ConcurrentHashMap<Long, Integer> user2MachineMap = new ConcurrentHashMap<>();
+    private static final ConcurrentHashMap<Long, Integer> user2MachineMap = new ConcurrentHashMap<>();
 
     // 几个操作：put remove get
     public static void put(Long userId, Integer machineId) {

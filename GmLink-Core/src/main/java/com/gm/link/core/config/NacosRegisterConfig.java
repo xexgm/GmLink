@@ -32,4 +32,6 @@ public class NacosRegisterConfig {
         PROPERTIES.put(PropertyKeyConst.NAMESPACE, DEFAULT_NAMESPACE);
         PROPERTIES.put(PropertyKeyConst.CLUSTER_NAME, CLUSTER_NAME);
     }
+
+    public static final String MACHINE_ID_KEY = "machine_id";
 }

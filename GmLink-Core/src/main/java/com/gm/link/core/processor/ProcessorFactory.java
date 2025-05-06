@@ -1,5 +1,6 @@
 package com.gm.link.core.processor;
 
+import com.gm.link.common.domain.model.CompleteMessage;
 import com.gm.link.common.enums.MessageType;
 
 import static com.gm.link.common.enums.MessageType.*;
@@ -9,7 +10,7 @@ import static com.gm.link.common.enums.MessageType.*;
  */
 public class ProcessorFactory {
 
-    public static AbstractMessageProcessor getProcessor(MessageType messageType) {
+    public static AbstractMessageProcessor<CompleteMessage> getProcessor(MessageType messageType) {
         return switch (messageType) {
             case LOGIN_MESSAGE -> LoginProcessor.getInstance();
             case HEARTBEAT_MESSAGE -> HeartBeatProcessor.getInstance();

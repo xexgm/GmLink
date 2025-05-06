@@ -41,7 +41,6 @@ public class NettyServer implements ServerLifeCycle {
     private EventLoopGroup workerEventLoopGroup;
 
     public NettyServer() {
-        init();
     }
 
     @Override
@@ -67,7 +66,8 @@ public class NettyServer implements ServerLifeCycle {
     }
 
     @Override
-    public void start() throws InterruptedException {
+    public void start() {
+        init();
         serverBootstrap
                 // 设置 主从Reactor多线程模型
                 .group(bossEventLoopGroup, workerEventLoopGroup)
