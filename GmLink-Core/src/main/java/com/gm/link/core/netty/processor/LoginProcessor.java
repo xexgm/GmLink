@@ -1,4 +1,4 @@
-package com.gm.link.core.processor;
+package com.gm.link.core.netty.processor;
 
 import com.gm.link.common.constant.ChannelAttrKey;
 import com.gm.link.common.domain.model.CompleteMessage;
@@ -26,6 +26,7 @@ import static com.gm.link.common.enums.MessageType.LOGIN_MESSAGE;
 /**
  * @Author: xexgm
  * descrption: 登录处理器
+ * todo 减少登录处理器的日志
  */
 @Slf4j
 public class LoginProcessor extends AbstractMessageProcessor<CompleteMessage>{

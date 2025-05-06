@@ -1,10 +1,8 @@
 package com.gm.link.bootstrap;
 
-import com.gm.link.core.Server.GrpcServer;
-import com.gm.link.core.Server.NettyServer;
+import com.gm.link.core.grpc.GrpcServer;
+import com.gm.link.core.netty.NettyServer;
 import com.gm.link.core.cache.LinkClusterManager;
-import com.gm.link.core.config.LinkConfig;
-import com.gm.link.core.config.NacosRegisterConfig;
 import com.gm.link.core.register.NacosRegisterCenter;
 import com.gm.link.core.register.RegisterCenterProcessor;
 import lombok.extern.slf4j.Slf4j;

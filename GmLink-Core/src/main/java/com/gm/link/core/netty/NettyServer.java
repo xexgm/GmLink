@@ -1,4 +1,4 @@
-package com.gm.link.core.Server;
+package com.gm.link.core.netty;
 
 import com.gm.link.common.utils.SystemUtil;
 import com.gm.link.core.codec.MessageProtocolDecoder;
@@ -6,7 +6,7 @@ import com.gm.link.core.codec.MessageProtocolEncoder;
 import com.gm.link.core.config.LinkConfig;
 import com.gm.link.core.config.NettyConfig;
 import com.gm.link.core.config.ServerLifeCycle;
-import com.gm.link.core.handler.LinkChannelHandler;
+import com.gm.link.core.netty.handler.LinkChannelHandler;
 import com.gm.link.core.redis.MachineIdGenerator;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelFuture;

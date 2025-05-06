@@ -1,9 +1,7 @@
-package com.gm.link.core.processor;
+package com.gm.link.core.netty.processor;
 
 import com.gm.link.common.domain.model.CompleteMessage;
 import com.gm.link.common.enums.MessageType;
-
-import static com.gm.link.common.enums.MessageType.*;
 
 /**
  * @Author: xexgm

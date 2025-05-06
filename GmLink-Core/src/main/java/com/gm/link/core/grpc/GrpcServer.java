@@ -1,7 +1,6 @@
-package com.gm.link.core.Server;
+package com.gm.link.core.grpc;
 
 import com.gm.link.core.config.GrpcConfig;
-import com.gm.link.core.grpc.PushServiceImpl;
 import io.grpc.Server;
 import io.grpc.ServerBuilder;
 import lombok.extern.slf4j.Slf4j;

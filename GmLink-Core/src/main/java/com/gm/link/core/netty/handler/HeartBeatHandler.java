@@ -1,4 +1,4 @@
-package com.gm.link.core.handler;
+package com.gm.link.core.netty.handler;
 
 import com.gm.link.common.domain.model.CompleteMessage;
 import com.gm.link.common.domain.model.MessageBody;
