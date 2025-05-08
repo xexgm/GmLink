@@ -9,6 +9,7 @@ import io.netty.channel.SimpleChannelInboundHandler;
 
 /**
  * @Author: xexgm
+ * description: 责任链 -> 处理上行消息
  */
 public class LinkChannelHandler extends SimpleChannelInboundHandler<CompleteMessage> {
     @Override

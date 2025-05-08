@@ -56,8 +56,10 @@ public class HeartBeatProcessor extends AbstractMessageProcessor<CompleteMessage
         Long heartBeatTimes = lastHeartBeatTimes == null ? 1 : lastHeartBeatTimes + 1;
         heartBeatCtx.channel().attr(heartBeatTimesKey).set(heartBeatTimes);
 
+        long lastTimes = lastHeartBeatTimes == null ? 0 : lastHeartBeatTimes;
+
         // 判断 %3 == 0 ? 续期redis
-        if (lastHeartBeatTimes + 1 % 3 != 0) {
+        if (lastTimes + 1 % 3 != 0) {
             return;
         }
         log.info("[HeartBeatMessage] 心跳达到三次，续期redis uid: {}, times: {}", uid, heartBeatTimes);

@@ -12,7 +12,7 @@ import java.util.Properties;
  */
 public class KafkaProducerManager {
     private static volatile KafkaProducer<String, String> producer;
-    private static Properties props = new Properties();
+    private static final Properties props = new Properties();
 
     static {
         // todo kafka地址待填
@@ -20,7 +20,7 @@ public class KafkaProducerManager {
         props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
         props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
         // 批处理核心参数
-        props.put(ProducerConfig.BATCH_SIZE_CONFIG, 1 * 1024 * 1024); // 批次大小 1Mb
+        props.put(ProducerConfig.BATCH_SIZE_CONFIG, 1024 * 1024); // 批次大小 1Mb
         props.put(ProducerConfig.LINGER_MS_CONFIG, 500); // 批次等待时间 500ms
         props.put(ProducerConfig.BUFFER_MEMORY_CONFIG, 32 * 1024 * 1024);
         // 可选优化配置

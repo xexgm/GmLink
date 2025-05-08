@@ -1,6 +1,5 @@
 package com.gm.link.core.netty.processor;
 
-import com.gm.link.common.domain.model.CompleteMessage;
 import io.netty.channel.ChannelHandlerContext;
 
 /**

@@ -5,6 +5,7 @@ import com.alibaba.nacos.api.naming.NamingFactory;
 import com.alibaba.nacos.api.naming.NamingService;
 import com.alibaba.nacos.api.naming.listener.NamingEvent;
 import com.alibaba.nacos.api.naming.pojo.Instance;
+import com.alibaba.nacos.common.executor.NameThreadFactory;
 import com.alibaba.nacos.common.utils.CollectionUtils;
 import com.gm.link.core.config.LinkConfig;
 import com.gm.link.core.config.NacosRegisterConfig;
@@ -13,6 +14,8 @@ import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.*;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
@@ -27,6 +30,8 @@ public class NacosRegisterCenter implements RegisterCenterProcessor {
     private NamingService namingService;
 
     private final AtomicBoolean initialized = new AtomicBoolean(false);
+    
+    private RegisterCenterListener listener;
 
     @SneakyThrows(Exception.class)
     @Override
@@ -76,11 +81,11 @@ public class NacosRegisterCenter implements RegisterCenterProcessor {
          */
     }
 
-    // nacos监听器 -> gm-link 实例发生变化，更新本地机器的实例缓存，key: 机器id value: 机器ip
-    // 新增内部机器连接管理者，存储 link集群机器信息，并且保存当前机器与其他机器的长连接
     @SneakyThrows(Exception.class)
     @Override
     public void subscribeServiceChange(RegisterCenterListener listener) {
+        this.listener = listener;
+        // 事件驱动
         namingService.subscribe(LinkConfig.SERVICENAME, NacosRegisterConfig.DEFAULT_GROUP, event -> {
             if (event instanceof NamingEvent) {
                 // 触发监听器
@@ -91,21 +96,63 @@ public class NacosRegisterCenter implements RegisterCenterProcessor {
                     // 不是当前服务实例的变化
                     return;
                 }
-                try {
-                    List<Instance> currentInstances = namingService.getAllInstances(LinkConfig.SERVICENAME, NacosRegisterConfig.DEFAULT_GROUP);
-                    Set<Instance> newInstances = new HashSet<>();
-                    if (CollectionUtils.isNotEmpty(currentInstances)) {
-                        for (Instance instance : currentInstances) {
-                            if (instance == null) continue;
-                            newInstances.add(instance);
-                        }
-                    }
-                    // 调用我们自定义的 listener
-                    listener.onInstancesChange(newInstances);
-                } catch (NacosException e) {
-                    log.info("[registerOnEvent] error: {}", e.getMessage());
-                }
+                doSubscribeServiceChange();
             }
         });
+
+        // 保留定时任务兜底
+        Executors.newScheduledThreadPool(1, new NameThreadFactory("doSubscribeInstanceChange"))
+                .scheduleWithFixedDelay(this::doSubscribeServiceChange, 0, 600, TimeUnit.SECONDS);
+
+    }
+
+    // nacos监听器 -> gm-link 实例发生变化，更新本地机器的实例缓存，key: 机器id value: 机器ip
+    // 新增内部机器连接管理者，存储 link集群机器信息，并且保存当前机器与其他机器的长连接
+//    @SneakyThrows(Exception.class)
+//    public void doSubscribeServiceChange(RegisterCenterListener listener) {
+//        namingService.subscribe(LinkConfig.SERVICENAME, NacosRegisterConfig.DEFAULT_GROUP, event -> {
+//            if (event instanceof NamingEvent) {
+//                // 触发监听器
+//                log.info("[registerOnEvent] event: {}", event);
+//
+//                String serviceName = ((NamingEvent) event).getServiceName();
+//                if (!LinkConfig.SERVICENAME.equals(serviceName)) {
+//                    // 不是当前服务实例的变化
+//                    return;
+//                }
+//                try {
+//                    List<Instance> currentInstances = namingService.getAllInstances(LinkConfig.SERVICENAME, NacosRegisterConfig.DEFAULT_GROUP);
+//                    Set<Instance> newInstances = new HashSet<>();
+//                    if (CollectionUtils.isNotEmpty(currentInstances)) {
+//                        for (Instance instance : currentInstances) {
+//                            if (instance == null) continue;
+//                            newInstances.add(instance);
+//                        }
+//                    }
+//                    // 调用我们自定义的 监听器
+//                    listener.onInstancesChange(newInstances);
+//                } catch (NacosException e) {
+//                    log.info("[registerOnEvent] error: {}", e.getMessage());
+//                }
+//            }
+//        });
+//    }
+
+    @SneakyThrows(Exception.class)
+    public void doSubscribeServiceChange() {
+        try {
+            List<Instance> currentInstances = namingService.getAllInstances(LinkConfig.SERVICENAME, NacosRegisterConfig.DEFAULT_GROUP);
+            Set<Instance> newInstances = new HashSet<>();
+            if (CollectionUtils.isNotEmpty(currentInstances)) {
+                for (Instance instance : currentInstances) {
+                    if (instance == null) continue;
+                    newInstances.add(instance);
+                }
+            }
+            // 调用我们自定义的 listener
+            listener.onInstancesChange(newInstances);
+        } catch (NacosException e) {
+            log.info("[registerOnEvent] error: {}", e.getMessage());
+        }
     }
 }
