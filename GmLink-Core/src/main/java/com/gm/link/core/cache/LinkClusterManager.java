@@ -19,7 +19,8 @@ public class LinkClusterManager {
     private static final ConcurrentHashMap<Integer, String> clusterMachineIpMap = new ConcurrentHashMap<>();
 
     // 当前机器 与 目标机器 建立的channel targetMachineId -> channel
-//    private static final ConcurrentHashMap<Integer, Channel> LinkId2ChannelMap = new ConcurrentHashMap<>();
+    @Deprecated
+    private static final ConcurrentHashMap<Integer, Channel> LinkId2ChannelMap = new ConcurrentHashMap<>();
 
     // nacos 监听器触发
     public static void updateClusterInstances(Set<Instance> newInstances) {
@@ -35,15 +36,18 @@ public class LinkClusterManager {
         return clusterMachineIpMap.get(machineId);
     }
 
-//    public static void addLinkId2Channel(int machineId, Channel channel) {
-//        LinkId2ChannelMap.put(machineId, channel);
-//    }
+    @Deprecated
+    public static void addLinkId2Channel(int machineId, Channel channel) {
+        LinkId2ChannelMap.put(machineId, channel);
+    }
 
-//    public static void removeLinkId2Channel(int machineId) {
-//        LinkId2ChannelMap.remove(machineId);
-//    }
+    @Deprecated
+    public static void removeLinkId2Channel(int machineId) {
+        LinkId2ChannelMap.remove(machineId);
+    }
 
-//    public static Channel getLinkId2Channel(int machineId) {
-//        return LinkId2ChannelMap.get(machineId);
-//    }
+    @Deprecated
+    public static Channel getLinkId2Channel(int machineId) {
+        return LinkId2ChannelMap.get(machineId);
+    }
 }

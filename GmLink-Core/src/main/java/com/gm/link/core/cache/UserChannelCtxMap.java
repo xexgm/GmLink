@@ -7,7 +7,6 @@ import java.util.concurrent.ConcurrentHashMap;
 /**
  * @Author: xexgm
  * description: 保存当前机器的连接 userId - channelHandlerCtx 的映射关系
- * todo 梳理一下维护的关系
  */
 public class UserChannelCtxMap {
 

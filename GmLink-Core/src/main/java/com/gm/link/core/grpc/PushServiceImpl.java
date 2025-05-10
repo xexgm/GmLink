@@ -19,6 +19,7 @@ import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelHandlerContext;
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.List;
 import java.util.concurrent.Executors;
 
 /**
@@ -194,8 +195,34 @@ public class PushServiceImpl extends PushServiceGrpc.PushServiceImplBase {
     // todo 批量处理 2000人以上用 标签方案优化
     @Override
     public void batchPush2Link(PushGrpc.BatchPushRequest request, StreamObserver<PushGrpc.BatchPushResponse> responseObserver) {
+        List<Long> toIdList = request.getToIdsList();
 
+        //
+
+        // 2000人以下 普通处理批量消息
+
+        // 2000人以上 使用标签优化
     }
+
+
+    // 普通处理批量消息
+    // 根据 toIds，拿到 目标机器id，按照 目标机器id 进行分组，每组的数据为  toIdList
+    // 遍历每个分组，判断分组的 targetMachineId 是否为当前机器，若是，直接推送
+    // 若不是，调用目标机器的 批量消息grpc接口，进行转发
+//    private PushGrpc.BatchPushResponse batchPushStrategy() {
+//
+//    }
+
+
+    // 群聊业务层，需要维护 标签id
+    // redis: tagId -> machineIds
+    // Link中台: tagId -> channels (或者 userId，根据userId，去本地缓存拿 channel，拿不到就响应，业务层做其他处理)
+    // 根据标签id，从redis查 machineIds，判断 machineIds 是否有效
+//    private PushGrpc.BatchPushResponse tagSubscribeStrategy() {
+//
+//    }
+
+
 
     public CompleteMessage buildForwardMessage(PushGrpc.PushRequest request) {
         return CompleteMessage.builder()

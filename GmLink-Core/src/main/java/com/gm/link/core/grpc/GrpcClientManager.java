@@ -16,10 +16,10 @@ import java.util.concurrent.TimeUnit;
  */
 public class GrpcClientManager {
 
-    // 客户端 machineId -> stub
+    // 客户端 targetMachineId -> stub
     private static final Map<Integer, PushServiceGrpc.PushServiceFutureStub> asyncStubCache = new ConcurrentHashMap<>();
 
-    // 连接池 machineId -> channel
+    // 连接池 targetMachineId -> channel
     private static final Map<Integer, ManagedChannel> channelPool = new ConcurrentHashMap<>();
 
     public static PushServiceGrpc.PushServiceFutureStub getAsyncStub(Integer machineId) {

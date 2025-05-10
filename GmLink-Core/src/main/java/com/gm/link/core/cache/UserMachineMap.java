@@ -9,6 +9,7 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 // Abandoned 不作使用，不能保证 实时+可靠
 // kafka分区广播，建立连接，断开连接，都需要维护
+@Deprecated
 public class UserMachineMap {
 
     private static final ConcurrentHashMap<Long, Integer> user2MachineMap = new ConcurrentHashMap<>();
