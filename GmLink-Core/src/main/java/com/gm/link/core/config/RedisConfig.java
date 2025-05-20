@@ -18,7 +18,7 @@ public class RedisConfig {
     public static String PREFIX_USER_ID = "user:";
 
     /** redis 获取机器id 地址 todo **/
-    public static String REDIS_HOST = "";
+    public static String REDIS_HOST = "47.96.227.200";
 
     /** redis 获取机器id 端口 **/
     public static Integer REDIS_PORT = 6379;

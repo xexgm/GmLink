@@ -9,11 +9,9 @@ import java.util.Properties;
  * @Author: xexgm
  */
 public class NacosRegisterConfig {
-    
-    public static final Properties PROPERTIES = new Properties();
 
-    /** Nacos地址 host:port **/
-    public static final String SERVERADDR = NetUtil.getLocalIp() + ":" + "10000";
+    /** todo Nacos地址 host:port **/
+    public static final String SERVERADDR = ":" + "10000";
 
     /** nacos默认命名空间，为空，代表 Public **/
     public static final String DEFAULT_NAMESPACE = "";
@@ -26,12 +24,12 @@ public class NacosRegisterConfig {
 
     /** nacos 默认超时时长 **/
     public static final int DEFAULT_TIMEOUT = 3000;
-    
-    static {
-        PROPERTIES.put(PropertyKeyConst.SERVER_ADDR, SERVERADDR);
-        PROPERTIES.put(PropertyKeyConst.NAMESPACE, DEFAULT_NAMESPACE);
-        PROPERTIES.put(PropertyKeyConst.CLUSTER_NAME, CLUSTER_NAME);
-    }
+    public static final Properties PROPERTIES = new Properties() {
+        {
+            put(PropertyKeyConst.SERVER_ADDR, SERVERADDR);
+            put(PropertyKeyConst.NAMESPACE, DEFAULT_NAMESPACE);
+        }
+    };
 
     public static final String MACHINE_ID_KEY = "machine_id";
 }

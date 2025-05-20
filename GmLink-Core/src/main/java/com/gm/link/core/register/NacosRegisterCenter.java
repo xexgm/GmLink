@@ -36,6 +36,7 @@ public class NacosRegisterCenter implements RegisterCenterProcessor {
     @SneakyThrows(Exception.class)
     @Override
     public void init() {
+        log.info("[nacosRegisterInit]...");
         if (!initialized.compareAndSet(false, true)) {
             return;
         }
