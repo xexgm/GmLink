@@ -66,6 +66,8 @@ public class LoginProcessor extends AbstractMessageProcessor<CompleteMessage>{
         ProducerRecord<String, String> record = new ProducerRecord<>(
                 // topic
                 KafkaConfig.LINK_TOPIC,
+                // 路由分区key
+                String.valueOf(userId),
                 // value: 对redis进行操作，添加 userId 机器id，过期时间为300s
                 JsonUtil.toJson(RedisOperationMessage
                         .builder()

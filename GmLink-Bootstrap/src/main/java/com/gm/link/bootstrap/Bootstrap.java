@@ -13,7 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class Bootstrap {
 
-    public static void run(String[] args) {
+    public static void main(String[] args) {
         new Bootstrap().start(args);
     }
 

@@ -68,6 +68,7 @@ public class HeartBeatProcessor extends AbstractMessageProcessor<CompleteMessage
         ProducerRecord<String, String> expireRecord = new ProducerRecord<>(
                 // topic
                 KafkaConfig.LINK_TOPIC,
+                String.valueOf(uid),
                 // value: 对redis进行操作，添加 userId 机器id，过期时间为300s
                 JsonUtil.toJson(RedisOperationMessage
                         .builder()

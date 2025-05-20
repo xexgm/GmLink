@@ -79,8 +79,8 @@ public class NettyServer implements ServerLifeCycle {
                     @Override
                     protected void initChannel(SocketChannel ch) throws Exception {
                         ch.pipeline()
-                                // 检测 读空闲 事件，用于心跳检测
-                                .addLast(new IdleStateHandler(60, 0, 0, TimeUnit.SECONDS))
+//                                // 检测 读空闲 事件，用于心跳检测
+//                                .addLast(new IdleStateHandler(60, 0, 0, TimeUnit.SECONDS))
                                 // 自定义解码器
                                 .addLast(new MessageProtocolDecoder())
                                 // 自定义编码器

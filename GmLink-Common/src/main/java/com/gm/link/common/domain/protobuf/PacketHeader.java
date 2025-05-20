@@ -222,7 +222,7 @@ private static final long serialVersionUID = 0L;
   private int messageType_;
   /**
    * <pre>
-   * 2字节，数据类型标识，标识数据类型，0-登录，1-心跳，2-ack，3-强制下线,4-私聊，5-群聊，6-系统消息，待扩展
+   * 2字节，数据类型标识，标识数据类型，0-客户端登录，1-心跳，2-ack，3-强制下线,4-私聊，
    * </pre>
    *
    * <code>int32 messageType = 6;</code>
@@ -892,7 +892,7 @@ private static final long serialVersionUID = 0L;
     private int messageType_ ;
     /**
      * <pre>
-     * 2字节，数据类型标识，标识数据类型，0-登录，1-心跳，2-ack，3-强制下线,4-私聊，5-群聊，6-系统消息，待扩展
+     * 2字节，数据类型标识，标识数据类型，0-客户端登录，1-心跳，2-ack，3-强制下线,4-私聊，
      * </pre>
      *
      * <code>int32 messageType = 6;</code>
@@ -904,7 +904,7 @@ private static final long serialVersionUID = 0L;
     }
     /**
      * <pre>
-     * 2字节，数据类型标识，标识数据类型，0-登录，1-心跳，2-ack，3-强制下线,4-私聊，5-群聊，6-系统消息，待扩展
+     * 2字节，数据类型标识，标识数据类型，0-客户端登录，1-心跳，2-ack，3-强制下线,4-私聊，
      * </pre>
      *
      * <code>int32 messageType = 6;</code>
@@ -919,7 +919,7 @@ private static final long serialVersionUID = 0L;
     }
     /**
      * <pre>
-     * 2字节，数据类型标识，标识数据类型，0-登录，1-心跳，2-ack，3-强制下线,4-私聊，5-群聊，6-系统消息，待扩展
+     * 2字节，数据类型标识，标识数据类型，0-客户端登录，1-心跳，2-ack，3-强制下线,4-私聊，
      * </pre>
      *
      * <code>int32 messageType = 6;</code>

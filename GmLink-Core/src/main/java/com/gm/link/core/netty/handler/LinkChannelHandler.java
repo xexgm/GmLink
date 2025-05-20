@@ -6,6 +6,7 @@ import com.gm.link.core.netty.processor.AbstractMessageProcessor;
 import com.gm.link.core.netty.processor.ProcessorFactory;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
+import io.netty.util.ReferenceCountUtil;
 
 /**
  * @Author: xexgm
@@ -16,11 +17,12 @@ public class LinkChannelHandler extends SimpleChannelInboundHandler<CompleteMess
     protected void channelRead0(ChannelHandlerContext channelHandlerContext, CompleteMessage completeMessage) throws Exception {
         MessageType messageType = MessageType.fromType((short) completeMessage.getPacketHeader().getMessageType());
         if (messageType == null) {
+            // 在读的中途停止了传递，手动释放 ByteBuf，避免内存泄漏
+            ReferenceCountUtil.release(completeMessage);
             return;
         }
         AbstractMessageProcessor<CompleteMessage> processor = ProcessorFactory.getProcessor(messageType);
         processor.process(channelHandlerContext, completeMessage);
-    }
 
-    // todo 处理 idleState 事件
+    }
 }
