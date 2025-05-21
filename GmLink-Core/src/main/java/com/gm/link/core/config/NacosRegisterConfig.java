@@ -10,10 +10,10 @@ import java.util.Properties;
  */
 public class NacosRegisterConfig {
     
-    public static final Properties PROPERTIES = new Properties();
+
 
     /** Nacos地址 host:port **/
-    public static final String SERVERADDR = NetUtil.getLocalIp() + ":" + "10000";
+    public static final String SERVERADDR = "192.168.222.142" + ":" + "8848";
 
     /** nacos默认命名空间，为空，代表 Public **/
     public static final String DEFAULT_NAMESPACE = "";
@@ -26,12 +26,22 @@ public class NacosRegisterConfig {
 
     /** nacos 默认超时时长 **/
     public static final int DEFAULT_TIMEOUT = 3000;
-    
-    static {
-        PROPERTIES.put(PropertyKeyConst.SERVER_ADDR, SERVERADDR);
-        PROPERTIES.put(PropertyKeyConst.NAMESPACE, DEFAULT_NAMESPACE);
-        PROPERTIES.put(PropertyKeyConst.CLUSTER_NAME, CLUSTER_NAME);
-    }
+
+    public static final Properties PROPERTIES = new Properties() {
+        {
+            put(PropertyKeyConst.SERVER_ADDR, SERVERADDR);
+            put(PropertyKeyConst.NAMESPACE, DEFAULT_NAMESPACE);
+            // grpc 配置
+//            put("nacos.remote.client.grpc.port", 9848);
+            put("nacos.remote.client.grpc.timeout", 10000);
+        }
+    };
+//
+//    static {
+//        PROPERTIES.put(PropertyKeyConst.SERVER_ADDR, SERVERADDR);
+//        PROPERTIES.put(PropertyKeyConst.NAMESPACE, DEFAULT_NAMESPACE);
+//        PROPERTIES.put(PropertyKeyConst.CLUSTER_NAME, CLUSTER_NAME);
+//    }
 
     public static final String MACHINE_ID_KEY = "machine_id";
 }

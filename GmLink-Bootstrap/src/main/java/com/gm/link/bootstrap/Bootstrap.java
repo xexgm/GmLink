@@ -22,11 +22,13 @@ public class Bootstrap {
 
         new NettyServer().start();
         GrpcServer grpcServer = new GrpcServer();
-        grpcServer.start();
-        grpcServer.blockUntilShutdown();
 
         // 初始化注册中心
         initConfigCenter();
+
+        grpcServer.start();
+        grpcServer.blockUntilShutdown();
+
 
     }
 

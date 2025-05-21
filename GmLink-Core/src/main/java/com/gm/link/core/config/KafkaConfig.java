@@ -8,7 +8,7 @@ public class KafkaConfig {
     /**
      * kafka host todo
      */
-    public static String SERVERS_CONFIG = "";
+    public static String SERVERS_CONFIG = "127.0.0.1:9092";
 
     /**
      * 登录、心跳、登出 topic

@@ -36,6 +36,7 @@ public class NacosRegisterCenter implements RegisterCenterProcessor {
     @SneakyThrows(Exception.class)
     @Override
     public void init() {
+        log.info("[nacosRegisterInit] ...");
         if (!initialized.compareAndSet(false, true)) {
             return;
         }
@@ -49,11 +50,12 @@ public class NacosRegisterCenter implements RegisterCenterProcessor {
         instance.setIp(LinkConfig.LINK_HOST);
         // netty监听端口作为主端口
         instance.setPort(NettyConfig.port);
+        instance.setServiceName(LinkConfig.SERVICENAME);
 
         // 关键元数据配置
         Map<String, String> metadata = new HashMap<>();
         metadata.put("netty_port", "9999");
-        metadata.put("grpc_port", "10001");
+        metadata.put("gm_grpc_port", "10001");
         metadata.put(NacosRegisterConfig.MACHINE_ID_KEY, LinkConfig.MACHINE_ID + "");
         metadata.put("service_type", "composite"); // 标记复合型服务
 

@@ -81,6 +81,9 @@ public class LoginProcessor extends AbstractMessageProcessor<CompleteMessage>{
 
         // 异步发送到 kafka
         Future<RecordMetadata> future = producer.send(record, (metadata, exception) -> {
+            if (exception != null) {
+                log.info("[sendKafkaFuture] exception: " + exception.getMessage(), exception);
+            }
             if (ctx.channel().isActive()) {
                 // 响应客户端
                 ctx.channel().writeAndFlush(
@@ -105,7 +108,7 @@ public class LoginProcessor extends AbstractMessageProcessor<CompleteMessage>{
             if (exception != null) {
                 log.error("[sendKafka] 发送消息失败: " + exception.getMessage());
             } else {
-                log.info("[sendKafka] 发送消息成功,Topic: {}", metadata.topic());
+                log.info("[sendKafka] 发送消息成功,上线 Topic: {}, uid: {}", metadata.topic(), userId);
             }
         });
 
