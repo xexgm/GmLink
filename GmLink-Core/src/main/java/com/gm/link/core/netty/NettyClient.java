@@ -6,12 +6,15 @@ import com.gm.link.core.codec.MessageProtocolDecoder;
 import com.gm.link.core.codec.MessageProtocolEncoder;
 import com.gm.link.core.netty.handler.LinkChannelHandler;
 import io.netty.bootstrap.Bootstrap;
-import io.netty.channel.*;
+import io.netty.channel.Channel;
+import io.netty.channel.ChannelFuture;
+import io.netty.channel.ChannelInitializer;
+import io.netty.channel.EventLoopGroup;
 import io.netty.channel.epoll.EpollEventLoopGroup;
-import io.netty.channel.epoll.EpollServerSocketChannel;
+import io.netty.channel.epoll.EpollSocketChannel;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
-import io.netty.channel.socket.nio.NioServerSocketChannel;
+import io.netty.channel.socket.nio.NioSocketChannel;
 import io.netty.util.concurrent.DefaultThreadFactory;
 import lombok.Data;
 
@@ -49,7 +52,7 @@ public class NettyClient {
     public void connect() throws InterruptedException {
         init();
         bootstrap.group(eventLoopGroup)
-                .channel(SystemUtil.useEpollMode() ? EpollServerSocketChannel.class : NioServerSocketChannel.class)
+                .channel(SystemUtil.useEpollMode() ? EpollSocketChannel.class : NioSocketChannel.class)
                 .handler(new ChannelInitializer<SocketChannel>() {
 
                     @Override
