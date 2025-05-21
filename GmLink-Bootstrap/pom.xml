@@ -4,7 +4,7 @@
     <parent>
         <groupId>com.gm</groupId>
         <artifactId>GmLink</artifactId>
-        <version>1.0</version>
+        <version>1.1</version>
     </parent>
 
     <artifactId>GmLink-Bootstrap</artifactId>
@@ -25,7 +25,7 @@
         <dependency>
             <groupId>com.gm</groupId>
             <artifactId>GmLink-Core</artifactId>
-            <version>1.0</version>
+            <version>1.1</version>
         </dependency>
     </dependencies>
 </project>
