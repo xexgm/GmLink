@@ -27,17 +27,6 @@ public class KafkaProducerManager {
     /* 状态服务生产者 */
     private static KafkaProducer<String, String> producer;
 
-//    static {
-//        try {
-//            producer = new KafkaProducer<>(props);
-//        } catch (Exception e) {
-//            log.error("KafkaProducerManager init error: {}", e.getMessage());
-//        }
-//    }
-
-    //    public static KafkaProducer<String, String> getProducer() {
-//        return producer;
-//    }
     public static KafkaProducer<String, String> getProducer() {
         if (producer == null) {
             synchronized (KafkaProducerManager.class) {
@@ -55,18 +44,6 @@ public class KafkaProducerManager {
         return producer;
     }
 
-//    static {
-//        // todo kafka地址待填
-//        props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, KafkaConfig.SERVERS_CONFIG);
-//        props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
-//        props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
-//        // 批处理核心参数
-////        props.put(ProducerConfig.BATCH_SIZE_CONFIG, 1024 * 1024); // 批次大小 1Mb
-////        props.put(ProducerConfig.LINGER_MS_CONFIG, 100); // 批次等待时间 100ms
-////        props.put(ProducerConfig.BUFFER_MEMORY_CONFIG, 32 * 1024 * 1024);
-//        // 可选优化配置
-//        props.put(ProducerConfig.ACKS_CONFIG, "1");
-//    }
 
     public static void shutdown() {
         if (producer != null) {
