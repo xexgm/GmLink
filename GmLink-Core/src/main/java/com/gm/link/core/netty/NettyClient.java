@@ -49,7 +49,7 @@ public class NettyClient {
     }
 
     // todo 心跳检测、断线重连
-    public void connect() throws InterruptedException {
+    public ChannelFuture connect() throws InterruptedException {
         init();
         bootstrap.group(eventLoopGroup)
                 .channel(SystemUtil.useEpollMode() ? EpollSocketChannel.class : NioSocketChannel.class)
@@ -68,8 +68,13 @@ public class NettyClient {
                     }
                 });
 
-        ChannelFuture future = bootstrap.connect(host, port).sync();
-        this.channel = future.channel();
+        ChannelFuture future = bootstrap.connect(host, port);
+        future.addListener(f -> {
+            if (f.isSuccess()) {
+                this.channel = future.channel();
+            }
+        });
+        return future;
     }
 
     public ChannelFuture send(CompleteMessage message) {

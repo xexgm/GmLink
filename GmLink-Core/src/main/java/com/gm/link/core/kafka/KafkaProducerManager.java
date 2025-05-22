@@ -17,8 +17,7 @@ public class KafkaProducerManager {
 
     private static final Properties props = new Properties() {
         {
-            log.info("[loadKafkaProducer] : {}", KafkaConfig.SERVERS_CONFIG);
-            put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, KafkaConfig.SERVERS_CONFIG);
+            put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "127.0.0.1:9092");
             put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
             put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
             put(ProducerConfig.ACKS_CONFIG, "1");
@@ -26,15 +25,34 @@ public class KafkaProducerManager {
     };
 
     /* 状态服务生产者 */
-    @Getter
     private static KafkaProducer<String, String> producer;
 
-    static {
-        try {
-            producer = new KafkaProducer<>(props);
-        } catch (Exception e) {
-            log.error("[KafkaProducerManager] init error" + e.getMessage(), e);
+//    static {
+//        try {
+//            producer = new KafkaProducer<>(props);
+//        } catch (Exception e) {
+//            log.error("KafkaProducerManager init error: {}", e.getMessage());
+//        }
+//    }
+
+    //    public static KafkaProducer<String, String> getProducer() {
+//        return producer;
+//    }
+    public static KafkaProducer<String, String> getProducer() {
+        if (producer == null) {
+            synchronized (KafkaProducerManager.class) {
+                if (producer == null) {
+                    try {
+                        producer = new KafkaProducer<>(props);
+                        log.info("KafkaProducer 初始化成功");
+                    } catch (Exception e) {
+                        log.error("KafkaProducer 初始化失败: ", e);
+                        throw new RuntimeException("KafkaProducer 初始化失败", e);
+                    }
+                }
+            }
         }
+        return producer;
     }
 
 //    static {

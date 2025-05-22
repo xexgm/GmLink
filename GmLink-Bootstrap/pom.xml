@@ -4,7 +4,7 @@
     <parent>
         <groupId>com.gm</groupId>
         <artifactId>GmLink</artifactId>
-        <version>1.0</version>
+        <version>1.1</version>
     </parent>
 
     <artifactId>GmLink-Bootstrap</artifactId>
@@ -16,6 +16,12 @@
     </properties>
 
     <dependencies>
+        <!-- 依赖Nacos -->
+        <dependency>
+            <groupId>com.alibaba.nacos</groupId>
+            <artifactId>nacos-client</artifactId>
+            <version>2.2.3</version>
+        </dependency>
         <dependency>
             <groupId>com.alibaba.nacos</groupId>
             <artifactId>nacos-client</artifactId>
@@ -24,7 +30,7 @@
         <dependency>
             <groupId>com.gm</groupId>
             <artifactId>GmLink-Core</artifactId>
-            <version>1.0</version>
+            <version>1.1</version>
         </dependency>
     </dependencies>
 </project>

@@ -4,7 +4,7 @@
     <parent>
         <groupId>com.gm</groupId>
         <artifactId>GmLink</artifactId>
-        <version>1.0</version>
+        <version>1.1</version>
     </parent>
 
     <artifactId>GmLink-Core</artifactId>
@@ -35,7 +35,7 @@
         <dependency>
             <groupId>org.apache.kafka</groupId>
             <artifactId>kafka-clients</artifactId>
-            <version>3.5.1</version>
+            <version>4.0.0</version>
         </dependency>
 
         <!-- 依赖redis-->
