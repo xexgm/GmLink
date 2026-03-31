@@ -1,7 +1,7 @@
 package com.gm.link.core.netty.handler;
 
-import com.gm.link.common.domain.model.CompleteMessage;
-import com.gm.link.common.domain.model.MessageBody;
+import com.gm.link.common.domain.protobuf.CompleteMessage;
+import com.gm.link.common.domain.protobuf.PacketBody;
 import com.gm.link.common.domain.protobuf.PacketHeader;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
@@ -34,17 +34,18 @@ public class HeartBeatHandler extends ChannelInboundHandlerAdapter {
     // 构造心跳消息
     private static CompleteMessage getHeartBeatMessage(long timestamp) {
         // 包体可以带一下时间戳，设定超时等待的事件
-        return new CompleteMessage(
-                PacketHeader
-                        .newBuilder()
-                        .setAppId(LINK_SERVER.getId())
-                        .setMessageType(HEARTBEAT_MESSAGE.getType())
-                        .build(),
-                // 包体可以带一下时间戳，设定超时等待的事件
-                MessageBody
-                        .builder()
-                        .timeStamp(timestamp)
-                        .build()
-        );
+        return CompleteMessage.newBuilder()
+                .setPacketHeader(
+                        PacketHeader.newBuilder()
+                                .setAppId(LINK_SERVER.getId())
+                                .setMessageType(HEARTBEAT_MESSAGE.getType())
+                                .build()
+                )
+                .setPacketBody(
+                        PacketBody.newBuilder()
+                                .setTimeStamp(timestamp)
+                                .build()
+                )
+                .build();
     }
 }

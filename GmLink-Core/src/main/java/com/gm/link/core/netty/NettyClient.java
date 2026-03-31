@@ -1,6 +1,6 @@
 package com.gm.link.core.netty;
 
-import com.gm.link.common.domain.model.CompleteMessage;
+import com.gm.link.common.domain.protobuf.CompleteMessage;
 import com.gm.link.common.utils.SystemUtil;
 import com.gm.link.core.codec.MessageProtocolDecoder;
 import com.gm.link.core.codec.MessageProtocolEncoder;

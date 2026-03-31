@@ -1,7 +1,7 @@
 package com.gm.link.core.grpc;
 
-import com.gm.link.common.domain.model.CompleteMessage;
-import com.gm.link.common.domain.model.MessageBody;
+import com.gm.link.common.domain.protobuf.CompleteMessage;
+import com.gm.link.common.domain.protobuf.PacketBody;
 import com.gm.link.common.domain.protobuf.PacketHeader;
 import com.gm.link.common.grpc.PushGrpc;
 import com.gm.link.common.grpc.PushServiceGrpc;
@@ -223,21 +223,20 @@ public class PushServiceImpl extends PushServiceGrpc.PushServiceImplBase {
 //    }
 
 
-
     public CompleteMessage buildForwardMessage(PushGrpc.PushRequest request) {
-        return CompleteMessage.builder()
-                .packetHeader(
+        return CompleteMessage.newBuilder()
+                .setPacketHeader(
                         PacketHeader.newBuilder()
                                 .setUid(request.getFromUserId())
                                 .setMessageType((short) 8) // 8 -> 集群转发下行消息
                                 .build()
                 )
-                .messageBody(
-                        MessageBody.builder()
-                                .content(request.getContent())
-                                .timeStamp(System.currentTimeMillis())
-                                .toId(request.getToId())
-                                .messageType((short) 8)
+                .setPacketBody(
+                        PacketBody.newBuilder()
+                                .setContent(request.getContent())
+                                .setTimeStamp(System.currentTimeMillis())
+                                .setToId(request.getToId())
+                                .setMessageType((short) 8)
                                 .build()
                 ).build();
     }

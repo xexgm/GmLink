@@ -1,11 +1,9 @@
 package com.gm.link.core.codec;
 
 import com.gm.link.common.constant.ProtoConstant;
-import com.gm.link.common.domain.model.CompleteMessage;
-import com.gm.link.common.domain.model.MessageBody;
+import com.gm.link.common.domain.protobuf.CompleteMessage;
 import com.gm.link.common.domain.protobuf.PacketBody;
 import com.gm.link.common.domain.protobuf.PacketHeader;
-import com.gm.link.common.utils.JsonUtil;
 import com.gm.link.common.utils.ProtoUtil;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
@@ -30,16 +28,13 @@ public class MessageProtocolEncoder extends MessageToByteEncoder<CompleteMessage
 
         // 从完整message中拆出 包头和包体
         PacketHeader packetHeader = message.getPacketHeader();
-        MessageBody messageBody = message.getMessageBody();
+        PacketBody messageBody = message.getPacketBody();
 
+        // header data: protobuf对象 -> 二进制数组
         byte[] headerBytes = packetHeader.toByteArray();
 
-        // MessageBody -> json字符串 -> protobuf对象 -> 二进制数组
-        String dataJson = JsonUtil.toJson(messageBody);
-        PacketBody packetBody = PacketBody.newBuilder()
-                .setData(dataJson)
-                .build();
-        byte[] dataBytes = packetBody.toByteArray();
+        // body data: protobuf对象 -> 二进制数组
+        byte[] dataBytes = messageBody.toByteArray();
 
         // 序列化包头长度
         out.writeInt(headerBytes.length);

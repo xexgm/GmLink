@@ -1,14 +1,12 @@
 package com.gm.link.common.domain.model;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Properties;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.io.Serializable;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Properties;
 
 /**
  * @Author: hhj023

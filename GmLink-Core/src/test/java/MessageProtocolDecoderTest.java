@@ -1,5 +1,5 @@
-import com.gm.link.common.domain.model.CompleteMessage;
-import com.gm.link.common.domain.model.MessageBody;
+
+import com.gm.link.common.domain.protobuf.CompleteMessage;
 import com.gm.link.common.domain.protobuf.PacketBody;
 import com.gm.link.common.domain.protobuf.PacketHeader;
 import com.gm.link.core.codec.MessageProtocolDecoder;
@@ -25,16 +25,16 @@ public class MessageProtocolDecoderTest {
     public void testDecode() throws Exception {
         // 1. 构造测试数据
         PacketHeader header = PacketHeader.newBuilder().setUid(123).build();
-        PacketBody body = PacketBody.newBuilder().setData("{\"content\":\"test\"}").build();
+        PacketBody body = PacketBody.newBuilder().setContent("test").build();
 
         // 2. 构造完整协议字节流
         ByteBuf buf = Unpooled.buffer();
-        buf.writeShort(MAGIC);              // 魔数
-        buf.writeShort(1);                  // 版本号
-        buf.writeInt(header.toByteArray().length);  // 包头长度
-        buf.writeInt(body.toByteArray().length);    // 包体长度
-        buf.writeBytes(header.toByteArray());       // 包头内容
-        buf.writeBytes(body.toByteArray());         // 包体内容
+        buf.writeShort(MAGIC);
+        buf.writeShort(1);
+        buf.writeInt(header.toByteArray().length);
+        buf.writeInt(body.toByteArray().length);
+        buf.writeBytes(header.toByteArray());
+        buf.writeBytes(body.toByteArray());
 
         // 3. 使用 EmbeddedChannel 测试
         EmbeddedChannel channel = new EmbeddedChannel(new MessageProtocolDecoder());
@@ -44,33 +44,37 @@ public class MessageProtocolDecoderTest {
         CompleteMessage msg = channel.readInbound();
         assertNotNull(msg);
         assertEquals(123, msg.getPacketHeader().getUid());
-        assertEquals("test", msg.getMessageBody().getContent());
+        assertEquals("test", msg.getPacketBody().getContent());
     }
 
     @Test
     public void testEncodeDecodeIntegration() {
         // 构建协议头
         PacketHeader header = PacketHeader.newBuilder()
-                .setUid(10001)         // 用户ID
-                .setAppId(1)    // 协议类型
-                .setMessageType((short) 1)
+                .setUid(10001)
+                .setAppId(1)
+                .setMessageType(1)
                 .build();
 
         // 构建消息体内容
-        MessageBody body = new MessageBody();
-        body.setContent("灵码测试消息");  // 根据你的 MessageBody 类实际结构调整
-        body.setTimeStamp(System.currentTimeMillis());
+        PacketBody body = PacketBody.newBuilder()
+                .setContent("编解码集成测试消息")
+                .setTimeStamp(System.currentTimeMillis())
+                .setFromUserId(10001)
+                .setToId(10002)
+                .setMessageType(4)
+                .build();
 
         // 构建完整消息对象
-        CompleteMessage testMessage = CompleteMessage.builder()
-                .packetHeader(header)
-                .messageBody(body)
+        CompleteMessage testMessage = CompleteMessage.newBuilder()
+                .setPacketHeader(header)
+                .setPacketBody(body)
                 .build();
 
         // 1. 使用编码器生成数据
         MessageProtocolEncoder encoder = new MessageProtocolEncoder();
         EmbeddedChannel encodeChannel = new EmbeddedChannel(encoder);
-        encodeChannel.writeOutbound(testMessage);  // 发送原始消息对象
+        encodeChannel.writeOutbound(testMessage);
 
         // 2. 获取编码后的字节流
         ByteBuf encodedBuf = encodeChannel.readOutbound();
@@ -81,12 +85,14 @@ public class MessageProtocolDecoderTest {
 
         // 4. 验证编解码结果一致性
         CompleteMessage decoded = decodeChannel.readInbound();
-        assertEquals(testMessage, decoded);
+        assertNotNull(decoded);
+        assertEquals(header, decoded.getPacketHeader());
+        assertEquals(body, decoded.getPacketBody());
     }
 
     @Test
     public void testKafkaProducerInitialization() {
-        KafkaProducer<String, String> producer = KafkaProducerManager.getProducer();
+        KafkaProducer<String, byte[]> producer = KafkaProducerManager.getProducer();
         assertNotNull(producer);
     }
 

@@ -1,6 +1,6 @@
 package com.gm.link.core.netty.handler;
 
-import com.gm.link.common.domain.model.CompleteMessage;
+import com.gm.link.common.domain.protobuf.CompleteMessage;
 import com.gm.link.common.enums.MessageType;
 import com.gm.link.core.netty.processor.AbstractMessageProcessor;
 import com.gm.link.core.netty.processor.ProcessorFactory;

@@ -1,13 +1,13 @@
 package com.gm.link.core.kafka;
 
-import com.gm.link.core.config.KafkaConfig;
-import lombok.Getter;
-import lombok.extern.slf4j.Slf4j;
+import java.util.Properties;
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.ProducerConfig;
+import org.apache.kafka.common.serialization.ByteArraySerializer;
 import org.apache.kafka.common.serialization.StringSerializer;
 
-import java.util.Properties;
+
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * @Author: xexgm
@@ -19,15 +19,15 @@ public class KafkaProducerManager {
         {
             put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "127.0.0.1:9092");
             put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
-            put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
+            put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, ByteArraySerializer.class.getName());
             put(ProducerConfig.ACKS_CONFIG, "1");
         }
     };
 
     /* 状态服务生产者 */
-    private static KafkaProducer<String, String> producer;
+    private static KafkaProducer<String, byte[]> producer;
 
-    public static KafkaProducer<String, String> getProducer() {
+    public static KafkaProducer<String, byte[]> getProducer() {
         if (producer == null) {
             synchronized (KafkaProducerManager.class) {
                 if (producer == null) {

@@ -8,22 +8,38 @@ public interface PacketBodyOrBuilder extends
     com.google.protobuf.MessageOrBuilder {
 
   /**
-   * <pre>
-   * json数据
-   * </pre>
-   *
-   * <code>string data = 1;</code>
-   * @return The data.
+   * <code>int64 from_user_id = 1;</code>
+   * @return The fromUserId.
    */
-  java.lang.String getData();
+  long getFromUserId();
+
   /**
-   * <pre>
-   * json数据
-   * </pre>
-   *
-   * <code>string data = 1;</code>
-   * @return The bytes for data.
+   * <code>int64 time_stamp = 2;</code>
+   * @return The timeStamp.
+   */
+  long getTimeStamp();
+
+  /**
+   * <code>int64 to_id = 3;</code>
+   * @return The toId.
+   */
+  long getToId();
+
+  /**
+   * <code>int32 message_type = 4;</code>
+   * @return The messageType.
+   */
+  int getMessageType();
+
+  /**
+   * <code>string content = 5;</code>
+   * @return The content.
+   */
+  java.lang.String getContent();
+  /**
+   * <code>string content = 5;</code>
+   * @return The bytes for content.
    */
   com.google.protobuf.ByteString
-      getDataBytes();
+      getContentBytes();
 }

@@ -1,30 +1,32 @@
 package com.gm.link.core.netty.processor;
 
-import com.gm.link.common.constant.ChannelAttrKey;
-import com.gm.link.common.domain.model.CompleteMessage;
-import com.gm.link.common.domain.model.MessageBody;
-import com.gm.link.common.domain.model.RedisOperationMessage;
-import com.gm.link.common.domain.protobuf.PacketHeader;
-import com.gm.link.common.utils.JsonUtil;
-import com.gm.link.core.config.KafkaConfig;
-import com.gm.link.core.config.RedisConfig;
-import com.gm.link.core.kafka.KafkaProducerManager;
-import com.gm.link.core.cache.UserChannelCtxMap;
-import io.netty.channel.ChannelHandlerContext;
-import io.netty.util.AttributeKey;
-import lombok.extern.slf4j.Slf4j;
-import org.apache.kafka.clients.producer.ProducerRecord;
-import org.apache.kafka.clients.producer.RecordMetadata;
-
-import java.util.concurrent.Future;
-
 import static com.gm.link.common.enums.AppId.LINK_SERVER;
 import static com.gm.link.common.enums.MessageType.HEARTBEAT_MESSAGE;
 
+import java.util.concurrent.Future;
+
+import org.apache.kafka.clients.producer.ProducerRecord;
+import org.apache.kafka.clients.producer.RecordMetadata;
+
+import com.gm.link.common.constant.ChannelAttrKey;
+import com.gm.link.common.domain.model.RedisOperationMessage;
+import com.gm.link.common.domain.protobuf.CompleteMessage;
+import com.gm.link.common.domain.protobuf.PacketBody;
+import com.gm.link.common.domain.protobuf.PacketHeader;
+import com.gm.link.common.utils.JsonUtil;
+import com.gm.link.core.cache.UserChannelCtxMap;
+import com.gm.link.core.config.KafkaConfig;
+import com.gm.link.core.config.RedisConfig;
+import com.gm.link.core.kafka.KafkaProducerManager;
+
+import io.netty.channel.ChannelHandlerContext;
+import io.netty.util.AttributeKey;
+import lombok.extern.slf4j.Slf4j;
+
 /**
  * @Author: xexgm
- * description: 处理 客户端 -> 中台 心跳消息
- * todo 减少心跳处理器的日志
+ *          description: 处理 客户端 -> 中台 心跳消息
+ *          todo 减少心跳处理器的日志
  */
 @Slf4j
 public class HeartBeatProcessor extends AbstractMessageProcessor<CompleteMessage> {
@@ -65,39 +67,45 @@ public class HeartBeatProcessor extends AbstractMessageProcessor<CompleteMessage
         log.info("[HeartBeatMessage] 心跳达到三次，续期redis uid: {}, times: {}", uid, heartBeatTimes);
 
         // 构造续期redis 的 kafka消息
-        ProducerRecord<String, String> expireRecord = new ProducerRecord<>(
+        ProducerRecord<String, byte[]> expireRecord = new ProducerRecord<>(
                 // topic
                 KafkaConfig.LINK_TOPIC,
                 String.valueOf(uid),
                 // value: 对redis进行操作，添加 userId 机器id，过期时间为300s
-                JsonUtil.toJson(RedisOperationMessage
-                        .builder()
-                        .op(RedisConfig.OP_EXPIRE)
-                        .key(RedisConfig.PREFIX_USER_ID + uid)
-                        .expireSeconds(Integer.parseInt(RedisConfig.KEY_EXPIRE_TIME))
-                        .build()
+                CompleteMessage.newBuilder()
+                .setPacketHeader(
+                        PacketHeader.newBuilder()
+                                .setAppId(LINK_SERVER.getId())
+                                .setUid(uid)
+                                .setMessageType(HEARTBEAT_MESSAGE.getType())
+                                .build()
                 )
-        );
+                .setPacketBody(
+                        PacketBody.newBuilder()
+                                .setTimeStamp(System.currentTimeMillis())
+                                .build()
+                )
+                .build()
+                .toByteArray());
 
-        Future<RecordMetadata> future = KafkaProducerManager.getProducer().send(expireRecord, (metadata, exception) -> {
+        KafkaProducerManager.getProducer().send(expireRecord, (metadata, exception) -> {
             if (heartBeatCtx.channel().isActive()) {
                 heartBeatCtx.channel().writeAndFlush(
-                        CompleteMessage.builder()
+                        CompleteMessage.newBuilder()
                                 // 包头携带 业务线id、userId、messageType
-                                .packetHeader(
+                                .setPacketHeader(
                                         PacketHeader.newBuilder()
                                                 .setAppId(LINK_SERVER.getId())
                                                 .setUid(uid)
                                                 .setMessageType(HEARTBEAT_MESSAGE.getType())
-                                                .build()
-                                )
-                                .messageBody(
-                                        MessageBody.builder()
-                                                .timeStamp(System.currentTimeMillis())
-                                                .content(exception == null ? "心跳续期成功" : "心跳续期失败: " + exception.getMessage())
-                                                .build()
-                                ).build()
-                );
+                                                .build())
+                                .setPacketBody(
+                                        PacketBody.newBuilder()
+                                                .setTimeStamp(System.currentTimeMillis())
+                                                .setContent(exception == null ? "心跳续期成功"
+                                                        : "心跳续期失败: " + exception.getMessage())
+                                                .build())
+                                .build());
             }
             // 日志输出
             if (exception != null) {

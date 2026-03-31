@@ -1,9 +1,9 @@
 package com.gm.link.core.netty.processor;
 
 import com.gm.link.common.constant.ChannelAttrKey;
-import com.gm.link.common.domain.model.CompleteMessage;
-import com.gm.link.common.domain.model.MessageBody;
 import com.gm.link.common.domain.model.RedisOperationMessage;
+import com.gm.link.common.domain.protobuf.CompleteMessage;
+import com.gm.link.common.domain.protobuf.PacketBody;
 import com.gm.link.common.domain.protobuf.PacketHeader;
 import com.gm.link.common.utils.JsonUtil;
 import com.gm.link.core.config.KafkaConfig;
@@ -45,7 +45,7 @@ public class LoginProcessor extends AbstractMessageProcessor<CompleteMessage>{
     public void process(ChannelHandlerContext ctx, CompleteMessage msg){
         PacketHeader packetHeader = msg.getPacketHeader();
         String token = packetHeader.getToken();
-        // todo 验证token
+        // 验证token
 
         long userId = packetHeader.getUid();
         // 1.channelCtx 写到 map里
@@ -60,46 +60,53 @@ public class LoginProcessor extends AbstractMessageProcessor<CompleteMessage>{
         // 3.往kafka 发登录消息,redis保存 userid - 机器id，以表示在线状态
 
         // 获取 producer
-        KafkaProducer<String, String> producer = KafkaProducerManager.getProducer();
+        KafkaProducer<String, byte[]> producer = KafkaProducerManager.getProducer();
 
         // 构造 kafka 消息
-        ProducerRecord<String, String> record = new ProducerRecord<>(
+        ProducerRecord<String, byte[]> record = new ProducerRecord<>(
                 // topic
                 KafkaConfig.LINK_TOPIC,
                 // 路由分区key
                 String.valueOf(userId),
                 // value: 对redis进行操作，添加 userId 机器id，过期时间为300s
-                JsonUtil.toJson(RedisOperationMessage
-                        .builder()
-                        .op(RedisConfig.OP_SETNX)
-                        .key(RedisConfig.PREFIX_USER_ID+userId)
-                        .value(String.valueOf(LinkConfig.MACHINE_ID))
-                        .expireSeconds(Integer.parseInt(RedisConfig.KEY_EXPIRE_TIME))
-                        .build()
+                CompleteMessage.newBuilder()
+                .setPacketHeader(
+                        PacketHeader.newBuilder()
+                                .setAppId(LINK_SERVER.getId())
+                                .setUid(userId)
+                                .setMessageType(LOGIN_MESSAGE.getType())
+                                .build()
                 )
+                .setPacketBody(
+                    PacketBody.newBuilder()
+                    .setTimeStamp(System.currentTimeMillis())
+                    .build()
+                )
+                .build()
+                .toByteArray()
         );
 
         // 异步发送到 kafka
-        Future<RecordMetadata> future = producer.send(record, (metadata, exception) -> {
+        producer.send(record, (metadata, exception) -> {
             if (exception != null) {
                 log.info("[sendKafkaFuture] exception: " + exception.getMessage(), exception);
             }
             if (ctx.channel().isActive()) {
                 // 响应客户端
                 ctx.channel().writeAndFlush(
-                        CompleteMessage.builder()
+                        CompleteMessage.newBuilder()
                                 // 包头携带 业务线id、userId、messageType
-                                .packetHeader(
+                                .setPacketHeader(
                                         PacketHeader.newBuilder()
                                                 .setAppId(LINK_SERVER.getId())
                                                 .setUid(userId)
                                                 .setMessageType(LOGIN_MESSAGE.getType())
                                                 .build()
                                 )
-                                .messageBody(
-                                        MessageBody.builder()
-                                                .timeStamp(System.currentTimeMillis())
-                                                .content(exception == null ? "登录成功" : "登陆失败: " + exception.getMessage())
+                                .setPacketBody(
+                                        PacketBody.newBuilder()
+                                                .setTimeStamp(System.currentTimeMillis())
+                                                .setContent(exception == null ? "登录成功" : "登陆失败: " + exception.getMessage())
                                                 .build()
                                 ).build()
                 );

@@ -1,20 +1,19 @@
 package com.gm.link.core.codec;
 
-import com.gm.link.common.domain.model.CompleteMessage;
-import com.gm.link.common.domain.model.MessageBody;
+import static com.gm.link.common.constant.ProtoConstant.DEFAULT_SECRETKEY;
+import static com.gm.link.common.constant.ProtoConstant.FIXED_PACKET_BOUNDARY;
+import static com.gm.link.common.constant.ProtoConstant.MAGIC;
+import static com.gm.link.common.constant.ProtoConstant.VERSION;
+import java.util.List;
+
+import com.gm.link.common.domain.protobuf.CompleteMessage;
 import com.gm.link.common.domain.protobuf.PacketBody;
 import com.gm.link.common.domain.protobuf.PacketHeader;
-import com.gm.link.common.utils.JsonUtil;
 import com.gm.link.common.utils.ProtoUtil;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.ByteToMessageDecoder;
 import lombok.extern.slf4j.Slf4j;
-
-import java.io.IOException;
-import java.util.List;
-
-import static com.gm.link.common.constant.ProtoConstant.*;
 
 /**
  * @Author: xexgm
@@ -64,7 +63,7 @@ public class MessageProtocolDecoder extends ByteToMessageDecoder {
         headerBuf.readBytes(headerBytes);
         dataBuf.readBytes(dataBytes);
 
-        // parseFrom
+        // header data: 
         PacketHeader packetHeader = PacketHeader.parseFrom(headerBytes);
 
         log.info("[DecodeMessageProtocol] 解析包头: {} ", packetHeader);
@@ -80,18 +79,9 @@ public class MessageProtocolDecoder extends ByteToMessageDecoder {
             dataBytes = ProtoUtil.decompress(dataBytes);
         }
 
-        // 处理 data  二进制数组 -> protobuf对象 -> json字符串 -> MessageBody
+        // body data: 二进制数组 -> protobuf对象
         PacketBody packetBody = PacketBody.parseFrom(dataBytes);
-        String dataJson = packetBody.getData();
-        // 异常处理
-        MessageBody messageBody = null;
-        try {
-            messageBody = JsonUtil.fromJson(dataJson, MessageBody.class);
-        } catch (Exception e) {
-            ctx.writeAndFlush("Invalid JSON format");
-            throw new RuntimeException(e);
-        }
 
-        out.add(CompleteMessage.builder().packetHeader(packetHeader).messageBody(messageBody).build());
+        out.add(CompleteMessage.newBuilder().setPacketHeader(packetHeader).setPacketBody(packetBody).build());
     }
 }

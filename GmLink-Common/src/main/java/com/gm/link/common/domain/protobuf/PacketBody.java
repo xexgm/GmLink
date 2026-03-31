@@ -16,7 +16,7 @@ private static final long serialVersionUID = 0L;
     super(builder);
   }
   private PacketBody() {
-    data_ = "";
+    content_ = "";
   }
 
   @java.lang.Override
@@ -49,10 +49,30 @@ private static final long serialVersionUID = 0L;
           case 0:
             done = true;
             break;
-          case 10: {
+          case 8: {
+
+            fromUserId_ = input.readInt64();
+            break;
+          }
+          case 16: {
+
+            timeStamp_ = input.readInt64();
+            break;
+          }
+          case 24: {
+
+            toId_ = input.readInt64();
+            break;
+          }
+          case 32: {
+
+            messageType_ = input.readInt32();
+            break;
+          }
+          case 42: {
             java.lang.String s = input.readStringRequireUtf8();
 
-            data_ = s;
+            content_ = s;
             break;
           }
           default: {
@@ -87,46 +107,82 @@ private static final long serialVersionUID = 0L;
             com.gm.link.common.domain.protobuf.PacketBody.class, com.gm.link.common.domain.protobuf.PacketBody.Builder.class);
   }
 
-  public static final int DATA_FIELD_NUMBER = 1;
-  private volatile java.lang.Object data_;
+  public static final int FROM_USER_ID_FIELD_NUMBER = 1;
+  private long fromUserId_;
   /**
-   * <pre>
-   * json数据
-   * </pre>
-   *
-   * <code>string data = 1;</code>
-   * @return The data.
+   * <code>int64 from_user_id = 1;</code>
+   * @return The fromUserId.
    */
   @java.lang.Override
-  public java.lang.String getData() {
-    java.lang.Object ref = data_;
+  public long getFromUserId() {
+    return fromUserId_;
+  }
+
+  public static final int TIME_STAMP_FIELD_NUMBER = 2;
+  private long timeStamp_;
+  /**
+   * <code>int64 time_stamp = 2;</code>
+   * @return The timeStamp.
+   */
+  @java.lang.Override
+  public long getTimeStamp() {
+    return timeStamp_;
+  }
+
+  public static final int TO_ID_FIELD_NUMBER = 3;
+  private long toId_;
+  /**
+   * <code>int64 to_id = 3;</code>
+   * @return The toId.
+   */
+  @java.lang.Override
+  public long getToId() {
+    return toId_;
+  }
+
+  public static final int MESSAGE_TYPE_FIELD_NUMBER = 4;
+  private int messageType_;
+  /**
+   * <code>int32 message_type = 4;</code>
+   * @return The messageType.
+   */
+  @java.lang.Override
+  public int getMessageType() {
+    return messageType_;
+  }
+
+  public static final int CONTENT_FIELD_NUMBER = 5;
+  private volatile java.lang.Object content_;
+  /**
+   * <code>string content = 5;</code>
+   * @return The content.
+   */
+  @java.lang.Override
+  public java.lang.String getContent() {
+    java.lang.Object ref = content_;
     if (ref instanceof java.lang.String) {
       return (java.lang.String) ref;
     } else {
       com.google.protobuf.ByteString bs = 
           (com.google.protobuf.ByteString) ref;
       java.lang.String s = bs.toStringUtf8();
-      data_ = s;
+      content_ = s;
       return s;
     }
   }
   /**
-   * <pre>
-   * json数据
-   * </pre>
-   *
-   * <code>string data = 1;</code>
-   * @return The bytes for data.
+   * <code>string content = 5;</code>
+   * @return The bytes for content.
    */
   @java.lang.Override
   public com.google.protobuf.ByteString
-      getDataBytes() {
-    java.lang.Object ref = data_;
+      getContentBytes() {
+    java.lang.Object ref = content_;
     if (ref instanceof java.lang.String) {
       com.google.protobuf.ByteString b = 
           com.google.protobuf.ByteString.copyFromUtf8(
               (java.lang.String) ref);
-      data_ = b;
+      content_ = b;
       return b;
     } else {
       return (com.google.protobuf.ByteString) ref;
@@ -147,8 +203,20 @@ private static final long serialVersionUID = 0L;
   @java.lang.Override
   public void writeTo(com.google.protobuf.CodedOutputStream output)
                       throws java.io.IOException {
-    if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(data_)) {
-      com.google.protobuf.GeneratedMessageV3.writeString(output, 1, data_);
+    if (fromUserId_ != 0L) {
+      output.writeInt64(1, fromUserId_);
+    }
+    if (timeStamp_ != 0L) {
+      output.writeInt64(2, timeStamp_);
+    }
+    if (toId_ != 0L) {
+      output.writeInt64(3, toId_);
+    }
+    if (messageType_ != 0) {
+      output.writeInt32(4, messageType_);
+    }
+    if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(content_)) {
+      com.google.protobuf.GeneratedMessageV3.writeString(output, 5, content_);
     }
     unknownFields.writeTo(output);
   }
@@ -159,8 +227,24 @@ private static final long serialVersionUID = 0L;
     if (size != -1) return size;
 
     size = 0;
-    if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(data_)) {
-      size += com.google.protobuf.GeneratedMessageV3.computeStringSize(1, data_);
+    if (fromUserId_ != 0L) {
+      size += com.google.protobuf.CodedOutputStream
+        .computeInt64Size(1, fromUserId_);
+    }
+    if (timeStamp_ != 0L) {
+      size += com.google.protobuf.CodedOutputStream
+        .computeInt64Size(2, timeStamp_);
+    }
+    if (toId_ != 0L) {
+      size += com.google.protobuf.CodedOutputStream
+        .computeInt64Size(3, toId_);
+    }
+    if (messageType_ != 0) {
+      size += com.google.protobuf.CodedOutputStream
+        .computeInt32Size(4, messageType_);
+    }
+    if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(content_)) {
+      size += com.google.protobuf.GeneratedMessageV3.computeStringSize(5, content_);
     }
     size += unknownFields.getSerializedSize();
     memoizedSize = size;
@@ -177,8 +261,16 @@ private static final long serialVersionUID = 0L;
     }
     com.gm.link.common.domain.protobuf.PacketBody other = (com.gm.link.common.domain.protobuf.PacketBody) obj;
 
-    if (!getData()
-        .equals(other.getData())) return false;
+    if (getFromUserId()
+        != other.getFromUserId()) return false;
+    if (getTimeStamp()
+        != other.getTimeStamp()) return false;
+    if (getToId()
+        != other.getToId()) return false;
+    if (getMessageType()
+        != other.getMessageType()) return false;
+    if (!getContent()
+        .equals(other.getContent())) return false;
     if (!unknownFields.equals(other.unknownFields)) return false;
     return true;
   }
@@ -190,8 +282,19 @@ private static final long serialVersionUID = 0L;
     }
     int hash = 41;
     hash = (19 * hash) + getDescriptor().hashCode();
-    hash = (37 * hash) + DATA_FIELD_NUMBER;
-    hash = (53 * hash) + getData().hashCode();
+    hash = (37 * hash) + FROM_USER_ID_FIELD_NUMBER;
+    hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
+        getFromUserId());
+    hash = (37 * hash) + TIME_STAMP_FIELD_NUMBER;
+    hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
+        getTimeStamp());
+    hash = (37 * hash) + TO_ID_FIELD_NUMBER;
+    hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
+        getToId());
+    hash = (37 * hash) + MESSAGE_TYPE_FIELD_NUMBER;
+    hash = (53 * hash) + getMessageType();
+    hash = (37 * hash) + CONTENT_FIELD_NUMBER;
+    hash = (53 * hash) + getContent().hashCode();
     hash = (29 * hash) + unknownFields.hashCode();
     memoizedHashCode = hash;
     return hash;
@@ -325,7 +428,15 @@ private static final long serialVersionUID = 0L;
     @java.lang.Override
     public Builder clear() {
       super.clear();
-      data_ = "";
+      fromUserId_ = 0L;
+
+      timeStamp_ = 0L;
+
+      toId_ = 0L;
+
+      messageType_ = 0;
+
+      content_ = "";
 
       return this;
     }
@@ -353,7 +464,11 @@ private static final long serialVersionUID = 0L;
     @java.lang.Override
     public com.gm.link.common.domain.protobuf.PacketBody buildPartial() {
       com.gm.link.common.domain.protobuf.PacketBody result = new com.gm.link.common.domain.protobuf.PacketBody(this);
-      result.data_ = data_;
+      result.fromUserId_ = fromUserId_;
+      result.timeStamp_ = timeStamp_;
+      result.toId_ = toId_;
+      result.messageType_ = messageType_;
+      result.content_ = content_;
       onBuilt();
       return result;
     }
@@ -402,8 +517,20 @@ private static final long serialVersionUID = 0L;
 
     public Builder mergeFrom(com.gm.link.common.domain.protobuf.PacketBody other) {
       if (other == com.gm.link.common.domain.protobuf.PacketBody.getDefaultInstance()) return this;
-      if (!other.getData().isEmpty()) {
-        data_ = other.data_;
+      if (other.getFromUserId() != 0L) {
+        setFromUserId(other.getFromUserId());
+      }
+      if (other.getTimeStamp() != 0L) {
+        setTimeStamp(other.getTimeStamp());
+      }
+      if (other.getToId() != 0L) {
+        setToId(other.getToId());
+      }
+      if (other.getMessageType() != 0) {
+        setMessageType(other.getMessageType());
+      }
+      if (!other.getContent().isEmpty()) {
+        content_ = other.content_;
         onChanged();
       }
       this.mergeUnknownFields(other.unknownFields);
@@ -435,98 +562,202 @@ private static final long serialVersionUID = 0L;
       return this;
     }
 
-    private java.lang.Object data_ = "";
+    private long fromUserId_ ;
     /**
-     * <pre>
-     * json数据
-     * </pre>
-     *
-     * <code>string data = 1;</code>
-     * @return The data.
+     * <code>int64 from_user_id = 1;</code>
+     * @return The fromUserId.
      */
-    public java.lang.String getData() {
-      java.lang.Object ref = data_;
+    @java.lang.Override
+    public long getFromUserId() {
+      return fromUserId_;
+    }
+    /**
+     * <code>int64 from_user_id = 1;</code>
+     * @param value The fromUserId to set.
+     * @return This builder for chaining.
+     */
+    public Builder setFromUserId(long value) {
+      
+      fromUserId_ = value;
+      onChanged();
+      return this;
+    }
+    /**
+     * <code>int64 from_user_id = 1;</code>
+     * @return This builder for chaining.
+     */
+    public Builder clearFromUserId() {
+      
+      fromUserId_ = 0L;
+      onChanged();
+      return this;
+    }
+
+    private long timeStamp_ ;
+    /**
+     * <code>int64 time_stamp = 2;</code>
+     * @return The timeStamp.
+     */
+    @java.lang.Override
+    public long getTimeStamp() {
+      return timeStamp_;
+    }
+    /**
+     * <code>int64 time_stamp = 2;</code>
+     * @param value The timeStamp to set.
+     * @return This builder for chaining.
+     */
+    public Builder setTimeStamp(long value) {
+      
+      timeStamp_ = value;
+      onChanged();
+      return this;
+    }
+    /**
+     * <code>int64 time_stamp = 2;</code>
+     * @return This builder for chaining.
+     */
+    public Builder clearTimeStamp() {
+      
+      timeStamp_ = 0L;
+      onChanged();
+      return this;
+    }
+
+    private long toId_ ;
+    /**
+     * <code>int64 to_id = 3;</code>
+     * @return The toId.
+     */
+    @java.lang.Override
+    public long getToId() {
+      return toId_;
+    }
+    /**
+     * <code>int64 to_id = 3;</code>
+     * @param value The toId to set.
+     * @return This builder for chaining.
+     */
+    public Builder setToId(long value) {
+      
+      toId_ = value;
+      onChanged();
+      return this;
+    }
+    /**
+     * <code>int64 to_id = 3;</code>
+     * @return This builder for chaining.
+     */
+    public Builder clearToId() {
+      
+      toId_ = 0L;
+      onChanged();
+      return this;
+    }
+
+    private int messageType_ ;
+    /**
+     * <code>int32 message_type = 4;</code>
+     * @return The messageType.
+     */
+    @java.lang.Override
+    public int getMessageType() {
+      return messageType_;
+    }
+    /**
+     * <code>int32 message_type = 4;</code>
+     * @param value The messageType to set.
+     * @return This builder for chaining.
+     */
+    public Builder setMessageType(int value) {
+      
+      messageType_ = value;
+      onChanged();
+      return this;
+    }
+    /**
+     * <code>int32 message_type = 4;</code>
+     * @return This builder for chaining.
+     */
+    public Builder clearMessageType() {
+      
+      messageType_ = 0;
+      onChanged();
+      return this;
+    }
+
+    private java.lang.Object content_ = "";
+    /**
+     * <code>string content = 5;</code>
+     * @return The content.
+     */
+    public java.lang.String getContent() {
+      java.lang.Object ref = content_;
       if (!(ref instanceof java.lang.String)) {
         com.google.protobuf.ByteString bs =
             (com.google.protobuf.ByteString) ref;
         java.lang.String s = bs.toStringUtf8();
-        data_ = s;
+        content_ = s;
         return s;
       } else {
         return (java.lang.String) ref;
       }
     }
     /**
-     * <pre>
-     * json数据
-     * </pre>
-     *
-     * <code>string data = 1;</code>
-     * @return The bytes for data.
+     * <code>string content = 5;</code>
+     * @return The bytes for content.
      */
     public com.google.protobuf.ByteString
-        getDataBytes() {
-      java.lang.Object ref = data_;
+        getContentBytes() {
+      java.lang.Object ref = content_;
       if (ref instanceof String) {
         com.google.protobuf.ByteString b = 
             com.google.protobuf.ByteString.copyFromUtf8(
                 (java.lang.String) ref);
-        data_ = b;
+        content_ = b;
         return b;
       } else {
         return (com.google.protobuf.ByteString) ref;
       }
     }
     /**
-     * <pre>
-     * json数据
-     * </pre>
-     *
-     * <code>string data = 1;</code>
-     * @param value The data to set.
+     * <code>string content = 5;</code>
+     * @param value The content to set.
      * @return This builder for chaining.
      */
-    public Builder setData(
+    public Builder setContent(
         java.lang.String value) {
       if (value == null) {
     throw new NullPointerException();
   }
   
-      data_ = value;
+      content_ = value;
       onChanged();
       return this;
     }
     /**
-     * <pre>
-     * json数据
-     * </pre>
-     *
-     * <code>string data = 1;</code>
+     * <code>string content = 5;</code>
      * @return This builder for chaining.
      */
-    public Builder clearData() {
+    public Builder clearContent() {
       
-      data_ = getDefaultInstance().getData();
+      content_ = getDefaultInstance().getContent();
       onChanged();
       return this;
     }
     /**
-     * <pre>
-     * json数据
-     * </pre>
-     *
-     * <code>string data = 1;</code>
-     * @param value The bytes for data to set.
+     * <code>string content = 5;</code>
+     * @param value The bytes for content to set.
      * @return This builder for chaining.
      */
-    public Builder setDataBytes(
+    public Builder setContentBytes(
         com.google.protobuf.ByteString value) {
       if (value == null) {
     throw new NullPointerException();
   }
   checkByteStringIsUtf8(value);
       
-      data_ = value;
+      content_ = value;
       onChanged();
       return this;
     }

@@ -16,5 +16,14 @@ message PacketHeader {
 }
 
 message PacketBody {
-  string data = 1;  // json数据
+  int64 from_user_id = 1;
+  int64 time_stamp = 2;
+  int64 to_id = 3;
+  int32 message_type = 4;
+  string content = 5;
+}
+
+message CompleteMessage {
+  PacketHeader packet_header = 1;
+  PacketBody packet_body = 2;
 }

@@ -24,6 +24,11 @@ public final class LinkMessage {
   static final 
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_com_gm_link_common_domain_protobuf_PacketBody_fieldAccessorTable;
+  static final com.google.protobuf.Descriptors.Descriptor
+    internal_static_com_gm_link_common_domain_protobuf_CompleteMessage_descriptor;
+  static final 
+    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      internal_static_com_gm_link_common_domain_protobuf_CompleteMessage_fieldAccessorTable;
 
   public static com.google.protobuf.Descriptors.FileDescriptor
       getDescriptor() {
@@ -37,9 +42,15 @@ public final class LinkMessage {
       ".domain.protobuf\"x\n\014PacketHeader\022\016\n\006app_" +
       "id\030\001 \001(\007\022\013\n\003uid\030\002 \001(\006\022\r\n\005token\030\003 \001(\t\022\023\n\013" +
       "compression\030\004 \001(\005\022\022\n\nencryption\030\005 \001(\005\022\023\n" +
-      "\013messageType\030\006 \001(\005\"\032\n\nPacketBody\022\014\n\004data" +
-      "\030\001 \001(\tB&\n\"com.gm.link.common.domain.prot" +
-      "obufP\001b\006proto3"
+      "\013messageType\030\006 \001(\005\"l\n\nPacketBody\022\024\n\014from" +
+      "_user_id\030\001 \001(\003\022\022\n\ntime_stamp\030\002 \001(\003\022\r\n\005to" +
+      "_id\030\003 \001(\003\022\024\n\014message_type\030\004 \001(\005\022\017\n\007conte" +
+      "nt\030\005 \001(\t\"\237\001\n\017CompleteMessage\022G\n\rpacket_h" +
+      "eader\030\001 \001(\01320.com.gm.link.common.domain." +
+      "protobuf.PacketHeader\022C\n\013packet_body\030\002 \001" +
+      "(\0132..com.gm.link.common.domain.protobuf." +
+      "PacketBodyB&\n\"com.gm.link.common.domain." +
+      "protobufP\001b\006proto3"
     };
     descriptor = com.google.protobuf.Descriptors.FileDescriptor
       .internalBuildGeneratedFileFrom(descriptorData,
@@ -56,7 +67,13 @@ public final class LinkMessage {
     internal_static_com_gm_link_common_domain_protobuf_PacketBody_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_com_gm_link_common_domain_protobuf_PacketBody_descriptor,
-        new java.lang.String[] { "Data", });
+        new java.lang.String[] { "FromUserId", "TimeStamp", "ToId", "MessageType", "Content", });
+    internal_static_com_gm_link_common_domain_protobuf_CompleteMessage_descriptor =
+      getDescriptor().getMessageTypes().get(2);
+    internal_static_com_gm_link_common_domain_protobuf_CompleteMessage_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+        internal_static_com_gm_link_common_domain_protobuf_CompleteMessage_descriptor,
+        new java.lang.String[] { "PacketHeader", "PacketBody", });
   }
 
   // @@protoc_insertion_point(outer_class_scope)
