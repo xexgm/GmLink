@@ -52,6 +52,10 @@ public class RedisClient {
 
     // 批量接收者查询对应机器
     public static List<Integer> batchGetMachineId(List<Long> userIds) {
+        if (userIds == null || userIds.isEmpty()) {
+            return new ArrayList<>();
+        }
+
         String[] keys = userIds.stream().map(userId -> PREFIX_USER_ID + userId).toArray(String[]::new);
         try (Jedis jedis = jedisPool.getResource()) {
             Pipeline pipeLine = jedis.pipelined();
@@ -62,10 +66,13 @@ public class RedisClient {
             }
             pipeLine.sync();
 
-            return responses.stream()
-                    .map(Response::get)
-                    .map(Integer::parseInt)
-                    .toList();
+            ArrayList<Integer> machineIds = new ArrayList<>(responses.size());
+            for (Response<String> response : responses) {
+                String machineId = response.get();
+                machineIds.add(machineId == null ? null : Integer.parseInt(machineId));
+            }
+
+            return machineIds;
         }
     }
 }

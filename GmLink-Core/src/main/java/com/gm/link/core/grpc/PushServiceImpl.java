@@ -4,6 +4,7 @@ import com.gm.link.common.domain.protobuf.CompleteMessage;
 import com.gm.link.common.domain.protobuf.PacketBody;
 import com.gm.link.common.domain.protobuf.PacketHeader;
 import com.gm.link.common.grpc.PushGrpc;
+import com.gm.link.common.grpc.PushGrpc.ResponseCode;
 import com.gm.link.common.grpc.PushServiceGrpc;
 import com.gm.link.core.cache.LinkClusterManager;
 import com.gm.link.core.cache.UserChannelCtxMap;
@@ -19,7 +20,10 @@ import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelHandlerContext;
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 /**
@@ -31,7 +35,11 @@ import java.util.concurrent.Executors;
 @Slf4j
 public class PushServiceImpl extends PushServiceGrpc.PushServiceImplBase {
 
-    // 方案1：Abandoned，中台机器内部 channel 转发
+    private static final ExecutorService CALLBACK_EXECUTOR = Executors.newFixedThreadPool(
+            Runtime.getRuntime().availableProcessors() * 2
+    );
+
+    // 方案1：Deprecated，中台机器内部 channel 转发
     // 服务端接受到内部转发的消息的处理器 （messageType == 8 的处理器）handler里的 processor
 //    @Override
 //    public void push2Link(PushGrpc.PushRequest request, StreamObserver<PushGrpc.PushResponse> responseObserver) {
@@ -125,24 +133,32 @@ public class PushServiceImpl extends PushServiceGrpc.PushServiceImplBase {
 //        responseObserver.onNext(PushGrpc.PushResponse.newBuilder().setSuccess(false).setMsg("客户端与中台失去连接").build());
 //    }
 
+
     /**
-     * 选用方案2：grpc转发
+     * todo grpc的 单推送和批量推送 接口设计
+     * 单推送: 1.
+     */
+
+    /**
+     * 方案2：grpc转发
      *
      * @param request
      * @param responseObserver
      */
     @Override
-    public void push2Link(PushGrpc.PushRequest request, StreamObserver<PushGrpc.PushResponse> responseObserver) {
+    public void push2User(PushGrpc.Push2UserRequest request, StreamObserver<PushGrpc.Push2UserResponse> responseObserver) {
         long toId = request.getToId();
         ChannelHandlerContext ctx = UserChannelCtxMap.getChannelCtx(toId);
 
+        // todo 不能根据拿不拿的到 channel，来判断用户是否连接在当前机器，这里逻辑存在问题
+
         // case1: 用户长连接不在当前机器，转发到其他Link机器
         if (ctx == null) {
-            // 从 redis拿到用户在线状态 userId -> 机器id
+            // 从 redis 拿到用户在线状态 userId -> 机器id
             Integer targetMachineId = RedisClient.getMachineId(toId);
             // 机器id判空处理
             if (targetMachineId == null) {
-                responseObserver.onNext(buildErrorResponse("用户不在线"));
+                responseObserver.onNext(buildErrorResponse("用户不在线", ResponseCode.USER_OFFLINE));
                 responseObserver.onCompleted();
                 return;
             }
@@ -150,58 +166,91 @@ public class PushServiceImpl extends PushServiceGrpc.PushServiceImplBase {
             // 拿到grpc客户端
             PushServiceGrpc.PushServiceFutureStub stub = GrpcClientManager.getAsyncStub(targetMachineId);
             // 调用目标机器的grpc服务
-            ListenableFuture<PushGrpc.PushResponse> future = stub.push2Link(request);
+            ListenableFuture<PushGrpc.Push2UserResponse> future = stub.push2User(request);
 
-            Futures.addCallback(future, new FutureCallback<PushGrpc.PushResponse>() {
+            Futures.addCallback(future, new FutureCallback<PushGrpc.Push2UserResponse>() {
                 @Override
-                public void onSuccess(PushGrpc.PushResponse result) {
+                public void onSuccess(PushGrpc.Push2UserResponse result) {
                     responseObserver.onNext(result);
                     responseObserver.onCompleted();
                 }
 
                 @Override
                 public void onFailure(Throwable t) {
-                    log.error("异步推送失败", t);
-                    responseObserver.onNext(buildErrorResponse("异步调用失败"));
+                    log.error("[push2User] 异步推送失败, userId: {}, error: {}", toId, t.getMessage());
+                    responseObserver.onNext(buildErrorResponse("异步推送失败", ResponseCode.FORWARD_FAILED));
                     responseObserver.onCompleted();
                 }
-                // todo 这里的参数，考究一下
-            }, Executors.newCachedThreadPool());
+            }, CALLBACK_EXECUTOR);
             return;
         }
 
         // case2: 在当前机器，拿到channel
         if (ctx.channel().isActive()) {
-            // 推送内容
-            ChannelFuture channelFuture = ctx.channel().writeAndFlush(request.getContent());
-            // 这里要通过监听器来获得响应
+            CompleteMessage pushMessage = buildPushMessage(request);
+            ChannelFuture channelFuture = ctx.channel().writeAndFlush(pushMessage);
             channelFuture.addListener(future -> {
                 if (future.isSuccess()) {
-                    responseObserver.onNext(PushGrpc.PushResponse.newBuilder().setSuccess(true).build());
+                    responseObserver.onNext(buildSuccessResponse());
                     responseObserver.onCompleted();
                 } else {
-                    responseObserver.onNext(PushGrpc.PushResponse.newBuilder().setSuccess(false).setMsg("推送失败").build());
+                    responseObserver.onNext(buildErrorResponse("channel写入失败", ResponseCode.CHANNEL_INACTIVE));
                     responseObserver.onCompleted();
                 }
             });
             return;
         }
         // channel不活跃，响应给客户端，连接不可用，做断线重连等等处理
-        responseObserver.onNext(buildErrorResponse("客户端与中台失去连接"));
+        responseObserver.onNext(buildErrorResponse("客户端与中台失去连接", ResponseCode.CHANNEL_INACTIVE));
         responseObserver.onCompleted();
     }
 
 
     // todo 批量处理 2000人以上用 标签方案优化
     @Override
-    public void batchPush2Link(PushGrpc.BatchPushRequest request, StreamObserver<PushGrpc.BatchPushResponse> responseObserver) {
+    public void push2Users(PushGrpc.Push2UsersRequest request, StreamObserver<PushGrpc.Push2UsersResponse> responseObserver) {
         List<Long> toIdList = request.getToIdsList();
+        if (toIdList.isEmpty()) {
+            // todo 构造一个通用的批量推送的error响应方法
+        }
 
-        //
 
-        // 2000人以下 普通处理批量消息
+        /**
+         * 判断 是否可以使用 标签 推送
+         * 约定，从 ext 拓展字段中，获取业务方是否需要使用 标签 推送
+         * 若需要，中台校验能否进行标签推送，若能，则进行标签推送，否则，进行普通批量推送
+         */
+        
 
-        // 2000人以上 使用标签优化
+        
+
+        // 普通处理批量消息
+
+        // machineId -> users
+        HashMap<Integer, List<Long>> machineId2UsersMap = new HashMap<>();
+        // failed users
+        ArrayList<Long> unLinkedUsers = new ArrayList<>();
+
+        List<Integer> machineIds = RedisClient.batchGetMachineId(toIdList);
+        for (int i = 0; i < machineIds.size(); i++) {
+            Integer machineId = machineIds.get(i);
+            Long userId = toIdList.get(i);
+
+            // 用户未连接，加入失败列表
+            if (machineId == null) {
+                unLinkedUsers.add(userId);
+                continue;
+            }
+
+            machineId2UsersMap
+                    .computeIfAbsent(machineId, key -> new ArrayList<>())
+                    .add(userId);
+        }
+
+        // step1: range machineId2UsersMap
+        // step2: 判断machineId是否是当前机器
+        // 若是，直接调用 push2User
+        // 若不是, 拿到machineId对应的grpc客户端，调用machineId对应的grpc客户端的push2Users
     }
 
 
@@ -223,31 +272,45 @@ public class PushServiceImpl extends PushServiceGrpc.PushServiceImplBase {
 //    }
 
 
-    public CompleteMessage buildForwardMessage(PushGrpc.PushRequest request) {
+
+
+
+    private CompleteMessage buildPushMessage(PushGrpc.Push2UserRequest request) {
+        PushGrpc.PushMessageBody msg = request.getMessage();
         return CompleteMessage.newBuilder()
                 .setPacketHeader(
                         PacketHeader.newBuilder()
-                                .setUid(request.getFromUserId())
-                                .setMessageType((short) 8) // 8 -> 集群转发下行消息
+                                .setUid(msg.getFromUserId())
+                                .setMessageType(msg.getMessageType())
                                 .build()
                 )
                 .setPacketBody(
                         PacketBody.newBuilder()
-                                .setContent(request.getContent())
-                                .setTimeStamp(System.currentTimeMillis())
+                                .setFromUserId(msg.getFromUserId())
+                                .setContent(msg.getContent())
+                                .setTimeStamp(msg.getTimeStamp())
                                 .setToId(request.getToId())
-                                .setMessageType((short) 8)
+                                .setMessageType(msg.getMessageType())
                                 .build()
                 ).build();
     }
 
+    private PushGrpc.Push2UserResponse buildErrorResponse(String msg, ResponseCode code) {
+        return PushGrpc.Push2UserResponse.newBuilder()
+                .setCode(code)
+                .setSuccess(false)
+                .setMsg(msg)
+                .build();
+    }
+
     /**
-     * channel机器互连使用，现方案不使用该方法
+     * channel机器互连使用
      *
      * @param targetMachineId
      * @return
      * @throws InterruptedException
      */
+    @Deprecated
     public NettyClient connectTargetMachine(Integer targetMachineId) throws InterruptedException {
         // 拿到目标机器的ip和端口
         String targetMachineIp = LinkClusterManager.getClusterMachineIp(targetMachineId);
@@ -265,17 +328,10 @@ public class PushServiceImpl extends PushServiceGrpc.PushServiceImplBase {
         return nettyClient;
     }
 
-
-    /**
-     * 构造失败响应
-     *
-     * @param msg
-     * @return
-     */
-    private PushGrpc.PushResponse buildErrorResponse(String msg) {
-        return PushGrpc.PushResponse.newBuilder()
-                .setSuccess(false)
-                .setMsg(msg)
+    private PushGrpc.Push2UserResponse buildSuccessResponse() {
+        return PushGrpc.Push2UserResponse.newBuilder()
+                .setCode(ResponseCode.SUCCESS)
+                .setSuccess(true)
                 .build();
     }
 }

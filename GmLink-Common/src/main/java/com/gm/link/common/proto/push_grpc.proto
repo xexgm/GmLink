@@ -4,41 +4,64 @@ option java_package = "com.gm.link.common.grpc";
 
 
 service PushService {
-  // 单次推送接口
-  rpc Push2Link (PushRequest) returns (PushResponse);
+  
+  rpc Push2User (Push2UserRequest) returns (Push2UserResponse);
 
-  // 新增批量推送接口
-  rpc BatchPush2Link (BatchPushRequest) returns (BatchPushResponse);
+  rpc Push2Users (Push2UsersRequest) returns (Push2UsersResponse);
 }
 
-message PushRequest {
-  fixed64 fromUserId = 1;
-  fixed64 timeStamp  = 2;
-  fixed64 toId = 3;
-  int32 messageType = 4; // 2字节，数据类型标识，标识数据类型，0-登录，1-心跳，2-ack，3-强制下线,4-私聊，5-群聊，6-系统消息，待扩展
-  string content = 5;
+
+// 响应状态码，便于业务层精确处理不同失败场景
+enum ResponseCode {
+  SUCCESS = 0;
+  USER_OFFLINE = 1;         // 用户不在线
+  CHANNEL_INACTIVE = 2;     // 长连接不可用
+  FORWARD_FAILED = 3;       // 集群转发失败
+  INTERNAL_ERROR = 4;       // 中台内部错误
 }
 
-message PushResponse {
-  bool success = 1; // 成功与否
-  string msg = 2;
+// 公共消息体，所有推送接口复用
+message PushMessageBody {
+  int64 from_user_id = 1;
+  int64 time_stamp = 2;
+  int32 message_type = 3;       // 仅业务类型: 4-私聊, 5-群聊, 6-系统消息
+  string content = 4;
+  int32 priority = 5;           // 推送优先级
+  int64 expire_at = 6;          // 消息过期时间
+  map<string, string> ext = 7;  // 业务自定义扩展预留字段
 }
 
-// 新增批量推送请求（复用单次推送字段，仅修改 toIds 为列表）
-message BatchPushRequest {
-  fixed64 fromUserId = 1;
-  fixed64 timeStamp = 2;
-  repeated fixed64 toIds = 3;  // 批量目标ID列表
-  int32 messageType = 4;
-  string content = 5;          // 所有用户接收相同内容
+// ========== 单用户推送 ==========
+
+message Push2UserRequest {
+  int64 to_id = 1;
+  PushMessageBody message = 2;
 }
 
-// 新增批量推送响应（返回每个目标的推送结果）
-message BatchPushResponse {
-  message Result {
-    fixed64 toId = 1;
-    bool success = 2; // 成功与否
-    string msg = 3;
-  }
-  repeated Result results = 1; // 每个目标的推送结果
+message Push2UserResponse {
+  ResponseCode code = 1;
+  bool success = 2;
+  string msg = 3;
+}
+
+// ========== 批量用户推送 ==========
+
+message Push2UsersRequest {
+  repeated int64 to_ids = 1;
+  PushMessageBody message = 2;
+}
+
+message Push2UsersResponse {
+  int32 total = 1;              // 总推送数
+  int32 success_count = 2;      // 成功数
+  int32 fail_count = 3;         // 失败数
+  repeated PushResult results = 4;
+}
+
+// 单个用户的推送结果
+message PushResult {
+  int64 to_id = 1;
+  ResponseCode code = 2;
+  bool success = 3;
+  string msg = 4;
 }

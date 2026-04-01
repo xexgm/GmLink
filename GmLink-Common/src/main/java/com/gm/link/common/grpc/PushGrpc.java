@@ -14,63 +14,306 @@ public final class PushGrpc {
     registerAllExtensions(
         (com.google.protobuf.ExtensionRegistryLite) registry);
   }
-  public interface PushRequestOrBuilder extends
-      // @@protoc_insertion_point(interface_extends:PushRequest)
+  /**
+   * <pre>
+   * 响应状态码，便于业务层精确处理不同失败场景
+   * </pre>
+   *
+   * Protobuf enum {@code ResponseCode}
+   */
+  public enum ResponseCode
+      implements com.google.protobuf.ProtocolMessageEnum {
+    /**
+     * <code>SUCCESS = 0;</code>
+     */
+    SUCCESS(0),
+    /**
+     * <pre>
+     * 用户不在线
+     * </pre>
+     *
+     * <code>USER_OFFLINE = 1;</code>
+     */
+    USER_OFFLINE(1),
+    /**
+     * <pre>
+     * 长连接不可用
+     * </pre>
+     *
+     * <code>CHANNEL_INACTIVE = 2;</code>
+     */
+    CHANNEL_INACTIVE(2),
+    /**
+     * <pre>
+     * 集群转发失败
+     * </pre>
+     *
+     * <code>FORWARD_FAILED = 3;</code>
+     */
+    FORWARD_FAILED(3),
+    /**
+     * <pre>
+     * 中台内部错误
+     * </pre>
+     *
+     * <code>INTERNAL_ERROR = 4;</code>
+     */
+    INTERNAL_ERROR(4),
+    UNRECOGNIZED(-1),
+    ;
+
+    /**
+     * <code>SUCCESS = 0;</code>
+     */
+    public static final int SUCCESS_VALUE = 0;
+    /**
+     * <pre>
+     * 用户不在线
+     * </pre>
+     *
+     * <code>USER_OFFLINE = 1;</code>
+     */
+    public static final int USER_OFFLINE_VALUE = 1;
+    /**
+     * <pre>
+     * 长连接不可用
+     * </pre>
+     *
+     * <code>CHANNEL_INACTIVE = 2;</code>
+     */
+    public static final int CHANNEL_INACTIVE_VALUE = 2;
+    /**
+     * <pre>
+     * 集群转发失败
+     * </pre>
+     *
+     * <code>FORWARD_FAILED = 3;</code>
+     */
+    public static final int FORWARD_FAILED_VALUE = 3;
+    /**
+     * <pre>
+     * 中台内部错误
+     * </pre>
+     *
+     * <code>INTERNAL_ERROR = 4;</code>
+     */
+    public static final int INTERNAL_ERROR_VALUE = 4;
+
+
+    public final int getNumber() {
+      if (this == UNRECOGNIZED) {
+        throw new java.lang.IllegalArgumentException(
+            "Can't get the number of an unknown enum value.");
+      }
+      return value;
+    }
+
+    /**
+     * @param value The numeric wire value of the corresponding enum entry.
+     * @return The enum associated with the given numeric wire value.
+     * @deprecated Use {@link #forNumber(int)} instead.
+     */
+    @java.lang.Deprecated
+    public static ResponseCode valueOf(int value) {
+      return forNumber(value);
+    }
+
+    /**
+     * @param value The numeric wire value of the corresponding enum entry.
+     * @return The enum associated with the given numeric wire value.
+     */
+    public static ResponseCode forNumber(int value) {
+      switch (value) {
+        case 0: return SUCCESS;
+        case 1: return USER_OFFLINE;
+        case 2: return CHANNEL_INACTIVE;
+        case 3: return FORWARD_FAILED;
+        case 4: return INTERNAL_ERROR;
+        default: return null;
+      }
+    }
+
+    public static com.google.protobuf.Internal.EnumLiteMap<ResponseCode>
+        internalGetValueMap() {
+      return internalValueMap;
+    }
+    private static final com.google.protobuf.Internal.EnumLiteMap<
+        ResponseCode> internalValueMap =
+          new com.google.protobuf.Internal.EnumLiteMap<ResponseCode>() {
+            public ResponseCode findValueByNumber(int number) {
+              return ResponseCode.forNumber(number);
+            }
+          };
+
+    public final com.google.protobuf.Descriptors.EnumValueDescriptor
+        getValueDescriptor() {
+      if (this == UNRECOGNIZED) {
+        throw new java.lang.IllegalStateException(
+            "Can't get the descriptor of an unrecognized enum value.");
+      }
+      return getDescriptor().getValues().get(ordinal());
+    }
+    public final com.google.protobuf.Descriptors.EnumDescriptor
+        getDescriptorForType() {
+      return getDescriptor();
+    }
+    public static final com.google.protobuf.Descriptors.EnumDescriptor
+        getDescriptor() {
+      return com.gm.link.common.grpc.PushGrpc.getDescriptor().getEnumTypes().get(0);
+    }
+
+    private static final ResponseCode[] VALUES = values();
+
+    public static ResponseCode valueOf(
+        com.google.protobuf.Descriptors.EnumValueDescriptor desc) {
+      if (desc.getType() != getDescriptor()) {
+        throw new java.lang.IllegalArgumentException(
+          "EnumValueDescriptor is not for this type.");
+      }
+      if (desc.getIndex() == -1) {
+        return UNRECOGNIZED;
+      }
+      return VALUES[desc.getIndex()];
+    }
+
+    private final int value;
+
+    private ResponseCode(int value) {
+      this.value = value;
+    }
+
+    // @@protoc_insertion_point(enum_scope:ResponseCode)
+  }
+
+  public interface PushMessageBodyOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:PushMessageBody)
       com.google.protobuf.MessageOrBuilder {
 
     /**
-     * <code>fixed64 fromUserId = 1;</code>
+     * <code>int64 from_user_id = 1;</code>
      * @return The fromUserId.
      */
     long getFromUserId();
 
     /**
-     * <code>fixed64 timeStamp = 2;</code>
+     * <code>int64 time_stamp = 2;</code>
      * @return The timeStamp.
      */
     long getTimeStamp();
 
     /**
-     * <code>fixed64 toId = 3;</code>
-     * @return The toId.
-     */
-    long getToId();
-
-    /**
      * <pre>
-     * 2字节，数据类型标识，标识数据类型，0-登录，1-心跳，2-ack，3-强制下线,4-私聊，5-群聊，6-系统消息，待扩展
+     * 仅业务类型: 4-私聊, 5-群聊, 6-系统消息
      * </pre>
      *
-     * <code>int32 messageType = 4;</code>
+     * <code>int32 message_type = 3;</code>
      * @return The messageType.
      */
     int getMessageType();
 
     /**
-     * <code>string content = 5;</code>
+     * <code>string content = 4;</code>
      * @return The content.
      */
     java.lang.String getContent();
     /**
-     * <code>string content = 5;</code>
+     * <code>string content = 4;</code>
      * @return The bytes for content.
      */
     com.google.protobuf.ByteString
         getContentBytes();
+
+    /**
+     * <pre>
+     * 推送优先级
+     * </pre>
+     *
+     * <code>int32 priority = 5;</code>
+     * @return The priority.
+     */
+    int getPriority();
+
+    /**
+     * <pre>
+     * 消息过期时间
+     * </pre>
+     *
+     * <code>int64 expire_at = 6;</code>
+     * @return The expireAt.
+     */
+    long getExpireAt();
+
+    /**
+     * <pre>
+     * 业务自定义扩展预留字段
+     * </pre>
+     *
+     * <code>map&lt;string, string&gt; ext = 7;</code>
+     */
+    int getExtCount();
+    /**
+     * <pre>
+     * 业务自定义扩展预留字段
+     * </pre>
+     *
+     * <code>map&lt;string, string&gt; ext = 7;</code>
+     */
+    boolean containsExt(
+        java.lang.String key);
+    /**
+     * Use {@link #getExtMap()} instead.
+     */
+    @java.lang.Deprecated
+    java.util.Map<java.lang.String, java.lang.String>
+    getExt();
+    /**
+     * <pre>
+     * 业务自定义扩展预留字段
+     * </pre>
+     *
+     * <code>map&lt;string, string&gt; ext = 7;</code>
+     */
+    java.util.Map<java.lang.String, java.lang.String>
+    getExtMap();
+    /**
+     * <pre>
+     * 业务自定义扩展预留字段
+     * </pre>
+     *
+     * <code>map&lt;string, string&gt; ext = 7;</code>
+     */
+
+    java.lang.String getExtOrDefault(
+        java.lang.String key,
+        java.lang.String defaultValue);
+    /**
+     * <pre>
+     * 业务自定义扩展预留字段
+     * </pre>
+     *
+     * <code>map&lt;string, string&gt; ext = 7;</code>
+     */
+
+    java.lang.String getExtOrThrow(
+        java.lang.String key);
   }
   /**
-   * Protobuf type {@code PushRequest}
+   * <pre>
+   * 公共消息体，所有推送接口复用
+   * </pre>
+   *
+   * Protobuf type {@code PushMessageBody}
    */
-  public static final class PushRequest extends
+  public static final class PushMessageBody extends
       com.google.protobuf.GeneratedMessageV3 implements
-      // @@protoc_insertion_point(message_implements:PushRequest)
-      PushRequestOrBuilder {
+      // @@protoc_insertion_point(message_implements:PushMessageBody)
+      PushMessageBodyOrBuilder {
   private static final long serialVersionUID = 0L;
-    // Use PushRequest.newBuilder() to construct.
-    private PushRequest(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
+    // Use PushMessageBody.newBuilder() to construct.
+    private PushMessageBody(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
       super(builder);
     }
-    private PushRequest() {
+    private PushMessageBody() {
       content_ = "";
     }
 
@@ -78,7 +321,7 @@ public final class PushGrpc {
     @SuppressWarnings({"unused"})
     protected java.lang.Object newInstance(
         UnusedPrivateParameter unused) {
-      return new PushRequest();
+      return new PushMessageBody();
     }
 
     @java.lang.Override
@@ -86,7 +329,7 @@ public final class PushGrpc {
     getUnknownFields() {
       return this.unknownFields;
     }
-    private PushRequest(
+    private PushMessageBody(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
@@ -94,6 +337,7 @@ public final class PushGrpc {
       if (extensionRegistry == null) {
         throw new java.lang.NullPointerException();
       }
+      int mutable_bitField0_ = 0;
       com.google.protobuf.UnknownFieldSet.Builder unknownFields =
           com.google.protobuf.UnknownFieldSet.newBuilder();
       try {
@@ -104,30 +348,48 @@ public final class PushGrpc {
             case 0:
               done = true;
               break;
-            case 9: {
+            case 8: {
 
-              fromUserId_ = input.readFixed64();
+              fromUserId_ = input.readInt64();
               break;
             }
-            case 17: {
+            case 16: {
 
-              timeStamp_ = input.readFixed64();
+              timeStamp_ = input.readInt64();
               break;
             }
-            case 25: {
-
-              toId_ = input.readFixed64();
-              break;
-            }
-            case 32: {
+            case 24: {
 
               messageType_ = input.readInt32();
               break;
             }
-            case 42: {
+            case 34: {
               java.lang.String s = input.readStringRequireUtf8();
 
               content_ = s;
+              break;
+            }
+            case 40: {
+
+              priority_ = input.readInt32();
+              break;
+            }
+            case 48: {
+
+              expireAt_ = input.readInt64();
+              break;
+            }
+            case 58: {
+              if (!((mutable_bitField0_ & 0x00000001) != 0)) {
+                ext_ = com.google.protobuf.MapField.newMapField(
+                    ExtDefaultEntryHolder.defaultEntry);
+                mutable_bitField0_ |= 0x00000001;
+              }
+              com.google.protobuf.MapEntry<java.lang.String, java.lang.String>
+              ext__ = input.readMessage(
+                  ExtDefaultEntryHolder.defaultEntry.getParserForType(), extensionRegistry);
+              ext_.getMutableMap().put(
+                  ext__.getKey(), ext__.getValue());
               break;
             }
             default: {
@@ -151,21 +413,33 @@ public final class PushGrpc {
     }
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
-      return com.gm.link.common.grpc.PushGrpc.internal_static_PushRequest_descriptor;
+      return com.gm.link.common.grpc.PushGrpc.internal_static_PushMessageBody_descriptor;
     }
 
+    @SuppressWarnings({"rawtypes"})
+    @java.lang.Override
+    protected com.google.protobuf.MapField internalGetMapField(
+        int number) {
+      switch (number) {
+        case 7:
+          return internalGetExt();
+        default:
+          throw new RuntimeException(
+              "Invalid map field number: " + number);
+      }
+    }
     @java.lang.Override
     protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
         internalGetFieldAccessorTable() {
-      return com.gm.link.common.grpc.PushGrpc.internal_static_PushRequest_fieldAccessorTable
+      return com.gm.link.common.grpc.PushGrpc.internal_static_PushMessageBody_fieldAccessorTable
           .ensureFieldAccessorsInitialized(
-              com.gm.link.common.grpc.PushGrpc.PushRequest.class, com.gm.link.common.grpc.PushGrpc.PushRequest.Builder.class);
+              com.gm.link.common.grpc.PushGrpc.PushMessageBody.class, com.gm.link.common.grpc.PushGrpc.PushMessageBody.Builder.class);
     }
 
-    public static final int FROMUSERID_FIELD_NUMBER = 1;
+    public static final int FROM_USER_ID_FIELD_NUMBER = 1;
     private long fromUserId_;
     /**
-     * <code>fixed64 fromUserId = 1;</code>
+     * <code>int64 from_user_id = 1;</code>
      * @return The fromUserId.
      */
     @java.lang.Override
@@ -173,10 +447,10 @@ public final class PushGrpc {
       return fromUserId_;
     }
 
-    public static final int TIMESTAMP_FIELD_NUMBER = 2;
+    public static final int TIME_STAMP_FIELD_NUMBER = 2;
     private long timeStamp_;
     /**
-     * <code>fixed64 timeStamp = 2;</code>
+     * <code>int64 time_stamp = 2;</code>
      * @return The timeStamp.
      */
     @java.lang.Override
@@ -184,25 +458,14 @@ public final class PushGrpc {
       return timeStamp_;
     }
 
-    public static final int TOID_FIELD_NUMBER = 3;
-    private long toId_;
-    /**
-     * <code>fixed64 toId = 3;</code>
-     * @return The toId.
-     */
-    @java.lang.Override
-    public long getToId() {
-      return toId_;
-    }
-
-    public static final int MESSAGETYPE_FIELD_NUMBER = 4;
+    public static final int MESSAGE_TYPE_FIELD_NUMBER = 3;
     private int messageType_;
     /**
      * <pre>
-     * 2字节，数据类型标识，标识数据类型，0-登录，1-心跳，2-ack，3-强制下线,4-私聊，5-群聊，6-系统消息，待扩展
+     * 仅业务类型: 4-私聊, 5-群聊, 6-系统消息
      * </pre>
      *
-     * <code>int32 messageType = 4;</code>
+     * <code>int32 message_type = 3;</code>
      * @return The messageType.
      */
     @java.lang.Override
@@ -210,10 +473,10 @@ public final class PushGrpc {
       return messageType_;
     }
 
-    public static final int CONTENT_FIELD_NUMBER = 5;
+    public static final int CONTENT_FIELD_NUMBER = 4;
     private volatile java.lang.Object content_;
     /**
-     * <code>string content = 5;</code>
+     * <code>string content = 4;</code>
      * @return The content.
      */
     @java.lang.Override
@@ -230,7 +493,7 @@ public final class PushGrpc {
       }
     }
     /**
-     * <code>string content = 5;</code>
+     * <code>string content = 4;</code>
      * @return The bytes for content.
      */
     @java.lang.Override
@@ -248,6 +511,133 @@ public final class PushGrpc {
       }
     }
 
+    public static final int PRIORITY_FIELD_NUMBER = 5;
+    private int priority_;
+    /**
+     * <pre>
+     * 推送优先级
+     * </pre>
+     *
+     * <code>int32 priority = 5;</code>
+     * @return The priority.
+     */
+    @java.lang.Override
+    public int getPriority() {
+      return priority_;
+    }
+
+    public static final int EXPIRE_AT_FIELD_NUMBER = 6;
+    private long expireAt_;
+    /**
+     * <pre>
+     * 消息过期时间
+     * </pre>
+     *
+     * <code>int64 expire_at = 6;</code>
+     * @return The expireAt.
+     */
+    @java.lang.Override
+    public long getExpireAt() {
+      return expireAt_;
+    }
+
+    public static final int EXT_FIELD_NUMBER = 7;
+    private static final class ExtDefaultEntryHolder {
+      static final com.google.protobuf.MapEntry<
+          java.lang.String, java.lang.String> defaultEntry =
+              com.google.protobuf.MapEntry
+              .<java.lang.String, java.lang.String>newDefaultInstance(
+                  com.gm.link.common.grpc.PushGrpc.internal_static_PushMessageBody_ExtEntry_descriptor, 
+                  com.google.protobuf.WireFormat.FieldType.STRING,
+                  "",
+                  com.google.protobuf.WireFormat.FieldType.STRING,
+                  "");
+    }
+    private com.google.protobuf.MapField<
+        java.lang.String, java.lang.String> ext_;
+    private com.google.protobuf.MapField<java.lang.String, java.lang.String>
+    internalGetExt() {
+      if (ext_ == null) {
+        return com.google.protobuf.MapField.emptyMapField(
+            ExtDefaultEntryHolder.defaultEntry);
+      }
+      return ext_;
+    }
+
+    public int getExtCount() {
+      return internalGetExt().getMap().size();
+    }
+    /**
+     * <pre>
+     * 业务自定义扩展预留字段
+     * </pre>
+     *
+     * <code>map&lt;string, string&gt; ext = 7;</code>
+     */
+
+    @java.lang.Override
+    public boolean containsExt(
+        java.lang.String key) {
+      if (key == null) { throw new NullPointerException("map key"); }
+      return internalGetExt().getMap().containsKey(key);
+    }
+    /**
+     * Use {@link #getExtMap()} instead.
+     */
+    @java.lang.Override
+    @java.lang.Deprecated
+    public java.util.Map<java.lang.String, java.lang.String> getExt() {
+      return getExtMap();
+    }
+    /**
+     * <pre>
+     * 业务自定义扩展预留字段
+     * </pre>
+     *
+     * <code>map&lt;string, string&gt; ext = 7;</code>
+     */
+    @java.lang.Override
+
+    public java.util.Map<java.lang.String, java.lang.String> getExtMap() {
+      return internalGetExt().getMap();
+    }
+    /**
+     * <pre>
+     * 业务自定义扩展预留字段
+     * </pre>
+     *
+     * <code>map&lt;string, string&gt; ext = 7;</code>
+     */
+    @java.lang.Override
+
+    public java.lang.String getExtOrDefault(
+        java.lang.String key,
+        java.lang.String defaultValue) {
+      if (key == null) { throw new NullPointerException("map key"); }
+      java.util.Map<java.lang.String, java.lang.String> map =
+          internalGetExt().getMap();
+      return map.containsKey(key) ? map.get(key) : defaultValue;
+    }
+    /**
+     * <pre>
+     * 业务自定义扩展预留字段
+     * </pre>
+     *
+     * <code>map&lt;string, string&gt; ext = 7;</code>
+     */
+    @java.lang.Override
+
+    public java.lang.String getExtOrThrow(
+        java.lang.String key) {
+      if (key == null) { throw new NullPointerException("map key"); }
+      java.util.Map<java.lang.String, java.lang.String> map =
+          internalGetExt().getMap();
+      if (!map.containsKey(key)) {
+        throw new java.lang.IllegalArgumentException();
+      }
+      return map.get(key);
+    }
+
     private byte memoizedIsInitialized = -1;
     @java.lang.Override
     public final boolean isInitialized() {
@@ -263,20 +653,29 @@ public final class PushGrpc {
     public void writeTo(com.google.protobuf.CodedOutputStream output)
                         throws java.io.IOException {
       if (fromUserId_ != 0L) {
-        output.writeFixed64(1, fromUserId_);
+        output.writeInt64(1, fromUserId_);
       }
       if (timeStamp_ != 0L) {
-        output.writeFixed64(2, timeStamp_);
-      }
-      if (toId_ != 0L) {
-        output.writeFixed64(3, toId_);
+        output.writeInt64(2, timeStamp_);
       }
       if (messageType_ != 0) {
-        output.writeInt32(4, messageType_);
+        output.writeInt32(3, messageType_);
       }
       if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(content_)) {
-        com.google.protobuf.GeneratedMessageV3.writeString(output, 5, content_);
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 4, content_);
       }
+      if (priority_ != 0) {
+        output.writeInt32(5, priority_);
+      }
+      if (expireAt_ != 0L) {
+        output.writeInt64(6, expireAt_);
+      }
+      com.google.protobuf.GeneratedMessageV3
+        .serializeStringMapTo(
+          output,
+          internalGetExt(),
+          ExtDefaultEntryHolder.defaultEntry,
+          7);
       unknownFields.writeTo(output);
     }
 
@@ -288,22 +687,36 @@ public final class PushGrpc {
       size = 0;
       if (fromUserId_ != 0L) {
         size += com.google.protobuf.CodedOutputStream
-          .computeFixed64Size(1, fromUserId_);
+          .computeInt64Size(1, fromUserId_);
       }
       if (timeStamp_ != 0L) {
         size += com.google.protobuf.CodedOutputStream
-          .computeFixed64Size(2, timeStamp_);
-      }
-      if (toId_ != 0L) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeFixed64Size(3, toId_);
+          .computeInt64Size(2, timeStamp_);
       }
       if (messageType_ != 0) {
         size += com.google.protobuf.CodedOutputStream
-          .computeInt32Size(4, messageType_);
+          .computeInt32Size(3, messageType_);
       }
       if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(content_)) {
-        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(5, content_);
+        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(4, content_);
+      }
+      if (priority_ != 0) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(5, priority_);
+      }
+      if (expireAt_ != 0L) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt64Size(6, expireAt_);
+      }
+      for (java.util.Map.Entry<java.lang.String, java.lang.String> entry
+           : internalGetExt().getMap().entrySet()) {
+        com.google.protobuf.MapEntry<java.lang.String, java.lang.String>
+        ext__ = ExtDefaultEntryHolder.defaultEntry.newBuilderForType()
+            .setKey(entry.getKey())
+            .setValue(entry.getValue())
+            .build();
+        size += com.google.protobuf.CodedOutputStream
+            .computeMessageSize(7, ext__);
       }
       size += unknownFields.getSerializedSize();
       memoizedSize = size;
@@ -315,21 +728,25 @@ public final class PushGrpc {
       if (obj == this) {
        return true;
       }
-      if (!(obj instanceof com.gm.link.common.grpc.PushGrpc.PushRequest)) {
+      if (!(obj instanceof com.gm.link.common.grpc.PushGrpc.PushMessageBody)) {
         return super.equals(obj);
       }
-      com.gm.link.common.grpc.PushGrpc.PushRequest other = (com.gm.link.common.grpc.PushGrpc.PushRequest) obj;
+      com.gm.link.common.grpc.PushGrpc.PushMessageBody other = (com.gm.link.common.grpc.PushGrpc.PushMessageBody) obj;
 
       if (getFromUserId()
           != other.getFromUserId()) return false;
       if (getTimeStamp()
           != other.getTimeStamp()) return false;
-      if (getToId()
-          != other.getToId()) return false;
       if (getMessageType()
           != other.getMessageType()) return false;
       if (!getContent()
           .equals(other.getContent())) return false;
+      if (getPriority()
+          != other.getPriority()) return false;
+      if (getExpireAt()
+          != other.getExpireAt()) return false;
+      if (!internalGetExt().equals(
+          other.internalGetExt())) return false;
       if (!unknownFields.equals(other.unknownFields)) return false;
       return true;
     }
@@ -341,87 +758,93 @@ public final class PushGrpc {
       }
       int hash = 41;
       hash = (19 * hash) + getDescriptor().hashCode();
-      hash = (37 * hash) + FROMUSERID_FIELD_NUMBER;
+      hash = (37 * hash) + FROM_USER_ID_FIELD_NUMBER;
       hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
           getFromUserId());
-      hash = (37 * hash) + TIMESTAMP_FIELD_NUMBER;
+      hash = (37 * hash) + TIME_STAMP_FIELD_NUMBER;
       hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
           getTimeStamp());
-      hash = (37 * hash) + TOID_FIELD_NUMBER;
-      hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
-          getToId());
-      hash = (37 * hash) + MESSAGETYPE_FIELD_NUMBER;
+      hash = (37 * hash) + MESSAGE_TYPE_FIELD_NUMBER;
       hash = (53 * hash) + getMessageType();
       hash = (37 * hash) + CONTENT_FIELD_NUMBER;
       hash = (53 * hash) + getContent().hashCode();
+      hash = (37 * hash) + PRIORITY_FIELD_NUMBER;
+      hash = (53 * hash) + getPriority();
+      hash = (37 * hash) + EXPIRE_AT_FIELD_NUMBER;
+      hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
+          getExpireAt());
+      if (!internalGetExt().getMap().isEmpty()) {
+        hash = (37 * hash) + EXT_FIELD_NUMBER;
+        hash = (53 * hash) + internalGetExt().hashCode();
+      }
       hash = (29 * hash) + unknownFields.hashCode();
       memoizedHashCode = hash;
       return hash;
     }
 
-    public static com.gm.link.common.grpc.PushGrpc.PushRequest parseFrom(
+    public static com.gm.link.common.grpc.PushGrpc.PushMessageBody parseFrom(
         java.nio.ByteBuffer data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-    public static com.gm.link.common.grpc.PushGrpc.PushRequest parseFrom(
+    public static com.gm.link.common.grpc.PushGrpc.PushMessageBody parseFrom(
         java.nio.ByteBuffer data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static com.gm.link.common.grpc.PushGrpc.PushRequest parseFrom(
+    public static com.gm.link.common.grpc.PushGrpc.PushMessageBody parseFrom(
         com.google.protobuf.ByteString data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-    public static com.gm.link.common.grpc.PushGrpc.PushRequest parseFrom(
+    public static com.gm.link.common.grpc.PushGrpc.PushMessageBody parseFrom(
         com.google.protobuf.ByteString data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static com.gm.link.common.grpc.PushGrpc.PushRequest parseFrom(byte[] data)
+    public static com.gm.link.common.grpc.PushGrpc.PushMessageBody parseFrom(byte[] data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-    public static com.gm.link.common.grpc.PushGrpc.PushRequest parseFrom(
+    public static com.gm.link.common.grpc.PushGrpc.PushMessageBody parseFrom(
         byte[] data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static com.gm.link.common.grpc.PushGrpc.PushRequest parseFrom(java.io.InputStream input)
+    public static com.gm.link.common.grpc.PushGrpc.PushMessageBody parseFrom(java.io.InputStream input)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseWithIOException(PARSER, input);
     }
-    public static com.gm.link.common.grpc.PushGrpc.PushRequest parseFrom(
+    public static com.gm.link.common.grpc.PushGrpc.PushMessageBody parseFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseWithIOException(PARSER, input, extensionRegistry);
     }
-    public static com.gm.link.common.grpc.PushGrpc.PushRequest parseDelimitedFrom(java.io.InputStream input)
+    public static com.gm.link.common.grpc.PushGrpc.PushMessageBody parseDelimitedFrom(java.io.InputStream input)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseDelimitedWithIOException(PARSER, input);
     }
-    public static com.gm.link.common.grpc.PushGrpc.PushRequest parseDelimitedFrom(
+    public static com.gm.link.common.grpc.PushGrpc.PushMessageBody parseDelimitedFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
     }
-    public static com.gm.link.common.grpc.PushGrpc.PushRequest parseFrom(
+    public static com.gm.link.common.grpc.PushGrpc.PushMessageBody parseFrom(
         com.google.protobuf.CodedInputStream input)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseWithIOException(PARSER, input);
     }
-    public static com.gm.link.common.grpc.PushGrpc.PushRequest parseFrom(
+    public static com.gm.link.common.grpc.PushGrpc.PushMessageBody parseFrom(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
@@ -434,7 +857,7 @@ public final class PushGrpc {
     public static Builder newBuilder() {
       return DEFAULT_INSTANCE.toBuilder();
     }
-    public static Builder newBuilder(com.gm.link.common.grpc.PushGrpc.PushRequest prototype) {
+    public static Builder newBuilder(com.gm.link.common.grpc.PushGrpc.PushMessageBody prototype) {
       return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
     }
     @java.lang.Override
@@ -450,26 +873,52 @@ public final class PushGrpc {
       return builder;
     }
     /**
-     * Protobuf type {@code PushRequest}
+     * <pre>
+     * 公共消息体，所有推送接口复用
+     * </pre>
+     *
+     * Protobuf type {@code PushMessageBody}
      */
     public static final class Builder extends
         com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
-        // @@protoc_insertion_point(builder_implements:PushRequest)
-        com.gm.link.common.grpc.PushGrpc.PushRequestOrBuilder {
+        // @@protoc_insertion_point(builder_implements:PushMessageBody)
+        com.gm.link.common.grpc.PushGrpc.PushMessageBodyOrBuilder {
       public static final com.google.protobuf.Descriptors.Descriptor
           getDescriptor() {
-        return com.gm.link.common.grpc.PushGrpc.internal_static_PushRequest_descriptor;
+        return com.gm.link.common.grpc.PushGrpc.internal_static_PushMessageBody_descriptor;
       }
 
+      @SuppressWarnings({"rawtypes"})
+      protected com.google.protobuf.MapField internalGetMapField(
+          int number) {
+        switch (number) {
+          case 7:
+            return internalGetExt();
+          default:
+            throw new RuntimeException(
+                "Invalid map field number: " + number);
+        }
+      }
+      @SuppressWarnings({"rawtypes"})
+      protected com.google.protobuf.MapField internalGetMutableMapField(
+          int number) {
+        switch (number) {
+          case 7:
+            return internalGetMutableExt();
+          default:
+            throw new RuntimeException(
+                "Invalid map field number: " + number);
+        }
+      }
       @java.lang.Override
       protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
           internalGetFieldAccessorTable() {
-        return com.gm.link.common.grpc.PushGrpc.internal_static_PushRequest_fieldAccessorTable
+        return com.gm.link.common.grpc.PushGrpc.internal_static_PushMessageBody_fieldAccessorTable
             .ensureFieldAccessorsInitialized(
-                com.gm.link.common.grpc.PushGrpc.PushRequest.class, com.gm.link.common.grpc.PushGrpc.PushRequest.Builder.class);
+                com.gm.link.common.grpc.PushGrpc.PushMessageBody.class, com.gm.link.common.grpc.PushGrpc.PushMessageBody.Builder.class);
       }
 
-      // Construct using com.gm.link.common.grpc.PushGrpc.PushRequest.newBuilder()
+      // Construct using com.gm.link.common.grpc.PushGrpc.PushMessageBody.newBuilder()
       private Builder() {
         maybeForceBuilderInitialization();
       }
@@ -491,29 +940,32 @@ public final class PushGrpc {
 
         timeStamp_ = 0L;
 
-        toId_ = 0L;
-
         messageType_ = 0;
 
         content_ = "";
 
+        priority_ = 0;
+
+        expireAt_ = 0L;
+
+        internalGetMutableExt().clear();
         return this;
       }
 
       @java.lang.Override
       public com.google.protobuf.Descriptors.Descriptor
           getDescriptorForType() {
-        return com.gm.link.common.grpc.PushGrpc.internal_static_PushRequest_descriptor;
+        return com.gm.link.common.grpc.PushGrpc.internal_static_PushMessageBody_descriptor;
       }
 
       @java.lang.Override
-      public com.gm.link.common.grpc.PushGrpc.PushRequest getDefaultInstanceForType() {
-        return com.gm.link.common.grpc.PushGrpc.PushRequest.getDefaultInstance();
+      public com.gm.link.common.grpc.PushGrpc.PushMessageBody getDefaultInstanceForType() {
+        return com.gm.link.common.grpc.PushGrpc.PushMessageBody.getDefaultInstance();
       }
 
       @java.lang.Override
-      public com.gm.link.common.grpc.PushGrpc.PushRequest build() {
-        com.gm.link.common.grpc.PushGrpc.PushRequest result = buildPartial();
+      public com.gm.link.common.grpc.PushGrpc.PushMessageBody build() {
+        com.gm.link.common.grpc.PushGrpc.PushMessageBody result = buildPartial();
         if (!result.isInitialized()) {
           throw newUninitializedMessageException(result);
         }
@@ -521,13 +973,17 @@ public final class PushGrpc {
       }
 
       @java.lang.Override
-      public com.gm.link.common.grpc.PushGrpc.PushRequest buildPartial() {
-        com.gm.link.common.grpc.PushGrpc.PushRequest result = new com.gm.link.common.grpc.PushGrpc.PushRequest(this);
+      public com.gm.link.common.grpc.PushGrpc.PushMessageBody buildPartial() {
+        com.gm.link.common.grpc.PushGrpc.PushMessageBody result = new com.gm.link.common.grpc.PushGrpc.PushMessageBody(this);
+        int from_bitField0_ = bitField0_;
         result.fromUserId_ = fromUserId_;
         result.timeStamp_ = timeStamp_;
-        result.toId_ = toId_;
         result.messageType_ = messageType_;
         result.content_ = content_;
+        result.priority_ = priority_;
+        result.expireAt_ = expireAt_;
+        result.ext_ = internalGetExt();
+        result.ext_.makeImmutable();
         onBuilt();
         return result;
       }
@@ -566,24 +1022,21 @@ public final class PushGrpc {
       }
       @java.lang.Override
       public Builder mergeFrom(com.google.protobuf.Message other) {
-        if (other instanceof com.gm.link.common.grpc.PushGrpc.PushRequest) {
-          return mergeFrom((com.gm.link.common.grpc.PushGrpc.PushRequest)other);
+        if (other instanceof com.gm.link.common.grpc.PushGrpc.PushMessageBody) {
+          return mergeFrom((com.gm.link.common.grpc.PushGrpc.PushMessageBody)other);
         } else {
           super.mergeFrom(other);
           return this;
         }
       }
 
-      public Builder mergeFrom(com.gm.link.common.grpc.PushGrpc.PushRequest other) {
-        if (other == com.gm.link.common.grpc.PushGrpc.PushRequest.getDefaultInstance()) return this;
+      public Builder mergeFrom(com.gm.link.common.grpc.PushGrpc.PushMessageBody other) {
+        if (other == com.gm.link.common.grpc.PushGrpc.PushMessageBody.getDefaultInstance()) return this;
         if (other.getFromUserId() != 0L) {
           setFromUserId(other.getFromUserId());
         }
         if (other.getTimeStamp() != 0L) {
           setTimeStamp(other.getTimeStamp());
-        }
-        if (other.getToId() != 0L) {
-          setToId(other.getToId());
         }
         if (other.getMessageType() != 0) {
           setMessageType(other.getMessageType());
@@ -592,6 +1045,14 @@ public final class PushGrpc {
           content_ = other.content_;
           onChanged();
         }
+        if (other.getPriority() != 0) {
+          setPriority(other.getPriority());
+        }
+        if (other.getExpireAt() != 0L) {
+          setExpireAt(other.getExpireAt());
+        }
+        internalGetMutableExt().mergeFrom(
+            other.internalGetExt());
         this.mergeUnknownFields(other.unknownFields);
         onChanged();
         return this;
@@ -607,11 +1068,11 @@ public final class PushGrpc {
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
-        com.gm.link.common.grpc.PushGrpc.PushRequest parsedMessage = null;
+        com.gm.link.common.grpc.PushGrpc.PushMessageBody parsedMessage = null;
         try {
           parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
         } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-          parsedMessage = (com.gm.link.common.grpc.PushGrpc.PushRequest) e.getUnfinishedMessage();
+          parsedMessage = (com.gm.link.common.grpc.PushGrpc.PushMessageBody) e.getUnfinishedMessage();
           throw e.unwrapIOException();
         } finally {
           if (parsedMessage != null) {
@@ -620,10 +1081,11 @@ public final class PushGrpc {
         }
         return this;
       }
+      private int bitField0_;
 
       private long fromUserId_ ;
       /**
-       * <code>fixed64 fromUserId = 1;</code>
+       * <code>int64 from_user_id = 1;</code>
        * @return The fromUserId.
        */
       @java.lang.Override
@@ -631,7 +1093,7 @@ public final class PushGrpc {
         return fromUserId_;
       }
       /**
-       * <code>fixed64 fromUserId = 1;</code>
+       * <code>int64 from_user_id = 1;</code>
        * @param value The fromUserId to set.
        * @return This builder for chaining.
        */
@@ -642,7 +1104,7 @@ public final class PushGrpc {
         return this;
       }
       /**
-       * <code>fixed64 fromUserId = 1;</code>
+       * <code>int64 from_user_id = 1;</code>
        * @return This builder for chaining.
        */
       public Builder clearFromUserId() {
@@ -654,7 +1116,7 @@ public final class PushGrpc {
 
       private long timeStamp_ ;
       /**
-       * <code>fixed64 timeStamp = 2;</code>
+       * <code>int64 time_stamp = 2;</code>
        * @return The timeStamp.
        */
       @java.lang.Override
@@ -662,7 +1124,7 @@ public final class PushGrpc {
         return timeStamp_;
       }
       /**
-       * <code>fixed64 timeStamp = 2;</code>
+       * <code>int64 time_stamp = 2;</code>
        * @param value The timeStamp to set.
        * @return This builder for chaining.
        */
@@ -673,7 +1135,7 @@ public final class PushGrpc {
         return this;
       }
       /**
-       * <code>fixed64 timeStamp = 2;</code>
+       * <code>int64 time_stamp = 2;</code>
        * @return This builder for chaining.
        */
       public Builder clearTimeStamp() {
@@ -683,44 +1145,13 @@ public final class PushGrpc {
         return this;
       }
 
-      private long toId_ ;
-      /**
-       * <code>fixed64 toId = 3;</code>
-       * @return The toId.
-       */
-      @java.lang.Override
-      public long getToId() {
-        return toId_;
-      }
-      /**
-       * <code>fixed64 toId = 3;</code>
-       * @param value The toId to set.
-       * @return This builder for chaining.
-       */
-      public Builder setToId(long value) {
-        
-        toId_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>fixed64 toId = 3;</code>
-       * @return This builder for chaining.
-       */
-      public Builder clearToId() {
-        
-        toId_ = 0L;
-        onChanged();
-        return this;
-      }
-
       private int messageType_ ;
       /**
        * <pre>
-       * 2字节，数据类型标识，标识数据类型，0-登录，1-心跳，2-ack，3-强制下线,4-私聊，5-群聊，6-系统消息，待扩展
+       * 仅业务类型: 4-私聊, 5-群聊, 6-系统消息
        * </pre>
        *
-       * <code>int32 messageType = 4;</code>
+       * <code>int32 message_type = 3;</code>
        * @return The messageType.
        */
       @java.lang.Override
@@ -729,10 +1160,10 @@ public final class PushGrpc {
       }
       /**
        * <pre>
-       * 2字节，数据类型标识，标识数据类型，0-登录，1-心跳，2-ack，3-强制下线,4-私聊，5-群聊，6-系统消息，待扩展
+       * 仅业务类型: 4-私聊, 5-群聊, 6-系统消息
        * </pre>
        *
-       * <code>int32 messageType = 4;</code>
+       * <code>int32 message_type = 3;</code>
        * @param value The messageType to set.
        * @return This builder for chaining.
        */
@@ -744,10 +1175,10 @@ public final class PushGrpc {
       }
       /**
        * <pre>
-       * 2字节，数据类型标识，标识数据类型，0-登录，1-心跳，2-ack，3-强制下线,4-私聊，5-群聊，6-系统消息，待扩展
+       * 仅业务类型: 4-私聊, 5-群聊, 6-系统消息
        * </pre>
        *
-       * <code>int32 messageType = 4;</code>
+       * <code>int32 message_type = 3;</code>
        * @return This builder for chaining.
        */
       public Builder clearMessageType() {
@@ -759,7 +1190,7 @@ public final class PushGrpc {
 
       private java.lang.Object content_ = "";
       /**
-       * <code>string content = 5;</code>
+       * <code>string content = 4;</code>
        * @return The content.
        */
       public java.lang.String getContent() {
@@ -775,7 +1206,7 @@ public final class PushGrpc {
         }
       }
       /**
-       * <code>string content = 5;</code>
+       * <code>string content = 4;</code>
        * @return The bytes for content.
        */
       public com.google.protobuf.ByteString
@@ -792,7 +1223,7 @@ public final class PushGrpc {
         }
       }
       /**
-       * <code>string content = 5;</code>
+       * <code>string content = 4;</code>
        * @param value The content to set.
        * @return This builder for chaining.
        */
@@ -807,7 +1238,7 @@ public final class PushGrpc {
         return this;
       }
       /**
-       * <code>string content = 5;</code>
+       * <code>string content = 4;</code>
        * @return This builder for chaining.
        */
       public Builder clearContent() {
@@ -817,7 +1248,7 @@ public final class PushGrpc {
         return this;
       }
       /**
-       * <code>string content = 5;</code>
+       * <code>string content = 4;</code>
        * @param value The bytes for content to set.
        * @return This builder for chaining.
        */
@@ -830,6 +1261,251 @@ public final class PushGrpc {
         
         content_ = value;
         onChanged();
+        return this;
+      }
+
+      private int priority_ ;
+      /**
+       * <pre>
+       * 推送优先级
+       * </pre>
+       *
+       * <code>int32 priority = 5;</code>
+       * @return The priority.
+       */
+      @java.lang.Override
+      public int getPriority() {
+        return priority_;
+      }
+      /**
+       * <pre>
+       * 推送优先级
+       * </pre>
+       *
+       * <code>int32 priority = 5;</code>
+       * @param value The priority to set.
+       * @return This builder for chaining.
+       */
+      public Builder setPriority(int value) {
+        
+        priority_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <pre>
+       * 推送优先级
+       * </pre>
+       *
+       * <code>int32 priority = 5;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearPriority() {
+        
+        priority_ = 0;
+        onChanged();
+        return this;
+      }
+
+      private long expireAt_ ;
+      /**
+       * <pre>
+       * 消息过期时间
+       * </pre>
+       *
+       * <code>int64 expire_at = 6;</code>
+       * @return The expireAt.
+       */
+      @java.lang.Override
+      public long getExpireAt() {
+        return expireAt_;
+      }
+      /**
+       * <pre>
+       * 消息过期时间
+       * </pre>
+       *
+       * <code>int64 expire_at = 6;</code>
+       * @param value The expireAt to set.
+       * @return This builder for chaining.
+       */
+      public Builder setExpireAt(long value) {
+        
+        expireAt_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <pre>
+       * 消息过期时间
+       * </pre>
+       *
+       * <code>int64 expire_at = 6;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearExpireAt() {
+        
+        expireAt_ = 0L;
+        onChanged();
+        return this;
+      }
+
+      private com.google.protobuf.MapField<
+          java.lang.String, java.lang.String> ext_;
+      private com.google.protobuf.MapField<java.lang.String, java.lang.String>
+      internalGetExt() {
+        if (ext_ == null) {
+          return com.google.protobuf.MapField.emptyMapField(
+              ExtDefaultEntryHolder.defaultEntry);
+        }
+        return ext_;
+      }
+      private com.google.protobuf.MapField<java.lang.String, java.lang.String>
+      internalGetMutableExt() {
+        onChanged();;
+        if (ext_ == null) {
+          ext_ = com.google.protobuf.MapField.newMapField(
+              ExtDefaultEntryHolder.defaultEntry);
+        }
+        if (!ext_.isMutable()) {
+          ext_ = ext_.copy();
+        }
+        return ext_;
+      }
+
+      public int getExtCount() {
+        return internalGetExt().getMap().size();
+      }
+      /**
+       * <pre>
+       * 业务自定义扩展预留字段
+       * </pre>
+       *
+       * <code>map&lt;string, string&gt; ext = 7;</code>
+       */
+
+      @java.lang.Override
+      public boolean containsExt(
+          java.lang.String key) {
+        if (key == null) { throw new NullPointerException("map key"); }
+        return internalGetExt().getMap().containsKey(key);
+      }
+      /**
+       * Use {@link #getExtMap()} instead.
+       */
+      @java.lang.Override
+      @java.lang.Deprecated
+      public java.util.Map<java.lang.String, java.lang.String> getExt() {
+        return getExtMap();
+      }
+      /**
+       * <pre>
+       * 业务自定义扩展预留字段
+       * </pre>
+       *
+       * <code>map&lt;string, string&gt; ext = 7;</code>
+       */
+      @java.lang.Override
+
+      public java.util.Map<java.lang.String, java.lang.String> getExtMap() {
+        return internalGetExt().getMap();
+      }
+      /**
+       * <pre>
+       * 业务自定义扩展预留字段
+       * </pre>
+       *
+       * <code>map&lt;string, string&gt; ext = 7;</code>
+       */
+      @java.lang.Override
+
+      public java.lang.String getExtOrDefault(
+          java.lang.String key,
+          java.lang.String defaultValue) {
+        if (key == null) { throw new NullPointerException("map key"); }
+        java.util.Map<java.lang.String, java.lang.String> map =
+            internalGetExt().getMap();
+        return map.containsKey(key) ? map.get(key) : defaultValue;
+      }
+      /**
+       * <pre>
+       * 业务自定义扩展预留字段
+       * </pre>
+       *
+       * <code>map&lt;string, string&gt; ext = 7;</code>
+       */
+      @java.lang.Override
+
+      public java.lang.String getExtOrThrow(
+          java.lang.String key) {
+        if (key == null) { throw new NullPointerException("map key"); }
+        java.util.Map<java.lang.String, java.lang.String> map =
+            internalGetExt().getMap();
+        if (!map.containsKey(key)) {
+          throw new java.lang.IllegalArgumentException();
+        }
+        return map.get(key);
+      }
+
+      public Builder clearExt() {
+        internalGetMutableExt().getMutableMap()
+            .clear();
+        return this;
+      }
+      /**
+       * <pre>
+       * 业务自定义扩展预留字段
+       * </pre>
+       *
+       * <code>map&lt;string, string&gt; ext = 7;</code>
+       */
+
+      public Builder removeExt(
+          java.lang.String key) {
+        if (key == null) { throw new NullPointerException("map key"); }
+        internalGetMutableExt().getMutableMap()
+            .remove(key);
+        return this;
+      }
+      /**
+       * Use alternate mutation accessors instead.
+       */
+      @java.lang.Deprecated
+      public java.util.Map<java.lang.String, java.lang.String>
+      getMutableExt() {
+        return internalGetMutableExt().getMutableMap();
+      }
+      /**
+       * <pre>
+       * 业务自定义扩展预留字段
+       * </pre>
+       *
+       * <code>map&lt;string, string&gt; ext = 7;</code>
+       */
+      public Builder putExt(
+          java.lang.String key,
+          java.lang.String value) {
+        if (key == null) { throw new NullPointerException("map key"); }
+        if (value == null) {
+  throw new NullPointerException("map value");
+}
+
+        internalGetMutableExt().getMutableMap()
+            .put(key, value);
+        return this;
+      }
+      /**
+       * <pre>
+       * 业务自定义扩展预留字段
+       * </pre>
+       *
+       * <code>map&lt;string, string&gt; ext = 7;</code>
+       */
+
+      public Builder putAllExt(
+          java.util.Map<java.lang.String, java.lang.String> values) {
+        internalGetMutableExt().getMutableMap()
+            .putAll(values);
         return this;
       }
       @java.lang.Override
@@ -845,93 +1521,91 @@ public final class PushGrpc {
       }
 
 
-      // @@protoc_insertion_point(builder_scope:PushRequest)
+      // @@protoc_insertion_point(builder_scope:PushMessageBody)
     }
 
-    // @@protoc_insertion_point(class_scope:PushRequest)
-    private static final com.gm.link.common.grpc.PushGrpc.PushRequest DEFAULT_INSTANCE;
+    // @@protoc_insertion_point(class_scope:PushMessageBody)
+    private static final com.gm.link.common.grpc.PushGrpc.PushMessageBody DEFAULT_INSTANCE;
     static {
-      DEFAULT_INSTANCE = new com.gm.link.common.grpc.PushGrpc.PushRequest();
+      DEFAULT_INSTANCE = new com.gm.link.common.grpc.PushGrpc.PushMessageBody();
     }
 
-    public static com.gm.link.common.grpc.PushGrpc.PushRequest getDefaultInstance() {
+    public static com.gm.link.common.grpc.PushGrpc.PushMessageBody getDefaultInstance() {
       return DEFAULT_INSTANCE;
     }
 
-    private static final com.google.protobuf.Parser<PushRequest>
-        PARSER = new com.google.protobuf.AbstractParser<PushRequest>() {
+    private static final com.google.protobuf.Parser<PushMessageBody>
+        PARSER = new com.google.protobuf.AbstractParser<PushMessageBody>() {
       @java.lang.Override
-      public PushRequest parsePartialFrom(
+      public PushMessageBody parsePartialFrom(
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws com.google.protobuf.InvalidProtocolBufferException {
-        return new PushRequest(input, extensionRegistry);
+        return new PushMessageBody(input, extensionRegistry);
       }
     };
 
-    public static com.google.protobuf.Parser<PushRequest> parser() {
+    public static com.google.protobuf.Parser<PushMessageBody> parser() {
       return PARSER;
     }
 
     @java.lang.Override
-    public com.google.protobuf.Parser<PushRequest> getParserForType() {
+    public com.google.protobuf.Parser<PushMessageBody> getParserForType() {
       return PARSER;
     }
 
     @java.lang.Override
-    public com.gm.link.common.grpc.PushGrpc.PushRequest getDefaultInstanceForType() {
+    public com.gm.link.common.grpc.PushGrpc.PushMessageBody getDefaultInstanceForType() {
       return DEFAULT_INSTANCE;
     }
 
   }
 
-  public interface PushResponseOrBuilder extends
-      // @@protoc_insertion_point(interface_extends:PushResponse)
+  public interface Push2UserRequestOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:Push2UserRequest)
       com.google.protobuf.MessageOrBuilder {
 
     /**
-     * <pre>
-     * 成功与否
-     * </pre>
-     *
-     * <code>bool success = 1;</code>
-     * @return The success.
+     * <code>int64 to_id = 1;</code>
+     * @return The toId.
      */
-    boolean getSuccess();
+    long getToId();
 
     /**
-     * <code>string msg = 2;</code>
-     * @return The msg.
+     * <code>.PushMessageBody message = 2;</code>
+     * @return Whether the message field is set.
      */
-    java.lang.String getMsg();
+    boolean hasMessage();
     /**
-     * <code>string msg = 2;</code>
-     * @return The bytes for msg.
+     * <code>.PushMessageBody message = 2;</code>
+     * @return The message.
      */
-    com.google.protobuf.ByteString
-        getMsgBytes();
+    com.gm.link.common.grpc.PushGrpc.PushMessageBody getMessage();
+    /**
+     * <code>.PushMessageBody message = 2;</code>
+     */
+    com.gm.link.common.grpc.PushGrpc.PushMessageBodyOrBuilder getMessageOrBuilder();
   }
   /**
-   * Protobuf type {@code PushResponse}
+   * Protobuf type {@code Push2UserRequest}
    */
-  public static final class PushResponse extends
+  public static final class Push2UserRequest extends
       com.google.protobuf.GeneratedMessageV3 implements
-      // @@protoc_insertion_point(message_implements:PushResponse)
-      PushResponseOrBuilder {
+      // @@protoc_insertion_point(message_implements:Push2UserRequest)
+      Push2UserRequestOrBuilder {
   private static final long serialVersionUID = 0L;
-    // Use PushResponse.newBuilder() to construct.
-    private PushResponse(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
+    // Use Push2UserRequest.newBuilder() to construct.
+    private Push2UserRequest(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
       super(builder);
     }
-    private PushResponse() {
-      msg_ = "";
+    private Push2UserRequest() {
     }
 
     @java.lang.Override
     @SuppressWarnings({"unused"})
     protected java.lang.Object newInstance(
         UnusedPrivateParameter unused) {
-      return new PushResponse();
+      return new Push2UserRequest();
     }
 
     @java.lang.Override
@@ -939,7 +1613,7 @@ public final class PushGrpc {
     getUnknownFields() {
       return this.unknownFields;
     }
-    private PushResponse(
+    private Push2UserRequest(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
@@ -959,10 +1633,718 @@ public final class PushGrpc {
               break;
             case 8: {
 
-              success_ = input.readBool();
+              toId_ = input.readInt64();
               break;
             }
             case 18: {
+              com.gm.link.common.grpc.PushGrpc.PushMessageBody.Builder subBuilder = null;
+              if (message_ != null) {
+                subBuilder = message_.toBuilder();
+              }
+              message_ = input.readMessage(com.gm.link.common.grpc.PushGrpc.PushMessageBody.parser(), extensionRegistry);
+              if (subBuilder != null) {
+                subBuilder.mergeFrom(message_);
+                message_ = subBuilder.buildPartial();
+              }
+
+              break;
+            }
+            default: {
+              if (!parseUnknownField(
+                  input, unknownFields, extensionRegistry, tag)) {
+                done = true;
+              }
+              break;
+            }
+          }
+        }
+      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+        throw e.setUnfinishedMessage(this);
+      } catch (java.io.IOException e) {
+        throw new com.google.protobuf.InvalidProtocolBufferException(
+            e).setUnfinishedMessage(this);
+      } finally {
+        this.unknownFields = unknownFields.build();
+        makeExtensionsImmutable();
+      }
+    }
+    public static final com.google.protobuf.Descriptors.Descriptor
+        getDescriptor() {
+      return com.gm.link.common.grpc.PushGrpc.internal_static_Push2UserRequest_descriptor;
+    }
+
+    @java.lang.Override
+    protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+        internalGetFieldAccessorTable() {
+      return com.gm.link.common.grpc.PushGrpc.internal_static_Push2UserRequest_fieldAccessorTable
+          .ensureFieldAccessorsInitialized(
+              com.gm.link.common.grpc.PushGrpc.Push2UserRequest.class, com.gm.link.common.grpc.PushGrpc.Push2UserRequest.Builder.class);
+    }
+
+    public static final int TO_ID_FIELD_NUMBER = 1;
+    private long toId_;
+    /**
+     * <code>int64 to_id = 1;</code>
+     * @return The toId.
+     */
+    @java.lang.Override
+    public long getToId() {
+      return toId_;
+    }
+
+    public static final int MESSAGE_FIELD_NUMBER = 2;
+    private com.gm.link.common.grpc.PushGrpc.PushMessageBody message_;
+    /**
+     * <code>.PushMessageBody message = 2;</code>
+     * @return Whether the message field is set.
+     */
+    @java.lang.Override
+    public boolean hasMessage() {
+      return message_ != null;
+    }
+    /**
+     * <code>.PushMessageBody message = 2;</code>
+     * @return The message.
+     */
+    @java.lang.Override
+    public com.gm.link.common.grpc.PushGrpc.PushMessageBody getMessage() {
+      return message_ == null ? com.gm.link.common.grpc.PushGrpc.PushMessageBody.getDefaultInstance() : message_;
+    }
+    /**
+     * <code>.PushMessageBody message = 2;</code>
+     */
+    @java.lang.Override
+    public com.gm.link.common.grpc.PushGrpc.PushMessageBodyOrBuilder getMessageOrBuilder() {
+      return getMessage();
+    }
+
+    private byte memoizedIsInitialized = -1;
+    @java.lang.Override
+    public final boolean isInitialized() {
+      byte isInitialized = memoizedIsInitialized;
+      if (isInitialized == 1) return true;
+      if (isInitialized == 0) return false;
+
+      memoizedIsInitialized = 1;
+      return true;
+    }
+
+    @java.lang.Override
+    public void writeTo(com.google.protobuf.CodedOutputStream output)
+                        throws java.io.IOException {
+      if (toId_ != 0L) {
+        output.writeInt64(1, toId_);
+      }
+      if (message_ != null) {
+        output.writeMessage(2, getMessage());
+      }
+      unknownFields.writeTo(output);
+    }
+
+    @java.lang.Override
+    public int getSerializedSize() {
+      int size = memoizedSize;
+      if (size != -1) return size;
+
+      size = 0;
+      if (toId_ != 0L) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt64Size(1, toId_);
+      }
+      if (message_ != null) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeMessageSize(2, getMessage());
+      }
+      size += unknownFields.getSerializedSize();
+      memoizedSize = size;
+      return size;
+    }
+
+    @java.lang.Override
+    public boolean equals(final java.lang.Object obj) {
+      if (obj == this) {
+       return true;
+      }
+      if (!(obj instanceof com.gm.link.common.grpc.PushGrpc.Push2UserRequest)) {
+        return super.equals(obj);
+      }
+      com.gm.link.common.grpc.PushGrpc.Push2UserRequest other = (com.gm.link.common.grpc.PushGrpc.Push2UserRequest) obj;
+
+      if (getToId()
+          != other.getToId()) return false;
+      if (hasMessage() != other.hasMessage()) return false;
+      if (hasMessage()) {
+        if (!getMessage()
+            .equals(other.getMessage())) return false;
+      }
+      if (!unknownFields.equals(other.unknownFields)) return false;
+      return true;
+    }
+
+    @java.lang.Override
+    public int hashCode() {
+      if (memoizedHashCode != 0) {
+        return memoizedHashCode;
+      }
+      int hash = 41;
+      hash = (19 * hash) + getDescriptor().hashCode();
+      hash = (37 * hash) + TO_ID_FIELD_NUMBER;
+      hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
+          getToId());
+      if (hasMessage()) {
+        hash = (37 * hash) + MESSAGE_FIELD_NUMBER;
+        hash = (53 * hash) + getMessage().hashCode();
+      }
+      hash = (29 * hash) + unknownFields.hashCode();
+      memoizedHashCode = hash;
+      return hash;
+    }
+
+    public static com.gm.link.common.grpc.PushGrpc.Push2UserRequest parseFrom(
+        java.nio.ByteBuffer data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static com.gm.link.common.grpc.PushGrpc.Push2UserRequest parseFrom(
+        java.nio.ByteBuffer data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static com.gm.link.common.grpc.PushGrpc.Push2UserRequest parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static com.gm.link.common.grpc.PushGrpc.Push2UserRequest parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static com.gm.link.common.grpc.PushGrpc.Push2UserRequest parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static com.gm.link.common.grpc.PushGrpc.Push2UserRequest parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static com.gm.link.common.grpc.PushGrpc.Push2UserRequest parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
+    }
+    public static com.gm.link.common.grpc.PushGrpc.Push2UserRequest parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
+    }
+    public static com.gm.link.common.grpc.PushGrpc.Push2UserRequest parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input);
+    }
+    public static com.gm.link.common.grpc.PushGrpc.Push2UserRequest parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
+    }
+    public static com.gm.link.common.grpc.PushGrpc.Push2UserRequest parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
+    }
+    public static com.gm.link.common.grpc.PushGrpc.Push2UserRequest parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
+    }
+
+    @java.lang.Override
+    public Builder newBuilderForType() { return newBuilder(); }
+    public static Builder newBuilder() {
+      return DEFAULT_INSTANCE.toBuilder();
+    }
+    public static Builder newBuilder(com.gm.link.common.grpc.PushGrpc.Push2UserRequest prototype) {
+      return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
+    }
+    @java.lang.Override
+    public Builder toBuilder() {
+      return this == DEFAULT_INSTANCE
+          ? new Builder() : new Builder().mergeFrom(this);
+    }
+
+    @java.lang.Override
+    protected Builder newBuilderForType(
+        com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+      Builder builder = new Builder(parent);
+      return builder;
+    }
+    /**
+     * Protobuf type {@code Push2UserRequest}
+     */
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
+        // @@protoc_insertion_point(builder_implements:Push2UserRequest)
+        com.gm.link.common.grpc.PushGrpc.Push2UserRequestOrBuilder {
+      public static final com.google.protobuf.Descriptors.Descriptor
+          getDescriptor() {
+        return com.gm.link.common.grpc.PushGrpc.internal_static_Push2UserRequest_descriptor;
+      }
+
+      @java.lang.Override
+      protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+          internalGetFieldAccessorTable() {
+        return com.gm.link.common.grpc.PushGrpc.internal_static_Push2UserRequest_fieldAccessorTable
+            .ensureFieldAccessorsInitialized(
+                com.gm.link.common.grpc.PushGrpc.Push2UserRequest.class, com.gm.link.common.grpc.PushGrpc.Push2UserRequest.Builder.class);
+      }
+
+      // Construct using com.gm.link.common.grpc.PushGrpc.Push2UserRequest.newBuilder()
+      private Builder() {
+        maybeForceBuilderInitialization();
+      }
+
+      private Builder(
+          com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+        super(parent);
+        maybeForceBuilderInitialization();
+      }
+      private void maybeForceBuilderInitialization() {
+        if (com.google.protobuf.GeneratedMessageV3
+                .alwaysUseFieldBuilders) {
+        }
+      }
+      @java.lang.Override
+      public Builder clear() {
+        super.clear();
+        toId_ = 0L;
+
+        if (messageBuilder_ == null) {
+          message_ = null;
+        } else {
+          message_ = null;
+          messageBuilder_ = null;
+        }
+        return this;
+      }
+
+      @java.lang.Override
+      public com.google.protobuf.Descriptors.Descriptor
+          getDescriptorForType() {
+        return com.gm.link.common.grpc.PushGrpc.internal_static_Push2UserRequest_descriptor;
+      }
+
+      @java.lang.Override
+      public com.gm.link.common.grpc.PushGrpc.Push2UserRequest getDefaultInstanceForType() {
+        return com.gm.link.common.grpc.PushGrpc.Push2UserRequest.getDefaultInstance();
+      }
+
+      @java.lang.Override
+      public com.gm.link.common.grpc.PushGrpc.Push2UserRequest build() {
+        com.gm.link.common.grpc.PushGrpc.Push2UserRequest result = buildPartial();
+        if (!result.isInitialized()) {
+          throw newUninitializedMessageException(result);
+        }
+        return result;
+      }
+
+      @java.lang.Override
+      public com.gm.link.common.grpc.PushGrpc.Push2UserRequest buildPartial() {
+        com.gm.link.common.grpc.PushGrpc.Push2UserRequest result = new com.gm.link.common.grpc.PushGrpc.Push2UserRequest(this);
+        result.toId_ = toId_;
+        if (messageBuilder_ == null) {
+          result.message_ = message_;
+        } else {
+          result.message_ = messageBuilder_.build();
+        }
+        onBuilt();
+        return result;
+      }
+
+      @java.lang.Override
+      public Builder clone() {
+        return super.clone();
+      }
+      @java.lang.Override
+      public Builder setField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.setField(field, value);
+      }
+      @java.lang.Override
+      public Builder clearField(
+          com.google.protobuf.Descriptors.FieldDescriptor field) {
+        return super.clearField(field);
+      }
+      @java.lang.Override
+      public Builder clearOneof(
+          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+        return super.clearOneof(oneof);
+      }
+      @java.lang.Override
+      public Builder setRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          int index, java.lang.Object value) {
+        return super.setRepeatedField(field, index, value);
+      }
+      @java.lang.Override
+      public Builder addRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.addRepeatedField(field, value);
+      }
+      @java.lang.Override
+      public Builder mergeFrom(com.google.protobuf.Message other) {
+        if (other instanceof com.gm.link.common.grpc.PushGrpc.Push2UserRequest) {
+          return mergeFrom((com.gm.link.common.grpc.PushGrpc.Push2UserRequest)other);
+        } else {
+          super.mergeFrom(other);
+          return this;
+        }
+      }
+
+      public Builder mergeFrom(com.gm.link.common.grpc.PushGrpc.Push2UserRequest other) {
+        if (other == com.gm.link.common.grpc.PushGrpc.Push2UserRequest.getDefaultInstance()) return this;
+        if (other.getToId() != 0L) {
+          setToId(other.getToId());
+        }
+        if (other.hasMessage()) {
+          mergeMessage(other.getMessage());
+        }
+        this.mergeUnknownFields(other.unknownFields);
+        onChanged();
+        return this;
+      }
+
+      @java.lang.Override
+      public final boolean isInitialized() {
+        return true;
+      }
+
+      @java.lang.Override
+      public Builder mergeFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        com.gm.link.common.grpc.PushGrpc.Push2UserRequest parsedMessage = null;
+        try {
+          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          parsedMessage = (com.gm.link.common.grpc.PushGrpc.Push2UserRequest) e.getUnfinishedMessage();
+          throw e.unwrapIOException();
+        } finally {
+          if (parsedMessage != null) {
+            mergeFrom(parsedMessage);
+          }
+        }
+        return this;
+      }
+
+      private long toId_ ;
+      /**
+       * <code>int64 to_id = 1;</code>
+       * @return The toId.
+       */
+      @java.lang.Override
+      public long getToId() {
+        return toId_;
+      }
+      /**
+       * <code>int64 to_id = 1;</code>
+       * @param value The toId to set.
+       * @return This builder for chaining.
+       */
+      public Builder setToId(long value) {
+        
+        toId_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>int64 to_id = 1;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearToId() {
+        
+        toId_ = 0L;
+        onChanged();
+        return this;
+      }
+
+      private com.gm.link.common.grpc.PushGrpc.PushMessageBody message_;
+      private com.google.protobuf.SingleFieldBuilderV3<
+          com.gm.link.common.grpc.PushGrpc.PushMessageBody, com.gm.link.common.grpc.PushGrpc.PushMessageBody.Builder, com.gm.link.common.grpc.PushGrpc.PushMessageBodyOrBuilder> messageBuilder_;
+      /**
+       * <code>.PushMessageBody message = 2;</code>
+       * @return Whether the message field is set.
+       */
+      public boolean hasMessage() {
+        return messageBuilder_ != null || message_ != null;
+      }
+      /**
+       * <code>.PushMessageBody message = 2;</code>
+       * @return The message.
+       */
+      public com.gm.link.common.grpc.PushGrpc.PushMessageBody getMessage() {
+        if (messageBuilder_ == null) {
+          return message_ == null ? com.gm.link.common.grpc.PushGrpc.PushMessageBody.getDefaultInstance() : message_;
+        } else {
+          return messageBuilder_.getMessage();
+        }
+      }
+      /**
+       * <code>.PushMessageBody message = 2;</code>
+       */
+      public Builder setMessage(com.gm.link.common.grpc.PushGrpc.PushMessageBody value) {
+        if (messageBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          message_ = value;
+          onChanged();
+        } else {
+          messageBuilder_.setMessage(value);
+        }
+
+        return this;
+      }
+      /**
+       * <code>.PushMessageBody message = 2;</code>
+       */
+      public Builder setMessage(
+          com.gm.link.common.grpc.PushGrpc.PushMessageBody.Builder builderForValue) {
+        if (messageBuilder_ == null) {
+          message_ = builderForValue.build();
+          onChanged();
+        } else {
+          messageBuilder_.setMessage(builderForValue.build());
+        }
+
+        return this;
+      }
+      /**
+       * <code>.PushMessageBody message = 2;</code>
+       */
+      public Builder mergeMessage(com.gm.link.common.grpc.PushGrpc.PushMessageBody value) {
+        if (messageBuilder_ == null) {
+          if (message_ != null) {
+            message_ =
+              com.gm.link.common.grpc.PushGrpc.PushMessageBody.newBuilder(message_).mergeFrom(value).buildPartial();
+          } else {
+            message_ = value;
+          }
+          onChanged();
+        } else {
+          messageBuilder_.mergeFrom(value);
+        }
+
+        return this;
+      }
+      /**
+       * <code>.PushMessageBody message = 2;</code>
+       */
+      public Builder clearMessage() {
+        if (messageBuilder_ == null) {
+          message_ = null;
+          onChanged();
+        } else {
+          message_ = null;
+          messageBuilder_ = null;
+        }
+
+        return this;
+      }
+      /**
+       * <code>.PushMessageBody message = 2;</code>
+       */
+      public com.gm.link.common.grpc.PushGrpc.PushMessageBody.Builder getMessageBuilder() {
+        
+        onChanged();
+        return getMessageFieldBuilder().getBuilder();
+      }
+      /**
+       * <code>.PushMessageBody message = 2;</code>
+       */
+      public com.gm.link.common.grpc.PushGrpc.PushMessageBodyOrBuilder getMessageOrBuilder() {
+        if (messageBuilder_ != null) {
+          return messageBuilder_.getMessageOrBuilder();
+        } else {
+          return message_ == null ?
+              com.gm.link.common.grpc.PushGrpc.PushMessageBody.getDefaultInstance() : message_;
+        }
+      }
+      /**
+       * <code>.PushMessageBody message = 2;</code>
+       */
+      private com.google.protobuf.SingleFieldBuilderV3<
+          com.gm.link.common.grpc.PushGrpc.PushMessageBody, com.gm.link.common.grpc.PushGrpc.PushMessageBody.Builder, com.gm.link.common.grpc.PushGrpc.PushMessageBodyOrBuilder> 
+          getMessageFieldBuilder() {
+        if (messageBuilder_ == null) {
+          messageBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
+              com.gm.link.common.grpc.PushGrpc.PushMessageBody, com.gm.link.common.grpc.PushGrpc.PushMessageBody.Builder, com.gm.link.common.grpc.PushGrpc.PushMessageBodyOrBuilder>(
+                  getMessage(),
+                  getParentForChildren(),
+                  isClean());
+          message_ = null;
+        }
+        return messageBuilder_;
+      }
+      @java.lang.Override
+      public final Builder setUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return super.setUnknownFields(unknownFields);
+      }
+
+      @java.lang.Override
+      public final Builder mergeUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return super.mergeUnknownFields(unknownFields);
+      }
+
+
+      // @@protoc_insertion_point(builder_scope:Push2UserRequest)
+    }
+
+    // @@protoc_insertion_point(class_scope:Push2UserRequest)
+    private static final com.gm.link.common.grpc.PushGrpc.Push2UserRequest DEFAULT_INSTANCE;
+    static {
+      DEFAULT_INSTANCE = new com.gm.link.common.grpc.PushGrpc.Push2UserRequest();
+    }
+
+    public static com.gm.link.common.grpc.PushGrpc.Push2UserRequest getDefaultInstance() {
+      return DEFAULT_INSTANCE;
+    }
+
+    private static final com.google.protobuf.Parser<Push2UserRequest>
+        PARSER = new com.google.protobuf.AbstractParser<Push2UserRequest>() {
+      @java.lang.Override
+      public Push2UserRequest parsePartialFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return new Push2UserRequest(input, extensionRegistry);
+      }
+    };
+
+    public static com.google.protobuf.Parser<Push2UserRequest> parser() {
+      return PARSER;
+    }
+
+    @java.lang.Override
+    public com.google.protobuf.Parser<Push2UserRequest> getParserForType() {
+      return PARSER;
+    }
+
+    @java.lang.Override
+    public com.gm.link.common.grpc.PushGrpc.Push2UserRequest getDefaultInstanceForType() {
+      return DEFAULT_INSTANCE;
+    }
+
+  }
+
+  public interface Push2UserResponseOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:Push2UserResponse)
+      com.google.protobuf.MessageOrBuilder {
+
+    /**
+     * <code>.ResponseCode code = 1;</code>
+     * @return The enum numeric value on the wire for code.
+     */
+    int getCodeValue();
+    /**
+     * <code>.ResponseCode code = 1;</code>
+     * @return The code.
+     */
+    com.gm.link.common.grpc.PushGrpc.ResponseCode getCode();
+
+    /**
+     * <code>bool success = 2;</code>
+     * @return The success.
+     */
+    boolean getSuccess();
+
+    /**
+     * <code>string msg = 3;</code>
+     * @return The msg.
+     */
+    java.lang.String getMsg();
+    /**
+     * <code>string msg = 3;</code>
+     * @return The bytes for msg.
+     */
+    com.google.protobuf.ByteString
+        getMsgBytes();
+  }
+  /**
+   * Protobuf type {@code Push2UserResponse}
+   */
+  public static final class Push2UserResponse extends
+      com.google.protobuf.GeneratedMessageV3 implements
+      // @@protoc_insertion_point(message_implements:Push2UserResponse)
+      Push2UserResponseOrBuilder {
+  private static final long serialVersionUID = 0L;
+    // Use Push2UserResponse.newBuilder() to construct.
+    private Push2UserResponse(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
+      super(builder);
+    }
+    private Push2UserResponse() {
+      code_ = 0;
+      msg_ = "";
+    }
+
+    @java.lang.Override
+    @SuppressWarnings({"unused"})
+    protected java.lang.Object newInstance(
+        UnusedPrivateParameter unused) {
+      return new Push2UserResponse();
+    }
+
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+    getUnknownFields() {
+      return this.unknownFields;
+    }
+    private Push2UserResponse(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      this();
+      if (extensionRegistry == null) {
+        throw new java.lang.NullPointerException();
+      }
+      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+          com.google.protobuf.UnknownFieldSet.newBuilder();
+      try {
+        boolean done = false;
+        while (!done) {
+          int tag = input.readTag();
+          switch (tag) {
+            case 0:
+              done = true;
+              break;
+            case 8: {
+              int rawValue = input.readEnum();
+
+              code_ = rawValue;
+              break;
+            }
+            case 16: {
+
+              success_ = input.readBool();
+              break;
+            }
+            case 26: {
               java.lang.String s = input.readStringRequireUtf8();
 
               msg_ = s;
@@ -989,25 +2371,40 @@ public final class PushGrpc {
     }
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
-      return com.gm.link.common.grpc.PushGrpc.internal_static_PushResponse_descriptor;
+      return com.gm.link.common.grpc.PushGrpc.internal_static_Push2UserResponse_descriptor;
     }
 
     @java.lang.Override
     protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
         internalGetFieldAccessorTable() {
-      return com.gm.link.common.grpc.PushGrpc.internal_static_PushResponse_fieldAccessorTable
+      return com.gm.link.common.grpc.PushGrpc.internal_static_Push2UserResponse_fieldAccessorTable
           .ensureFieldAccessorsInitialized(
-              com.gm.link.common.grpc.PushGrpc.PushResponse.class, com.gm.link.common.grpc.PushGrpc.PushResponse.Builder.class);
+              com.gm.link.common.grpc.PushGrpc.Push2UserResponse.class, com.gm.link.common.grpc.PushGrpc.Push2UserResponse.Builder.class);
     }
 
-    public static final int SUCCESS_FIELD_NUMBER = 1;
+    public static final int CODE_FIELD_NUMBER = 1;
+    private int code_;
+    /**
+     * <code>.ResponseCode code = 1;</code>
+     * @return The enum numeric value on the wire for code.
+     */
+    @java.lang.Override public int getCodeValue() {
+      return code_;
+    }
+    /**
+     * <code>.ResponseCode code = 1;</code>
+     * @return The code.
+     */
+    @java.lang.Override public com.gm.link.common.grpc.PushGrpc.ResponseCode getCode() {
+      @SuppressWarnings("deprecation")
+      com.gm.link.common.grpc.PushGrpc.ResponseCode result = com.gm.link.common.grpc.PushGrpc.ResponseCode.valueOf(code_);
+      return result == null ? com.gm.link.common.grpc.PushGrpc.ResponseCode.UNRECOGNIZED : result;
+    }
+
+    public static final int SUCCESS_FIELD_NUMBER = 2;
     private boolean success_;
     /**
-     * <pre>
-     * 成功与否
-     * </pre>
-     *
-     * <code>bool success = 1;</code>
+     * <code>bool success = 2;</code>
      * @return The success.
      */
     @java.lang.Override
@@ -1015,10 +2412,10 @@ public final class PushGrpc {
       return success_;
     }
 
-    public static final int MSG_FIELD_NUMBER = 2;
+    public static final int MSG_FIELD_NUMBER = 3;
     private volatile java.lang.Object msg_;
     /**
-     * <code>string msg = 2;</code>
+     * <code>string msg = 3;</code>
      * @return The msg.
      */
     @java.lang.Override
@@ -1035,7 +2432,7 @@ public final class PushGrpc {
       }
     }
     /**
-     * <code>string msg = 2;</code>
+     * <code>string msg = 3;</code>
      * @return The bytes for msg.
      */
     @java.lang.Override
@@ -1067,11 +2464,14 @@ public final class PushGrpc {
     @java.lang.Override
     public void writeTo(com.google.protobuf.CodedOutputStream output)
                         throws java.io.IOException {
+      if (code_ != com.gm.link.common.grpc.PushGrpc.ResponseCode.SUCCESS.getNumber()) {
+        output.writeEnum(1, code_);
+      }
       if (success_ != false) {
-        output.writeBool(1, success_);
+        output.writeBool(2, success_);
       }
       if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(msg_)) {
-        com.google.protobuf.GeneratedMessageV3.writeString(output, 2, msg_);
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 3, msg_);
       }
       unknownFields.writeTo(output);
     }
@@ -1082,12 +2482,16 @@ public final class PushGrpc {
       if (size != -1) return size;
 
       size = 0;
+      if (code_ != com.gm.link.common.grpc.PushGrpc.ResponseCode.SUCCESS.getNumber()) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeEnumSize(1, code_);
+      }
       if (success_ != false) {
         size += com.google.protobuf.CodedOutputStream
-          .computeBoolSize(1, success_);
+          .computeBoolSize(2, success_);
       }
       if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(msg_)) {
-        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(2, msg_);
+        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(3, msg_);
       }
       size += unknownFields.getSerializedSize();
       memoizedSize = size;
@@ -1099,11 +2503,12 @@ public final class PushGrpc {
       if (obj == this) {
        return true;
       }
-      if (!(obj instanceof com.gm.link.common.grpc.PushGrpc.PushResponse)) {
+      if (!(obj instanceof com.gm.link.common.grpc.PushGrpc.Push2UserResponse)) {
         return super.equals(obj);
       }
-      com.gm.link.common.grpc.PushGrpc.PushResponse other = (com.gm.link.common.grpc.PushGrpc.PushResponse) obj;
+      com.gm.link.common.grpc.PushGrpc.Push2UserResponse other = (com.gm.link.common.grpc.PushGrpc.Push2UserResponse) obj;
 
+      if (code_ != other.code_) return false;
       if (getSuccess()
           != other.getSuccess()) return false;
       if (!getMsg()
@@ -1119,6 +2524,8 @@ public final class PushGrpc {
       }
       int hash = 41;
       hash = (19 * hash) + getDescriptor().hashCode();
+      hash = (37 * hash) + CODE_FIELD_NUMBER;
+      hash = (53 * hash) + code_;
       hash = (37 * hash) + SUCCESS_FIELD_NUMBER;
       hash = (53 * hash) + com.google.protobuf.Internal.hashBoolean(
           getSuccess());
@@ -1129,69 +2536,69 @@ public final class PushGrpc {
       return hash;
     }
 
-    public static com.gm.link.common.grpc.PushGrpc.PushResponse parseFrom(
+    public static com.gm.link.common.grpc.PushGrpc.Push2UserResponse parseFrom(
         java.nio.ByteBuffer data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-    public static com.gm.link.common.grpc.PushGrpc.PushResponse parseFrom(
+    public static com.gm.link.common.grpc.PushGrpc.Push2UserResponse parseFrom(
         java.nio.ByteBuffer data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static com.gm.link.common.grpc.PushGrpc.PushResponse parseFrom(
+    public static com.gm.link.common.grpc.PushGrpc.Push2UserResponse parseFrom(
         com.google.protobuf.ByteString data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-    public static com.gm.link.common.grpc.PushGrpc.PushResponse parseFrom(
+    public static com.gm.link.common.grpc.PushGrpc.Push2UserResponse parseFrom(
         com.google.protobuf.ByteString data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static com.gm.link.common.grpc.PushGrpc.PushResponse parseFrom(byte[] data)
+    public static com.gm.link.common.grpc.PushGrpc.Push2UserResponse parseFrom(byte[] data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-    public static com.gm.link.common.grpc.PushGrpc.PushResponse parseFrom(
+    public static com.gm.link.common.grpc.PushGrpc.Push2UserResponse parseFrom(
         byte[] data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static com.gm.link.common.grpc.PushGrpc.PushResponse parseFrom(java.io.InputStream input)
+    public static com.gm.link.common.grpc.PushGrpc.Push2UserResponse parseFrom(java.io.InputStream input)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseWithIOException(PARSER, input);
     }
-    public static com.gm.link.common.grpc.PushGrpc.PushResponse parseFrom(
+    public static com.gm.link.common.grpc.PushGrpc.Push2UserResponse parseFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseWithIOException(PARSER, input, extensionRegistry);
     }
-    public static com.gm.link.common.grpc.PushGrpc.PushResponse parseDelimitedFrom(java.io.InputStream input)
+    public static com.gm.link.common.grpc.PushGrpc.Push2UserResponse parseDelimitedFrom(java.io.InputStream input)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseDelimitedWithIOException(PARSER, input);
     }
-    public static com.gm.link.common.grpc.PushGrpc.PushResponse parseDelimitedFrom(
+    public static com.gm.link.common.grpc.PushGrpc.Push2UserResponse parseDelimitedFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
     }
-    public static com.gm.link.common.grpc.PushGrpc.PushResponse parseFrom(
+    public static com.gm.link.common.grpc.PushGrpc.Push2UserResponse parseFrom(
         com.google.protobuf.CodedInputStream input)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseWithIOException(PARSER, input);
     }
-    public static com.gm.link.common.grpc.PushGrpc.PushResponse parseFrom(
+    public static com.gm.link.common.grpc.PushGrpc.Push2UserResponse parseFrom(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
@@ -1204,7 +2611,7 @@ public final class PushGrpc {
     public static Builder newBuilder() {
       return DEFAULT_INSTANCE.toBuilder();
     }
-    public static Builder newBuilder(com.gm.link.common.grpc.PushGrpc.PushResponse prototype) {
+    public static Builder newBuilder(com.gm.link.common.grpc.PushGrpc.Push2UserResponse prototype) {
       return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
     }
     @java.lang.Override
@@ -1220,26 +2627,26 @@ public final class PushGrpc {
       return builder;
     }
     /**
-     * Protobuf type {@code PushResponse}
+     * Protobuf type {@code Push2UserResponse}
      */
     public static final class Builder extends
         com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
-        // @@protoc_insertion_point(builder_implements:PushResponse)
-        com.gm.link.common.grpc.PushGrpc.PushResponseOrBuilder {
+        // @@protoc_insertion_point(builder_implements:Push2UserResponse)
+        com.gm.link.common.grpc.PushGrpc.Push2UserResponseOrBuilder {
       public static final com.google.protobuf.Descriptors.Descriptor
           getDescriptor() {
-        return com.gm.link.common.grpc.PushGrpc.internal_static_PushResponse_descriptor;
+        return com.gm.link.common.grpc.PushGrpc.internal_static_Push2UserResponse_descriptor;
       }
 
       @java.lang.Override
       protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
           internalGetFieldAccessorTable() {
-        return com.gm.link.common.grpc.PushGrpc.internal_static_PushResponse_fieldAccessorTable
+        return com.gm.link.common.grpc.PushGrpc.internal_static_Push2UserResponse_fieldAccessorTable
             .ensureFieldAccessorsInitialized(
-                com.gm.link.common.grpc.PushGrpc.PushResponse.class, com.gm.link.common.grpc.PushGrpc.PushResponse.Builder.class);
+                com.gm.link.common.grpc.PushGrpc.Push2UserResponse.class, com.gm.link.common.grpc.PushGrpc.Push2UserResponse.Builder.class);
       }
 
-      // Construct using com.gm.link.common.grpc.PushGrpc.PushResponse.newBuilder()
+      // Construct using com.gm.link.common.grpc.PushGrpc.Push2UserResponse.newBuilder()
       private Builder() {
         maybeForceBuilderInitialization();
       }
@@ -1257,6 +2664,8 @@ public final class PushGrpc {
       @java.lang.Override
       public Builder clear() {
         super.clear();
+        code_ = 0;
+
         success_ = false;
 
         msg_ = "";
@@ -1267,17 +2676,17 @@ public final class PushGrpc {
       @java.lang.Override
       public com.google.protobuf.Descriptors.Descriptor
           getDescriptorForType() {
-        return com.gm.link.common.grpc.PushGrpc.internal_static_PushResponse_descriptor;
+        return com.gm.link.common.grpc.PushGrpc.internal_static_Push2UserResponse_descriptor;
       }
 
       @java.lang.Override
-      public com.gm.link.common.grpc.PushGrpc.PushResponse getDefaultInstanceForType() {
-        return com.gm.link.common.grpc.PushGrpc.PushResponse.getDefaultInstance();
+      public com.gm.link.common.grpc.PushGrpc.Push2UserResponse getDefaultInstanceForType() {
+        return com.gm.link.common.grpc.PushGrpc.Push2UserResponse.getDefaultInstance();
       }
 
       @java.lang.Override
-      public com.gm.link.common.grpc.PushGrpc.PushResponse build() {
-        com.gm.link.common.grpc.PushGrpc.PushResponse result = buildPartial();
+      public com.gm.link.common.grpc.PushGrpc.Push2UserResponse build() {
+        com.gm.link.common.grpc.PushGrpc.Push2UserResponse result = buildPartial();
         if (!result.isInitialized()) {
           throw newUninitializedMessageException(result);
         }
@@ -1285,8 +2694,9 @@ public final class PushGrpc {
       }
 
       @java.lang.Override
-      public com.gm.link.common.grpc.PushGrpc.PushResponse buildPartial() {
-        com.gm.link.common.grpc.PushGrpc.PushResponse result = new com.gm.link.common.grpc.PushGrpc.PushResponse(this);
+      public com.gm.link.common.grpc.PushGrpc.Push2UserResponse buildPartial() {
+        com.gm.link.common.grpc.PushGrpc.Push2UserResponse result = new com.gm.link.common.grpc.PushGrpc.Push2UserResponse(this);
+        result.code_ = code_;
         result.success_ = success_;
         result.msg_ = msg_;
         onBuilt();
@@ -1327,16 +2737,19 @@ public final class PushGrpc {
       }
       @java.lang.Override
       public Builder mergeFrom(com.google.protobuf.Message other) {
-        if (other instanceof com.gm.link.common.grpc.PushGrpc.PushResponse) {
-          return mergeFrom((com.gm.link.common.grpc.PushGrpc.PushResponse)other);
+        if (other instanceof com.gm.link.common.grpc.PushGrpc.Push2UserResponse) {
+          return mergeFrom((com.gm.link.common.grpc.PushGrpc.Push2UserResponse)other);
         } else {
           super.mergeFrom(other);
           return this;
         }
       }
 
-      public Builder mergeFrom(com.gm.link.common.grpc.PushGrpc.PushResponse other) {
-        if (other == com.gm.link.common.grpc.PushGrpc.PushResponse.getDefaultInstance()) return this;
+      public Builder mergeFrom(com.gm.link.common.grpc.PushGrpc.Push2UserResponse other) {
+        if (other == com.gm.link.common.grpc.PushGrpc.Push2UserResponse.getDefaultInstance()) return this;
+        if (other.code_ != 0) {
+          setCodeValue(other.getCodeValue());
+        }
         if (other.getSuccess() != false) {
           setSuccess(other.getSuccess());
         }
@@ -1359,11 +2772,11 @@ public final class PushGrpc {
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
-        com.gm.link.common.grpc.PushGrpc.PushResponse parsedMessage = null;
+        com.gm.link.common.grpc.PushGrpc.Push2UserResponse parsedMessage = null;
         try {
           parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
         } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-          parsedMessage = (com.gm.link.common.grpc.PushGrpc.PushResponse) e.getUnfinishedMessage();
+          parsedMessage = (com.gm.link.common.grpc.PushGrpc.Push2UserResponse) e.getUnfinishedMessage();
           throw e.unwrapIOException();
         } finally {
           if (parsedMessage != null) {
@@ -1373,13 +2786,63 @@ public final class PushGrpc {
         return this;
       }
 
+      private int code_ = 0;
+      /**
+       * <code>.ResponseCode code = 1;</code>
+       * @return The enum numeric value on the wire for code.
+       */
+      @java.lang.Override public int getCodeValue() {
+        return code_;
+      }
+      /**
+       * <code>.ResponseCode code = 1;</code>
+       * @param value The enum numeric value on the wire for code to set.
+       * @return This builder for chaining.
+       */
+      public Builder setCodeValue(int value) {
+        
+        code_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>.ResponseCode code = 1;</code>
+       * @return The code.
+       */
+      @java.lang.Override
+      public com.gm.link.common.grpc.PushGrpc.ResponseCode getCode() {
+        @SuppressWarnings("deprecation")
+        com.gm.link.common.grpc.PushGrpc.ResponseCode result = com.gm.link.common.grpc.PushGrpc.ResponseCode.valueOf(code_);
+        return result == null ? com.gm.link.common.grpc.PushGrpc.ResponseCode.UNRECOGNIZED : result;
+      }
+      /**
+       * <code>.ResponseCode code = 1;</code>
+       * @param value The code to set.
+       * @return This builder for chaining.
+       */
+      public Builder setCode(com.gm.link.common.grpc.PushGrpc.ResponseCode value) {
+        if (value == null) {
+          throw new NullPointerException();
+        }
+        
+        code_ = value.getNumber();
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>.ResponseCode code = 1;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearCode() {
+        
+        code_ = 0;
+        onChanged();
+        return this;
+      }
+
       private boolean success_ ;
       /**
-       * <pre>
-       * 成功与否
-       * </pre>
-       *
-       * <code>bool success = 1;</code>
+       * <code>bool success = 2;</code>
        * @return The success.
        */
       @java.lang.Override
@@ -1387,11 +2850,7 @@ public final class PushGrpc {
         return success_;
       }
       /**
-       * <pre>
-       * 成功与否
-       * </pre>
-       *
-       * <code>bool success = 1;</code>
+       * <code>bool success = 2;</code>
        * @param value The success to set.
        * @return This builder for chaining.
        */
@@ -1402,11 +2861,7 @@ public final class PushGrpc {
         return this;
       }
       /**
-       * <pre>
-       * 成功与否
-       * </pre>
-       *
-       * <code>bool success = 1;</code>
+       * <code>bool success = 2;</code>
        * @return This builder for chaining.
        */
       public Builder clearSuccess() {
@@ -1418,7 +2873,7 @@ public final class PushGrpc {
 
       private java.lang.Object msg_ = "";
       /**
-       * <code>string msg = 2;</code>
+       * <code>string msg = 3;</code>
        * @return The msg.
        */
       public java.lang.String getMsg() {
@@ -1434,7 +2889,7 @@ public final class PushGrpc {
         }
       }
       /**
-       * <code>string msg = 2;</code>
+       * <code>string msg = 3;</code>
        * @return The bytes for msg.
        */
       public com.google.protobuf.ByteString
@@ -1451,7 +2906,7 @@ public final class PushGrpc {
         }
       }
       /**
-       * <code>string msg = 2;</code>
+       * <code>string msg = 3;</code>
        * @param value The msg to set.
        * @return This builder for chaining.
        */
@@ -1466,7 +2921,7 @@ public final class PushGrpc {
         return this;
       }
       /**
-       * <code>string msg = 2;</code>
+       * <code>string msg = 3;</code>
        * @return This builder for chaining.
        */
       public Builder clearMsg() {
@@ -1476,7 +2931,7 @@ public final class PushGrpc {
         return this;
       }
       /**
-       * <code>string msg = 2;</code>
+       * <code>string msg = 3;</code>
        * @param value The bytes for msg to set.
        * @return This builder for chaining.
        */
@@ -1504,143 +2959,103 @@ public final class PushGrpc {
       }
 
 
-      // @@protoc_insertion_point(builder_scope:PushResponse)
+      // @@protoc_insertion_point(builder_scope:Push2UserResponse)
     }
 
-    // @@protoc_insertion_point(class_scope:PushResponse)
-    private static final com.gm.link.common.grpc.PushGrpc.PushResponse DEFAULT_INSTANCE;
+    // @@protoc_insertion_point(class_scope:Push2UserResponse)
+    private static final com.gm.link.common.grpc.PushGrpc.Push2UserResponse DEFAULT_INSTANCE;
     static {
-      DEFAULT_INSTANCE = new com.gm.link.common.grpc.PushGrpc.PushResponse();
+      DEFAULT_INSTANCE = new com.gm.link.common.grpc.PushGrpc.Push2UserResponse();
     }
 
-    public static com.gm.link.common.grpc.PushGrpc.PushResponse getDefaultInstance() {
+    public static com.gm.link.common.grpc.PushGrpc.Push2UserResponse getDefaultInstance() {
       return DEFAULT_INSTANCE;
     }
 
-    private static final com.google.protobuf.Parser<PushResponse>
-        PARSER = new com.google.protobuf.AbstractParser<PushResponse>() {
+    private static final com.google.protobuf.Parser<Push2UserResponse>
+        PARSER = new com.google.protobuf.AbstractParser<Push2UserResponse>() {
       @java.lang.Override
-      public PushResponse parsePartialFrom(
+      public Push2UserResponse parsePartialFrom(
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws com.google.protobuf.InvalidProtocolBufferException {
-        return new PushResponse(input, extensionRegistry);
+        return new Push2UserResponse(input, extensionRegistry);
       }
     };
 
-    public static com.google.protobuf.Parser<PushResponse> parser() {
+    public static com.google.protobuf.Parser<Push2UserResponse> parser() {
       return PARSER;
     }
 
     @java.lang.Override
-    public com.google.protobuf.Parser<PushResponse> getParserForType() {
+    public com.google.protobuf.Parser<Push2UserResponse> getParserForType() {
       return PARSER;
     }
 
     @java.lang.Override
-    public com.gm.link.common.grpc.PushGrpc.PushResponse getDefaultInstanceForType() {
+    public com.gm.link.common.grpc.PushGrpc.Push2UserResponse getDefaultInstanceForType() {
       return DEFAULT_INSTANCE;
     }
 
   }
 
-  public interface BatchPushRequestOrBuilder extends
-      // @@protoc_insertion_point(interface_extends:BatchPushRequest)
+  public interface Push2UsersRequestOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:Push2UsersRequest)
       com.google.protobuf.MessageOrBuilder {
 
     /**
-     * <code>fixed64 fromUserId = 1;</code>
-     * @return The fromUserId.
-     */
-    long getFromUserId();
-
-    /**
-     * <code>fixed64 timeStamp = 2;</code>
-     * @return The timeStamp.
-     */
-    long getTimeStamp();
-
-    /**
-     * <pre>
-     * 批量目标ID列表
-     * </pre>
-     *
-     * <code>repeated fixed64 toIds = 3;</code>
+     * <code>repeated int64 to_ids = 1;</code>
      * @return A list containing the toIds.
      */
     java.util.List<java.lang.Long> getToIdsList();
     /**
-     * <pre>
-     * 批量目标ID列表
-     * </pre>
-     *
-     * <code>repeated fixed64 toIds = 3;</code>
+     * <code>repeated int64 to_ids = 1;</code>
      * @return The count of toIds.
      */
     int getToIdsCount();
     /**
-     * <pre>
-     * 批量目标ID列表
-     * </pre>
-     *
-     * <code>repeated fixed64 toIds = 3;</code>
+     * <code>repeated int64 to_ids = 1;</code>
      * @param index The index of the element to return.
      * @return The toIds at the given index.
      */
     long getToIds(int index);
 
     /**
-     * <code>int32 messageType = 4;</code>
-     * @return The messageType.
+     * <code>.PushMessageBody message = 2;</code>
+     * @return Whether the message field is set.
      */
-    int getMessageType();
-
+    boolean hasMessage();
     /**
-     * <pre>
-     * 所有用户接收相同内容
-     * </pre>
-     *
-     * <code>string content = 5;</code>
-     * @return The content.
+     * <code>.PushMessageBody message = 2;</code>
+     * @return The message.
      */
-    java.lang.String getContent();
+    com.gm.link.common.grpc.PushGrpc.PushMessageBody getMessage();
     /**
-     * <pre>
-     * 所有用户接收相同内容
-     * </pre>
-     *
-     * <code>string content = 5;</code>
-     * @return The bytes for content.
+     * <code>.PushMessageBody message = 2;</code>
      */
-    com.google.protobuf.ByteString
-        getContentBytes();
+    com.gm.link.common.grpc.PushGrpc.PushMessageBodyOrBuilder getMessageOrBuilder();
   }
   /**
-   * <pre>
-   * 新增批量推送请求（复用单次推送字段，仅修改 toIds 为列表）
-   * </pre>
-   *
-   * Protobuf type {@code BatchPushRequest}
+   * Protobuf type {@code Push2UsersRequest}
    */
-  public static final class BatchPushRequest extends
+  public static final class Push2UsersRequest extends
       com.google.protobuf.GeneratedMessageV3 implements
-      // @@protoc_insertion_point(message_implements:BatchPushRequest)
-      BatchPushRequestOrBuilder {
+      // @@protoc_insertion_point(message_implements:Push2UsersRequest)
+      Push2UsersRequestOrBuilder {
   private static final long serialVersionUID = 0L;
-    // Use BatchPushRequest.newBuilder() to construct.
-    private BatchPushRequest(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
+    // Use Push2UsersRequest.newBuilder() to construct.
+    private Push2UsersRequest(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
       super(builder);
     }
-    private BatchPushRequest() {
+    private Push2UsersRequest() {
       toIds_ = emptyLongList();
-      content_ = "";
     }
 
     @java.lang.Override
     @SuppressWarnings({"unused"})
     protected java.lang.Object newInstance(
         UnusedPrivateParameter unused) {
-      return new BatchPushRequest();
+      return new Push2UsersRequest();
     }
 
     @java.lang.Override
@@ -1648,7 +3063,7 @@ public final class PushGrpc {
     getUnknownFields() {
       return this.unknownFields;
     }
-    private BatchPushRequest(
+    private Push2UsersRequest(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
@@ -1667,25 +3082,15 @@ public final class PushGrpc {
             case 0:
               done = true;
               break;
-            case 9: {
-
-              fromUserId_ = input.readFixed64();
-              break;
-            }
-            case 17: {
-
-              timeStamp_ = input.readFixed64();
-              break;
-            }
-            case 25: {
+            case 8: {
               if (!((mutable_bitField0_ & 0x00000001) != 0)) {
                 toIds_ = newLongList();
                 mutable_bitField0_ |= 0x00000001;
               }
-              toIds_.addLong(input.readFixed64());
+              toIds_.addLong(input.readInt64());
               break;
             }
-            case 26: {
+            case 10: {
               int length = input.readRawVarint32();
               int limit = input.pushLimit(length);
               if (!((mutable_bitField0_ & 0x00000001) != 0) && input.getBytesUntilLimit() > 0) {
@@ -1693,20 +3098,22 @@ public final class PushGrpc {
                 mutable_bitField0_ |= 0x00000001;
               }
               while (input.getBytesUntilLimit() > 0) {
-                toIds_.addLong(input.readFixed64());
+                toIds_.addLong(input.readInt64());
               }
               input.popLimit(limit);
               break;
             }
-            case 32: {
+            case 18: {
+              com.gm.link.common.grpc.PushGrpc.PushMessageBody.Builder subBuilder = null;
+              if (message_ != null) {
+                subBuilder = message_.toBuilder();
+              }
+              message_ = input.readMessage(com.gm.link.common.grpc.PushGrpc.PushMessageBody.parser(), extensionRegistry);
+              if (subBuilder != null) {
+                subBuilder.mergeFrom(message_);
+                message_ = subBuilder.buildPartial();
+              }
 
-              messageType_ = input.readInt32();
-              break;
-            }
-            case 42: {
-              java.lang.String s = input.readStringRequireUtf8();
-
-              content_ = s;
               break;
             }
             default: {
@@ -1733,47 +3140,21 @@ public final class PushGrpc {
     }
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
-      return com.gm.link.common.grpc.PushGrpc.internal_static_BatchPushRequest_descriptor;
+      return com.gm.link.common.grpc.PushGrpc.internal_static_Push2UsersRequest_descriptor;
     }
 
     @java.lang.Override
     protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
         internalGetFieldAccessorTable() {
-      return com.gm.link.common.grpc.PushGrpc.internal_static_BatchPushRequest_fieldAccessorTable
+      return com.gm.link.common.grpc.PushGrpc.internal_static_Push2UsersRequest_fieldAccessorTable
           .ensureFieldAccessorsInitialized(
-              com.gm.link.common.grpc.PushGrpc.BatchPushRequest.class, com.gm.link.common.grpc.PushGrpc.BatchPushRequest.Builder.class);
+              com.gm.link.common.grpc.PushGrpc.Push2UsersRequest.class, com.gm.link.common.grpc.PushGrpc.Push2UsersRequest.Builder.class);
     }
 
-    public static final int FROMUSERID_FIELD_NUMBER = 1;
-    private long fromUserId_;
-    /**
-     * <code>fixed64 fromUserId = 1;</code>
-     * @return The fromUserId.
-     */
-    @java.lang.Override
-    public long getFromUserId() {
-      return fromUserId_;
-    }
-
-    public static final int TIMESTAMP_FIELD_NUMBER = 2;
-    private long timeStamp_;
-    /**
-     * <code>fixed64 timeStamp = 2;</code>
-     * @return The timeStamp.
-     */
-    @java.lang.Override
-    public long getTimeStamp() {
-      return timeStamp_;
-    }
-
-    public static final int TOIDS_FIELD_NUMBER = 3;
+    public static final int TO_IDS_FIELD_NUMBER = 1;
     private com.google.protobuf.Internal.LongList toIds_;
     /**
-     * <pre>
-     * 批量目标ID列表
-     * </pre>
-     *
-     * <code>repeated fixed64 toIds = 3;</code>
+     * <code>repeated int64 to_ids = 1;</code>
      * @return A list containing the toIds.
      */
     @java.lang.Override
@@ -1782,22 +3163,14 @@ public final class PushGrpc {
       return toIds_;
     }
     /**
-     * <pre>
-     * 批量目标ID列表
-     * </pre>
-     *
-     * <code>repeated fixed64 toIds = 3;</code>
+     * <code>repeated int64 to_ids = 1;</code>
      * @return The count of toIds.
      */
     public int getToIdsCount() {
       return toIds_.size();
     }
     /**
-     * <pre>
-     * 批量目标ID列表
-     * </pre>
-     *
-     * <code>repeated fixed64 toIds = 3;</code>
+     * <code>repeated int64 to_ids = 1;</code>
      * @param index The index of the element to return.
      * @return The toIds at the given index.
      */
@@ -1806,61 +3179,30 @@ public final class PushGrpc {
     }
     private int toIdsMemoizedSerializedSize = -1;
 
-    public static final int MESSAGETYPE_FIELD_NUMBER = 4;
-    private int messageType_;
+    public static final int MESSAGE_FIELD_NUMBER = 2;
+    private com.gm.link.common.grpc.PushGrpc.PushMessageBody message_;
     /**
-     * <code>int32 messageType = 4;</code>
-     * @return The messageType.
+     * <code>.PushMessageBody message = 2;</code>
+     * @return Whether the message field is set.
      */
     @java.lang.Override
-    public int getMessageType() {
-      return messageType_;
-    }
-
-    public static final int CONTENT_FIELD_NUMBER = 5;
-    private volatile java.lang.Object content_;
-    /**
-     * <pre>
-     * 所有用户接收相同内容
-     * </pre>
-     *
-     * <code>string content = 5;</code>
-     * @return The content.
-     */
-    @java.lang.Override
-    public java.lang.String getContent() {
-      java.lang.Object ref = content_;
-      if (ref instanceof java.lang.String) {
-        return (java.lang.String) ref;
-      } else {
-        com.google.protobuf.ByteString bs = 
-            (com.google.protobuf.ByteString) ref;
-        java.lang.String s = bs.toStringUtf8();
-        content_ = s;
-        return s;
-      }
+    public boolean hasMessage() {
+      return message_ != null;
     }
     /**
-     * <pre>
-     * 所有用户接收相同内容
-     * </pre>
-     *
-     * <code>string content = 5;</code>
-     * @return The bytes for content.
+     * <code>.PushMessageBody message = 2;</code>
+     * @return The message.
      */
     @java.lang.Override
-    public com.google.protobuf.ByteString
-        getContentBytes() {
-      java.lang.Object ref = content_;
-      if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b = 
-            com.google.protobuf.ByteString.copyFromUtf8(
-                (java.lang.String) ref);
-        content_ = b;
-        return b;
-      } else {
-        return (com.google.protobuf.ByteString) ref;
-      }
+    public com.gm.link.common.grpc.PushGrpc.PushMessageBody getMessage() {
+      return message_ == null ? com.gm.link.common.grpc.PushGrpc.PushMessageBody.getDefaultInstance() : message_;
+    }
+    /**
+     * <code>.PushMessageBody message = 2;</code>
+     */
+    @java.lang.Override
+    public com.gm.link.common.grpc.PushGrpc.PushMessageBodyOrBuilder getMessageOrBuilder() {
+      return getMessage();
     }
 
     private byte memoizedIsInitialized = -1;
@@ -1878,24 +3220,15 @@ public final class PushGrpc {
     public void writeTo(com.google.protobuf.CodedOutputStream output)
                         throws java.io.IOException {
       getSerializedSize();
-      if (fromUserId_ != 0L) {
-        output.writeFixed64(1, fromUserId_);
-      }
-      if (timeStamp_ != 0L) {
-        output.writeFixed64(2, timeStamp_);
-      }
       if (getToIdsList().size() > 0) {
-        output.writeUInt32NoTag(26);
+        output.writeUInt32NoTag(10);
         output.writeUInt32NoTag(toIdsMemoizedSerializedSize);
       }
       for (int i = 0; i < toIds_.size(); i++) {
-        output.writeFixed64NoTag(toIds_.getLong(i));
+        output.writeInt64NoTag(toIds_.getLong(i));
       }
-      if (messageType_ != 0) {
-        output.writeInt32(4, messageType_);
-      }
-      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(content_)) {
-        com.google.protobuf.GeneratedMessageV3.writeString(output, 5, content_);
+      if (message_ != null) {
+        output.writeMessage(2, getMessage());
       }
       unknownFields.writeTo(output);
     }
@@ -1906,17 +3239,12 @@ public final class PushGrpc {
       if (size != -1) return size;
 
       size = 0;
-      if (fromUserId_ != 0L) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeFixed64Size(1, fromUserId_);
-      }
-      if (timeStamp_ != 0L) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeFixed64Size(2, timeStamp_);
-      }
       {
         int dataSize = 0;
-        dataSize = 8 * getToIdsList().size();
+        for (int i = 0; i < toIds_.size(); i++) {
+          dataSize += com.google.protobuf.CodedOutputStream
+            .computeInt64SizeNoTag(toIds_.getLong(i));
+        }
         size += dataSize;
         if (!getToIdsList().isEmpty()) {
           size += 1;
@@ -1925,12 +3253,9 @@ public final class PushGrpc {
         }
         toIdsMemoizedSerializedSize = dataSize;
       }
-      if (messageType_ != 0) {
+      if (message_ != null) {
         size += com.google.protobuf.CodedOutputStream
-          .computeInt32Size(4, messageType_);
-      }
-      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(content_)) {
-        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(5, content_);
+          .computeMessageSize(2, getMessage());
       }
       size += unknownFields.getSerializedSize();
       memoizedSize = size;
@@ -1942,21 +3267,18 @@ public final class PushGrpc {
       if (obj == this) {
        return true;
       }
-      if (!(obj instanceof com.gm.link.common.grpc.PushGrpc.BatchPushRequest)) {
+      if (!(obj instanceof com.gm.link.common.grpc.PushGrpc.Push2UsersRequest)) {
         return super.equals(obj);
       }
-      com.gm.link.common.grpc.PushGrpc.BatchPushRequest other = (com.gm.link.common.grpc.PushGrpc.BatchPushRequest) obj;
+      com.gm.link.common.grpc.PushGrpc.Push2UsersRequest other = (com.gm.link.common.grpc.PushGrpc.Push2UsersRequest) obj;
 
-      if (getFromUserId()
-          != other.getFromUserId()) return false;
-      if (getTimeStamp()
-          != other.getTimeStamp()) return false;
       if (!getToIdsList()
           .equals(other.getToIdsList())) return false;
-      if (getMessageType()
-          != other.getMessageType()) return false;
-      if (!getContent()
-          .equals(other.getContent())) return false;
+      if (hasMessage() != other.hasMessage()) return false;
+      if (hasMessage()) {
+        if (!getMessage()
+            .equals(other.getMessage())) return false;
+      }
       if (!unknownFields.equals(other.unknownFields)) return false;
       return true;
     }
@@ -1968,88 +3290,82 @@ public final class PushGrpc {
       }
       int hash = 41;
       hash = (19 * hash) + getDescriptor().hashCode();
-      hash = (37 * hash) + FROMUSERID_FIELD_NUMBER;
-      hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
-          getFromUserId());
-      hash = (37 * hash) + TIMESTAMP_FIELD_NUMBER;
-      hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
-          getTimeStamp());
       if (getToIdsCount() > 0) {
-        hash = (37 * hash) + TOIDS_FIELD_NUMBER;
+        hash = (37 * hash) + TO_IDS_FIELD_NUMBER;
         hash = (53 * hash) + getToIdsList().hashCode();
       }
-      hash = (37 * hash) + MESSAGETYPE_FIELD_NUMBER;
-      hash = (53 * hash) + getMessageType();
-      hash = (37 * hash) + CONTENT_FIELD_NUMBER;
-      hash = (53 * hash) + getContent().hashCode();
+      if (hasMessage()) {
+        hash = (37 * hash) + MESSAGE_FIELD_NUMBER;
+        hash = (53 * hash) + getMessage().hashCode();
+      }
       hash = (29 * hash) + unknownFields.hashCode();
       memoizedHashCode = hash;
       return hash;
     }
 
-    public static com.gm.link.common.grpc.PushGrpc.BatchPushRequest parseFrom(
+    public static com.gm.link.common.grpc.PushGrpc.Push2UsersRequest parseFrom(
         java.nio.ByteBuffer data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-    public static com.gm.link.common.grpc.PushGrpc.BatchPushRequest parseFrom(
+    public static com.gm.link.common.grpc.PushGrpc.Push2UsersRequest parseFrom(
         java.nio.ByteBuffer data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static com.gm.link.common.grpc.PushGrpc.BatchPushRequest parseFrom(
+    public static com.gm.link.common.grpc.PushGrpc.Push2UsersRequest parseFrom(
         com.google.protobuf.ByteString data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-    public static com.gm.link.common.grpc.PushGrpc.BatchPushRequest parseFrom(
+    public static com.gm.link.common.grpc.PushGrpc.Push2UsersRequest parseFrom(
         com.google.protobuf.ByteString data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static com.gm.link.common.grpc.PushGrpc.BatchPushRequest parseFrom(byte[] data)
+    public static com.gm.link.common.grpc.PushGrpc.Push2UsersRequest parseFrom(byte[] data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-    public static com.gm.link.common.grpc.PushGrpc.BatchPushRequest parseFrom(
+    public static com.gm.link.common.grpc.PushGrpc.Push2UsersRequest parseFrom(
         byte[] data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static com.gm.link.common.grpc.PushGrpc.BatchPushRequest parseFrom(java.io.InputStream input)
+    public static com.gm.link.common.grpc.PushGrpc.Push2UsersRequest parseFrom(java.io.InputStream input)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseWithIOException(PARSER, input);
     }
-    public static com.gm.link.common.grpc.PushGrpc.BatchPushRequest parseFrom(
+    public static com.gm.link.common.grpc.PushGrpc.Push2UsersRequest parseFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseWithIOException(PARSER, input, extensionRegistry);
     }
-    public static com.gm.link.common.grpc.PushGrpc.BatchPushRequest parseDelimitedFrom(java.io.InputStream input)
+    public static com.gm.link.common.grpc.PushGrpc.Push2UsersRequest parseDelimitedFrom(java.io.InputStream input)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseDelimitedWithIOException(PARSER, input);
     }
-    public static com.gm.link.common.grpc.PushGrpc.BatchPushRequest parseDelimitedFrom(
+    public static com.gm.link.common.grpc.PushGrpc.Push2UsersRequest parseDelimitedFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
     }
-    public static com.gm.link.common.grpc.PushGrpc.BatchPushRequest parseFrom(
+    public static com.gm.link.common.grpc.PushGrpc.Push2UsersRequest parseFrom(
         com.google.protobuf.CodedInputStream input)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseWithIOException(PARSER, input);
     }
-    public static com.gm.link.common.grpc.PushGrpc.BatchPushRequest parseFrom(
+    public static com.gm.link.common.grpc.PushGrpc.Push2UsersRequest parseFrom(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
@@ -2062,7 +3378,7 @@ public final class PushGrpc {
     public static Builder newBuilder() {
       return DEFAULT_INSTANCE.toBuilder();
     }
-    public static Builder newBuilder(com.gm.link.common.grpc.PushGrpc.BatchPushRequest prototype) {
+    public static Builder newBuilder(com.gm.link.common.grpc.PushGrpc.Push2UsersRequest prototype) {
       return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
     }
     @java.lang.Override
@@ -2078,30 +3394,26 @@ public final class PushGrpc {
       return builder;
     }
     /**
-     * <pre>
-     * 新增批量推送请求（复用单次推送字段，仅修改 toIds 为列表）
-     * </pre>
-     *
-     * Protobuf type {@code BatchPushRequest}
+     * Protobuf type {@code Push2UsersRequest}
      */
     public static final class Builder extends
         com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
-        // @@protoc_insertion_point(builder_implements:BatchPushRequest)
-        com.gm.link.common.grpc.PushGrpc.BatchPushRequestOrBuilder {
+        // @@protoc_insertion_point(builder_implements:Push2UsersRequest)
+        com.gm.link.common.grpc.PushGrpc.Push2UsersRequestOrBuilder {
       public static final com.google.protobuf.Descriptors.Descriptor
           getDescriptor() {
-        return com.gm.link.common.grpc.PushGrpc.internal_static_BatchPushRequest_descriptor;
+        return com.gm.link.common.grpc.PushGrpc.internal_static_Push2UsersRequest_descriptor;
       }
 
       @java.lang.Override
       protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
           internalGetFieldAccessorTable() {
-        return com.gm.link.common.grpc.PushGrpc.internal_static_BatchPushRequest_fieldAccessorTable
+        return com.gm.link.common.grpc.PushGrpc.internal_static_Push2UsersRequest_fieldAccessorTable
             .ensureFieldAccessorsInitialized(
-                com.gm.link.common.grpc.PushGrpc.BatchPushRequest.class, com.gm.link.common.grpc.PushGrpc.BatchPushRequest.Builder.class);
+                com.gm.link.common.grpc.PushGrpc.Push2UsersRequest.class, com.gm.link.common.grpc.PushGrpc.Push2UsersRequest.Builder.class);
       }
 
-      // Construct using com.gm.link.common.grpc.PushGrpc.BatchPushRequest.newBuilder()
+      // Construct using com.gm.link.common.grpc.PushGrpc.Push2UsersRequest.newBuilder()
       private Builder() {
         maybeForceBuilderInitialization();
       }
@@ -2119,33 +3431,31 @@ public final class PushGrpc {
       @java.lang.Override
       public Builder clear() {
         super.clear();
-        fromUserId_ = 0L;
-
-        timeStamp_ = 0L;
-
         toIds_ = emptyLongList();
         bitField0_ = (bitField0_ & ~0x00000001);
-        messageType_ = 0;
-
-        content_ = "";
-
+        if (messageBuilder_ == null) {
+          message_ = null;
+        } else {
+          message_ = null;
+          messageBuilder_ = null;
+        }
         return this;
       }
 
       @java.lang.Override
       public com.google.protobuf.Descriptors.Descriptor
           getDescriptorForType() {
-        return com.gm.link.common.grpc.PushGrpc.internal_static_BatchPushRequest_descriptor;
+        return com.gm.link.common.grpc.PushGrpc.internal_static_Push2UsersRequest_descriptor;
       }
 
       @java.lang.Override
-      public com.gm.link.common.grpc.PushGrpc.BatchPushRequest getDefaultInstanceForType() {
-        return com.gm.link.common.grpc.PushGrpc.BatchPushRequest.getDefaultInstance();
+      public com.gm.link.common.grpc.PushGrpc.Push2UsersRequest getDefaultInstanceForType() {
+        return com.gm.link.common.grpc.PushGrpc.Push2UsersRequest.getDefaultInstance();
       }
 
       @java.lang.Override
-      public com.gm.link.common.grpc.PushGrpc.BatchPushRequest build() {
-        com.gm.link.common.grpc.PushGrpc.BatchPushRequest result = buildPartial();
+      public com.gm.link.common.grpc.PushGrpc.Push2UsersRequest build() {
+        com.gm.link.common.grpc.PushGrpc.Push2UsersRequest result = buildPartial();
         if (!result.isInitialized()) {
           throw newUninitializedMessageException(result);
         }
@@ -2153,18 +3463,19 @@ public final class PushGrpc {
       }
 
       @java.lang.Override
-      public com.gm.link.common.grpc.PushGrpc.BatchPushRequest buildPartial() {
-        com.gm.link.common.grpc.PushGrpc.BatchPushRequest result = new com.gm.link.common.grpc.PushGrpc.BatchPushRequest(this);
+      public com.gm.link.common.grpc.PushGrpc.Push2UsersRequest buildPartial() {
+        com.gm.link.common.grpc.PushGrpc.Push2UsersRequest result = new com.gm.link.common.grpc.PushGrpc.Push2UsersRequest(this);
         int from_bitField0_ = bitField0_;
-        result.fromUserId_ = fromUserId_;
-        result.timeStamp_ = timeStamp_;
         if (((bitField0_ & 0x00000001) != 0)) {
           toIds_.makeImmutable();
           bitField0_ = (bitField0_ & ~0x00000001);
         }
         result.toIds_ = toIds_;
-        result.messageType_ = messageType_;
-        result.content_ = content_;
+        if (messageBuilder_ == null) {
+          result.message_ = message_;
+        } else {
+          result.message_ = messageBuilder_.build();
+        }
         onBuilt();
         return result;
       }
@@ -2203,22 +3514,16 @@ public final class PushGrpc {
       }
       @java.lang.Override
       public Builder mergeFrom(com.google.protobuf.Message other) {
-        if (other instanceof com.gm.link.common.grpc.PushGrpc.BatchPushRequest) {
-          return mergeFrom((com.gm.link.common.grpc.PushGrpc.BatchPushRequest)other);
+        if (other instanceof com.gm.link.common.grpc.PushGrpc.Push2UsersRequest) {
+          return mergeFrom((com.gm.link.common.grpc.PushGrpc.Push2UsersRequest)other);
         } else {
           super.mergeFrom(other);
           return this;
         }
       }
 
-      public Builder mergeFrom(com.gm.link.common.grpc.PushGrpc.BatchPushRequest other) {
-        if (other == com.gm.link.common.grpc.PushGrpc.BatchPushRequest.getDefaultInstance()) return this;
-        if (other.getFromUserId() != 0L) {
-          setFromUserId(other.getFromUserId());
-        }
-        if (other.getTimeStamp() != 0L) {
-          setTimeStamp(other.getTimeStamp());
-        }
+      public Builder mergeFrom(com.gm.link.common.grpc.PushGrpc.Push2UsersRequest other) {
+        if (other == com.gm.link.common.grpc.PushGrpc.Push2UsersRequest.getDefaultInstance()) return this;
         if (!other.toIds_.isEmpty()) {
           if (toIds_.isEmpty()) {
             toIds_ = other.toIds_;
@@ -2229,12 +3534,8 @@ public final class PushGrpc {
           }
           onChanged();
         }
-        if (other.getMessageType() != 0) {
-          setMessageType(other.getMessageType());
-        }
-        if (!other.getContent().isEmpty()) {
-          content_ = other.content_;
-          onChanged();
+        if (other.hasMessage()) {
+          mergeMessage(other.getMessage());
         }
         this.mergeUnknownFields(other.unknownFields);
         onChanged();
@@ -2251,11 +3552,11 @@ public final class PushGrpc {
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
-        com.gm.link.common.grpc.PushGrpc.BatchPushRequest parsedMessage = null;
+        com.gm.link.common.grpc.PushGrpc.Push2UsersRequest parsedMessage = null;
         try {
           parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
         } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-          parsedMessage = (com.gm.link.common.grpc.PushGrpc.BatchPushRequest) e.getUnfinishedMessage();
+          parsedMessage = (com.gm.link.common.grpc.PushGrpc.Push2UsersRequest) e.getUnfinishedMessage();
           throw e.unwrapIOException();
         } finally {
           if (parsedMessage != null) {
@@ -2266,68 +3567,6 @@ public final class PushGrpc {
       }
       private int bitField0_;
 
-      private long fromUserId_ ;
-      /**
-       * <code>fixed64 fromUserId = 1;</code>
-       * @return The fromUserId.
-       */
-      @java.lang.Override
-      public long getFromUserId() {
-        return fromUserId_;
-      }
-      /**
-       * <code>fixed64 fromUserId = 1;</code>
-       * @param value The fromUserId to set.
-       * @return This builder for chaining.
-       */
-      public Builder setFromUserId(long value) {
-        
-        fromUserId_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>fixed64 fromUserId = 1;</code>
-       * @return This builder for chaining.
-       */
-      public Builder clearFromUserId() {
-        
-        fromUserId_ = 0L;
-        onChanged();
-        return this;
-      }
-
-      private long timeStamp_ ;
-      /**
-       * <code>fixed64 timeStamp = 2;</code>
-       * @return The timeStamp.
-       */
-      @java.lang.Override
-      public long getTimeStamp() {
-        return timeStamp_;
-      }
-      /**
-       * <code>fixed64 timeStamp = 2;</code>
-       * @param value The timeStamp to set.
-       * @return This builder for chaining.
-       */
-      public Builder setTimeStamp(long value) {
-        
-        timeStamp_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>fixed64 timeStamp = 2;</code>
-       * @return This builder for chaining.
-       */
-      public Builder clearTimeStamp() {
-        
-        timeStamp_ = 0L;
-        onChanged();
-        return this;
-      }
-
       private com.google.protobuf.Internal.LongList toIds_ = emptyLongList();
       private void ensureToIdsIsMutable() {
         if (!((bitField0_ & 0x00000001) != 0)) {
@@ -2336,11 +3575,7 @@ public final class PushGrpc {
          }
       }
       /**
-       * <pre>
-       * 批量目标ID列表
-       * </pre>
-       *
-       * <code>repeated fixed64 toIds = 3;</code>
+       * <code>repeated int64 to_ids = 1;</code>
        * @return A list containing the toIds.
        */
       public java.util.List<java.lang.Long>
@@ -2349,22 +3584,14 @@ public final class PushGrpc {
                  java.util.Collections.unmodifiableList(toIds_) : toIds_;
       }
       /**
-       * <pre>
-       * 批量目标ID列表
-       * </pre>
-       *
-       * <code>repeated fixed64 toIds = 3;</code>
+       * <code>repeated int64 to_ids = 1;</code>
        * @return The count of toIds.
        */
       public int getToIdsCount() {
         return toIds_.size();
       }
       /**
-       * <pre>
-       * 批量目标ID列表
-       * </pre>
-       *
-       * <code>repeated fixed64 toIds = 3;</code>
+       * <code>repeated int64 to_ids = 1;</code>
        * @param index The index of the element to return.
        * @return The toIds at the given index.
        */
@@ -2372,11 +3599,7 @@ public final class PushGrpc {
         return toIds_.getLong(index);
       }
       /**
-       * <pre>
-       * 批量目标ID列表
-       * </pre>
-       *
-       * <code>repeated fixed64 toIds = 3;</code>
+       * <code>repeated int64 to_ids = 1;</code>
        * @param index The index to set the value at.
        * @param value The toIds to set.
        * @return This builder for chaining.
@@ -2389,11 +3612,7 @@ public final class PushGrpc {
         return this;
       }
       /**
-       * <pre>
-       * 批量目标ID列表
-       * </pre>
-       *
-       * <code>repeated fixed64 toIds = 3;</code>
+       * <code>repeated int64 to_ids = 1;</code>
        * @param value The toIds to add.
        * @return This builder for chaining.
        */
@@ -2404,11 +3623,7 @@ public final class PushGrpc {
         return this;
       }
       /**
-       * <pre>
-       * 批量目标ID列表
-       * </pre>
-       *
-       * <code>repeated fixed64 toIds = 3;</code>
+       * <code>repeated int64 to_ids = 1;</code>
        * @param values The toIds to add.
        * @return This builder for chaining.
        */
@@ -2421,11 +3636,7 @@ public final class PushGrpc {
         return this;
       }
       /**
-       * <pre>
-       * 批量目标ID列表
-       * </pre>
-       *
-       * <code>repeated fixed64 toIds = 3;</code>
+       * <code>repeated int64 to_ids = 1;</code>
        * @return This builder for chaining.
        */
       public Builder clearToIds() {
@@ -2435,131 +3646,123 @@ public final class PushGrpc {
         return this;
       }
 
-      private int messageType_ ;
+      private com.gm.link.common.grpc.PushGrpc.PushMessageBody message_;
+      private com.google.protobuf.SingleFieldBuilderV3<
+          com.gm.link.common.grpc.PushGrpc.PushMessageBody, com.gm.link.common.grpc.PushGrpc.PushMessageBody.Builder, com.gm.link.common.grpc.PushGrpc.PushMessageBodyOrBuilder> messageBuilder_;
       /**
-       * <code>int32 messageType = 4;</code>
-       * @return The messageType.
+       * <code>.PushMessageBody message = 2;</code>
+       * @return Whether the message field is set.
        */
-      @java.lang.Override
-      public int getMessageType() {
-        return messageType_;
+      public boolean hasMessage() {
+        return messageBuilder_ != null || message_ != null;
       }
       /**
-       * <code>int32 messageType = 4;</code>
-       * @param value The messageType to set.
-       * @return This builder for chaining.
+       * <code>.PushMessageBody message = 2;</code>
+       * @return The message.
        */
-      public Builder setMessageType(int value) {
-        
-        messageType_ = value;
-        onChanged();
-        return this;
+      public com.gm.link.common.grpc.PushGrpc.PushMessageBody getMessage() {
+        if (messageBuilder_ == null) {
+          return message_ == null ? com.gm.link.common.grpc.PushGrpc.PushMessageBody.getDefaultInstance() : message_;
+        } else {
+          return messageBuilder_.getMessage();
+        }
       }
       /**
-       * <code>int32 messageType = 4;</code>
-       * @return This builder for chaining.
+       * <code>.PushMessageBody message = 2;</code>
        */
-      public Builder clearMessageType() {
-        
-        messageType_ = 0;
-        onChanged();
-        return this;
-      }
+      public Builder setMessage(com.gm.link.common.grpc.PushGrpc.PushMessageBody value) {
+        if (messageBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          message_ = value;
+          onChanged();
+        } else {
+          messageBuilder_.setMessage(value);
+        }
 
-      private java.lang.Object content_ = "";
+        return this;
+      }
       /**
-       * <pre>
-       * 所有用户接收相同内容
-       * </pre>
-       *
-       * <code>string content = 5;</code>
-       * @return The content.
+       * <code>.PushMessageBody message = 2;</code>
        */
-      public java.lang.String getContent() {
-        java.lang.Object ref = content_;
-        if (!(ref instanceof java.lang.String)) {
-          com.google.protobuf.ByteString bs =
-              (com.google.protobuf.ByteString) ref;
-          java.lang.String s = bs.toStringUtf8();
-          content_ = s;
-          return s;
+      public Builder setMessage(
+          com.gm.link.common.grpc.PushGrpc.PushMessageBody.Builder builderForValue) {
+        if (messageBuilder_ == null) {
+          message_ = builderForValue.build();
+          onChanged();
         } else {
-          return (java.lang.String) ref;
+          messageBuilder_.setMessage(builderForValue.build());
+        }
+
+        return this;
+      }
+      /**
+       * <code>.PushMessageBody message = 2;</code>
+       */
+      public Builder mergeMessage(com.gm.link.common.grpc.PushGrpc.PushMessageBody value) {
+        if (messageBuilder_ == null) {
+          if (message_ != null) {
+            message_ =
+              com.gm.link.common.grpc.PushGrpc.PushMessageBody.newBuilder(message_).mergeFrom(value).buildPartial();
+          } else {
+            message_ = value;
+          }
+          onChanged();
+        } else {
+          messageBuilder_.mergeFrom(value);
+        }
+
+        return this;
+      }
+      /**
+       * <code>.PushMessageBody message = 2;</code>
+       */
+      public Builder clearMessage() {
+        if (messageBuilder_ == null) {
+          message_ = null;
+          onChanged();
+        } else {
+          message_ = null;
+          messageBuilder_ = null;
+        }
+
+        return this;
+      }
+      /**
+       * <code>.PushMessageBody message = 2;</code>
+       */
+      public com.gm.link.common.grpc.PushGrpc.PushMessageBody.Builder getMessageBuilder() {
+        
+        onChanged();
+        return getMessageFieldBuilder().getBuilder();
+      }
+      /**
+       * <code>.PushMessageBody message = 2;</code>
+       */
+      public com.gm.link.common.grpc.PushGrpc.PushMessageBodyOrBuilder getMessageOrBuilder() {
+        if (messageBuilder_ != null) {
+          return messageBuilder_.getMessageOrBuilder();
+        } else {
+          return message_ == null ?
+              com.gm.link.common.grpc.PushGrpc.PushMessageBody.getDefaultInstance() : message_;
         }
       }
       /**
-       * <pre>
-       * 所有用户接收相同内容
-       * </pre>
-       *
-       * <code>string content = 5;</code>
-       * @return The bytes for content.
+       * <code>.PushMessageBody message = 2;</code>
        */
-      public com.google.protobuf.ByteString
-          getContentBytes() {
-        java.lang.Object ref = content_;
-        if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
-              com.google.protobuf.ByteString.copyFromUtf8(
-                  (java.lang.String) ref);
-          content_ = b;
-          return b;
-        } else {
-          return (com.google.protobuf.ByteString) ref;
+      private com.google.protobuf.SingleFieldBuilderV3<
+          com.gm.link.common.grpc.PushGrpc.PushMessageBody, com.gm.link.common.grpc.PushGrpc.PushMessageBody.Builder, com.gm.link.common.grpc.PushGrpc.PushMessageBodyOrBuilder> 
+          getMessageFieldBuilder() {
+        if (messageBuilder_ == null) {
+          messageBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
+              com.gm.link.common.grpc.PushGrpc.PushMessageBody, com.gm.link.common.grpc.PushGrpc.PushMessageBody.Builder, com.gm.link.common.grpc.PushGrpc.PushMessageBodyOrBuilder>(
+                  getMessage(),
+                  getParentForChildren(),
+                  isClean());
+          message_ = null;
         }
-      }
-      /**
-       * <pre>
-       * 所有用户接收相同内容
-       * </pre>
-       *
-       * <code>string content = 5;</code>
-       * @param value The content to set.
-       * @return This builder for chaining.
-       */
-      public Builder setContent(
-          java.lang.String value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  
-        content_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <pre>
-       * 所有用户接收相同内容
-       * </pre>
-       *
-       * <code>string content = 5;</code>
-       * @return This builder for chaining.
-       */
-      public Builder clearContent() {
-        
-        content_ = getDefaultInstance().getContent();
-        onChanged();
-        return this;
-      }
-      /**
-       * <pre>
-       * 所有用户接收相同内容
-       * </pre>
-       *
-       * <code>string content = 5;</code>
-       * @param value The bytes for content to set.
-       * @return This builder for chaining.
-       */
-      public Builder setContentBytes(
-          com.google.protobuf.ByteString value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  checkByteStringIsUtf8(value);
-        
-        content_ = value;
-        onChanged();
-        return this;
+        return messageBuilder_;
       }
       @java.lang.Override
       public final Builder setUnknownFields(
@@ -2574,111 +3777,117 @@ public final class PushGrpc {
       }
 
 
-      // @@protoc_insertion_point(builder_scope:BatchPushRequest)
+      // @@protoc_insertion_point(builder_scope:Push2UsersRequest)
     }
 
-    // @@protoc_insertion_point(class_scope:BatchPushRequest)
-    private static final com.gm.link.common.grpc.PushGrpc.BatchPushRequest DEFAULT_INSTANCE;
+    // @@protoc_insertion_point(class_scope:Push2UsersRequest)
+    private static final com.gm.link.common.grpc.PushGrpc.Push2UsersRequest DEFAULT_INSTANCE;
     static {
-      DEFAULT_INSTANCE = new com.gm.link.common.grpc.PushGrpc.BatchPushRequest();
+      DEFAULT_INSTANCE = new com.gm.link.common.grpc.PushGrpc.Push2UsersRequest();
     }
 
-    public static com.gm.link.common.grpc.PushGrpc.BatchPushRequest getDefaultInstance() {
+    public static com.gm.link.common.grpc.PushGrpc.Push2UsersRequest getDefaultInstance() {
       return DEFAULT_INSTANCE;
     }
 
-    private static final com.google.protobuf.Parser<BatchPushRequest>
-        PARSER = new com.google.protobuf.AbstractParser<BatchPushRequest>() {
+    private static final com.google.protobuf.Parser<Push2UsersRequest>
+        PARSER = new com.google.protobuf.AbstractParser<Push2UsersRequest>() {
       @java.lang.Override
-      public BatchPushRequest parsePartialFrom(
+      public Push2UsersRequest parsePartialFrom(
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws com.google.protobuf.InvalidProtocolBufferException {
-        return new BatchPushRequest(input, extensionRegistry);
+        return new Push2UsersRequest(input, extensionRegistry);
       }
     };
 
-    public static com.google.protobuf.Parser<BatchPushRequest> parser() {
+    public static com.google.protobuf.Parser<Push2UsersRequest> parser() {
       return PARSER;
     }
 
     @java.lang.Override
-    public com.google.protobuf.Parser<BatchPushRequest> getParserForType() {
+    public com.google.protobuf.Parser<Push2UsersRequest> getParserForType() {
       return PARSER;
     }
 
     @java.lang.Override
-    public com.gm.link.common.grpc.PushGrpc.BatchPushRequest getDefaultInstanceForType() {
+    public com.gm.link.common.grpc.PushGrpc.Push2UsersRequest getDefaultInstanceForType() {
       return DEFAULT_INSTANCE;
     }
 
   }
 
-  public interface BatchPushResponseOrBuilder extends
-      // @@protoc_insertion_point(interface_extends:BatchPushResponse)
+  public interface Push2UsersResponseOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:Push2UsersResponse)
       com.google.protobuf.MessageOrBuilder {
 
     /**
      * <pre>
-     * 每个目标的推送结果
+     * 总推送数
      * </pre>
      *
-     * <code>repeated .BatchPushResponse.Result results = 1;</code>
+     * <code>int32 total = 1;</code>
+     * @return The total.
      */
-    java.util.List<com.gm.link.common.grpc.PushGrpc.BatchPushResponse.Result> 
+    int getTotal();
+
+    /**
+     * <pre>
+     * 成功数
+     * </pre>
+     *
+     * <code>int32 success_count = 2;</code>
+     * @return The successCount.
+     */
+    int getSuccessCount();
+
+    /**
+     * <pre>
+     * 失败数
+     * </pre>
+     *
+     * <code>int32 fail_count = 3;</code>
+     * @return The failCount.
+     */
+    int getFailCount();
+
+    /**
+     * <code>repeated .PushResult results = 4;</code>
+     */
+    java.util.List<com.gm.link.common.grpc.PushGrpc.PushResult> 
         getResultsList();
     /**
-     * <pre>
-     * 每个目标的推送结果
-     * </pre>
-     *
-     * <code>repeated .BatchPushResponse.Result results = 1;</code>
+     * <code>repeated .PushResult results = 4;</code>
      */
-    com.gm.link.common.grpc.PushGrpc.BatchPushResponse.Result getResults(int index);
+    com.gm.link.common.grpc.PushGrpc.PushResult getResults(int index);
     /**
-     * <pre>
-     * 每个目标的推送结果
-     * </pre>
-     *
-     * <code>repeated .BatchPushResponse.Result results = 1;</code>
+     * <code>repeated .PushResult results = 4;</code>
      */
     int getResultsCount();
     /**
-     * <pre>
-     * 每个目标的推送结果
-     * </pre>
-     *
-     * <code>repeated .BatchPushResponse.Result results = 1;</code>
+     * <code>repeated .PushResult results = 4;</code>
      */
-    java.util.List<? extends com.gm.link.common.grpc.PushGrpc.BatchPushResponse.ResultOrBuilder> 
+    java.util.List<? extends com.gm.link.common.grpc.PushGrpc.PushResultOrBuilder> 
         getResultsOrBuilderList();
     /**
-     * <pre>
-     * 每个目标的推送结果
-     * </pre>
-     *
-     * <code>repeated .BatchPushResponse.Result results = 1;</code>
+     * <code>repeated .PushResult results = 4;</code>
      */
-    com.gm.link.common.grpc.PushGrpc.BatchPushResponse.ResultOrBuilder getResultsOrBuilder(
+    com.gm.link.common.grpc.PushGrpc.PushResultOrBuilder getResultsOrBuilder(
         int index);
   }
   /**
-   * <pre>
-   * 新增批量推送响应（返回每个目标的推送结果）
-   * </pre>
-   *
-   * Protobuf type {@code BatchPushResponse}
+   * Protobuf type {@code Push2UsersResponse}
    */
-  public static final class BatchPushResponse extends
+  public static final class Push2UsersResponse extends
       com.google.protobuf.GeneratedMessageV3 implements
-      // @@protoc_insertion_point(message_implements:BatchPushResponse)
-      BatchPushResponseOrBuilder {
+      // @@protoc_insertion_point(message_implements:Push2UsersResponse)
+      Push2UsersResponseOrBuilder {
   private static final long serialVersionUID = 0L;
-    // Use BatchPushResponse.newBuilder() to construct.
-    private BatchPushResponse(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
+    // Use Push2UsersResponse.newBuilder() to construct.
+    private Push2UsersResponse(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
       super(builder);
     }
-    private BatchPushResponse() {
+    private Push2UsersResponse() {
       results_ = java.util.Collections.emptyList();
     }
 
@@ -2686,7 +3895,7 @@ public final class PushGrpc {
     @SuppressWarnings({"unused"})
     protected java.lang.Object newInstance(
         UnusedPrivateParameter unused) {
-      return new BatchPushResponse();
+      return new Push2UsersResponse();
     }
 
     @java.lang.Override
@@ -2694,7 +3903,7 @@ public final class PushGrpc {
     getUnknownFields() {
       return this.unknownFields;
     }
-    private BatchPushResponse(
+    private Push2UsersResponse(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
@@ -2713,13 +3922,28 @@ public final class PushGrpc {
             case 0:
               done = true;
               break;
-            case 10: {
+            case 8: {
+
+              total_ = input.readInt32();
+              break;
+            }
+            case 16: {
+
+              successCount_ = input.readInt32();
+              break;
+            }
+            case 24: {
+
+              failCount_ = input.readInt32();
+              break;
+            }
+            case 34: {
               if (!((mutable_bitField0_ & 0x00000001) != 0)) {
-                results_ = new java.util.ArrayList<com.gm.link.common.grpc.PushGrpc.BatchPushResponse.Result>();
+                results_ = new java.util.ArrayList<com.gm.link.common.grpc.PushGrpc.PushResult>();
                 mutable_bitField0_ |= 0x00000001;
               }
               results_.add(
-                  input.readMessage(com.gm.link.common.grpc.PushGrpc.BatchPushResponse.Result.parser(), extensionRegistry));
+                  input.readMessage(com.gm.link.common.grpc.PushGrpc.PushResult.parser(), extensionRegistry));
               break;
             }
             default: {
@@ -2746,803 +3970,98 @@ public final class PushGrpc {
     }
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
-      return com.gm.link.common.grpc.PushGrpc.internal_static_BatchPushResponse_descriptor;
+      return com.gm.link.common.grpc.PushGrpc.internal_static_Push2UsersResponse_descriptor;
     }
 
     @java.lang.Override
     protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
         internalGetFieldAccessorTable() {
-      return com.gm.link.common.grpc.PushGrpc.internal_static_BatchPushResponse_fieldAccessorTable
+      return com.gm.link.common.grpc.PushGrpc.internal_static_Push2UsersResponse_fieldAccessorTable
           .ensureFieldAccessorsInitialized(
-              com.gm.link.common.grpc.PushGrpc.BatchPushResponse.class, com.gm.link.common.grpc.PushGrpc.BatchPushResponse.Builder.class);
+              com.gm.link.common.grpc.PushGrpc.Push2UsersResponse.class, com.gm.link.common.grpc.PushGrpc.Push2UsersResponse.Builder.class);
     }
 
-    public interface ResultOrBuilder extends
-        // @@protoc_insertion_point(interface_extends:BatchPushResponse.Result)
-        com.google.protobuf.MessageOrBuilder {
-
-      /**
-       * <code>fixed64 toId = 1;</code>
-       * @return The toId.
-       */
-      long getToId();
-
-      /**
-       * <pre>
-       * 成功与否
-       * </pre>
-       *
-       * <code>bool success = 2;</code>
-       * @return The success.
-       */
-      boolean getSuccess();
-
-      /**
-       * <code>string msg = 3;</code>
-       * @return The msg.
-       */
-      java.lang.String getMsg();
-      /**
-       * <code>string msg = 3;</code>
-       * @return The bytes for msg.
-       */
-      com.google.protobuf.ByteString
-          getMsgBytes();
-    }
-    /**
-     * Protobuf type {@code BatchPushResponse.Result}
-     */
-    public static final class Result extends
-        com.google.protobuf.GeneratedMessageV3 implements
-        // @@protoc_insertion_point(message_implements:BatchPushResponse.Result)
-        ResultOrBuilder {
-    private static final long serialVersionUID = 0L;
-      // Use Result.newBuilder() to construct.
-      private Result(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
-        super(builder);
-      }
-      private Result() {
-        msg_ = "";
-      }
-
-      @java.lang.Override
-      @SuppressWarnings({"unused"})
-      protected java.lang.Object newInstance(
-          UnusedPrivateParameter unused) {
-        return new Result();
-      }
-
-      @java.lang.Override
-      public final com.google.protobuf.UnknownFieldSet
-      getUnknownFields() {
-        return this.unknownFields;
-      }
-      private Result(
-          com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws com.google.protobuf.InvalidProtocolBufferException {
-        this();
-        if (extensionRegistry == null) {
-          throw new java.lang.NullPointerException();
-        }
-        com.google.protobuf.UnknownFieldSet.Builder unknownFields =
-            com.google.protobuf.UnknownFieldSet.newBuilder();
-        try {
-          boolean done = false;
-          while (!done) {
-            int tag = input.readTag();
-            switch (tag) {
-              case 0:
-                done = true;
-                break;
-              case 9: {
-
-                toId_ = input.readFixed64();
-                break;
-              }
-              case 16: {
-
-                success_ = input.readBool();
-                break;
-              }
-              case 26: {
-                java.lang.String s = input.readStringRequireUtf8();
-
-                msg_ = s;
-                break;
-              }
-              default: {
-                if (!parseUnknownField(
-                    input, unknownFields, extensionRegistry, tag)) {
-                  done = true;
-                }
-                break;
-              }
-            }
-          }
-        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-          throw e.setUnfinishedMessage(this);
-        } catch (java.io.IOException e) {
-          throw new com.google.protobuf.InvalidProtocolBufferException(
-              e).setUnfinishedMessage(this);
-        } finally {
-          this.unknownFields = unknownFields.build();
-          makeExtensionsImmutable();
-        }
-      }
-      public static final com.google.protobuf.Descriptors.Descriptor
-          getDescriptor() {
-        return com.gm.link.common.grpc.PushGrpc.internal_static_BatchPushResponse_Result_descriptor;
-      }
-
-      @java.lang.Override
-      protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-          internalGetFieldAccessorTable() {
-        return com.gm.link.common.grpc.PushGrpc.internal_static_BatchPushResponse_Result_fieldAccessorTable
-            .ensureFieldAccessorsInitialized(
-                com.gm.link.common.grpc.PushGrpc.BatchPushResponse.Result.class, com.gm.link.common.grpc.PushGrpc.BatchPushResponse.Result.Builder.class);
-      }
-
-      public static final int TOID_FIELD_NUMBER = 1;
-      private long toId_;
-      /**
-       * <code>fixed64 toId = 1;</code>
-       * @return The toId.
-       */
-      @java.lang.Override
-      public long getToId() {
-        return toId_;
-      }
-
-      public static final int SUCCESS_FIELD_NUMBER = 2;
-      private boolean success_;
-      /**
-       * <pre>
-       * 成功与否
-       * </pre>
-       *
-       * <code>bool success = 2;</code>
-       * @return The success.
-       */
-      @java.lang.Override
-      public boolean getSuccess() {
-        return success_;
-      }
-
-      public static final int MSG_FIELD_NUMBER = 3;
-      private volatile java.lang.Object msg_;
-      /**
-       * <code>string msg = 3;</code>
-       * @return The msg.
-       */
-      @java.lang.Override
-      public java.lang.String getMsg() {
-        java.lang.Object ref = msg_;
-        if (ref instanceof java.lang.String) {
-          return (java.lang.String) ref;
-        } else {
-          com.google.protobuf.ByteString bs = 
-              (com.google.protobuf.ByteString) ref;
-          java.lang.String s = bs.toStringUtf8();
-          msg_ = s;
-          return s;
-        }
-      }
-      /**
-       * <code>string msg = 3;</code>
-       * @return The bytes for msg.
-       */
-      @java.lang.Override
-      public com.google.protobuf.ByteString
-          getMsgBytes() {
-        java.lang.Object ref = msg_;
-        if (ref instanceof java.lang.String) {
-          com.google.protobuf.ByteString b = 
-              com.google.protobuf.ByteString.copyFromUtf8(
-                  (java.lang.String) ref);
-          msg_ = b;
-          return b;
-        } else {
-          return (com.google.protobuf.ByteString) ref;
-        }
-      }
-
-      private byte memoizedIsInitialized = -1;
-      @java.lang.Override
-      public final boolean isInitialized() {
-        byte isInitialized = memoizedIsInitialized;
-        if (isInitialized == 1) return true;
-        if (isInitialized == 0) return false;
-
-        memoizedIsInitialized = 1;
-        return true;
-      }
-
-      @java.lang.Override
-      public void writeTo(com.google.protobuf.CodedOutputStream output)
-                          throws java.io.IOException {
-        if (toId_ != 0L) {
-          output.writeFixed64(1, toId_);
-        }
-        if (success_ != false) {
-          output.writeBool(2, success_);
-        }
-        if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(msg_)) {
-          com.google.protobuf.GeneratedMessageV3.writeString(output, 3, msg_);
-        }
-        unknownFields.writeTo(output);
-      }
-
-      @java.lang.Override
-      public int getSerializedSize() {
-        int size = memoizedSize;
-        if (size != -1) return size;
-
-        size = 0;
-        if (toId_ != 0L) {
-          size += com.google.protobuf.CodedOutputStream
-            .computeFixed64Size(1, toId_);
-        }
-        if (success_ != false) {
-          size += com.google.protobuf.CodedOutputStream
-            .computeBoolSize(2, success_);
-        }
-        if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(msg_)) {
-          size += com.google.protobuf.GeneratedMessageV3.computeStringSize(3, msg_);
-        }
-        size += unknownFields.getSerializedSize();
-        memoizedSize = size;
-        return size;
-      }
-
-      @java.lang.Override
-      public boolean equals(final java.lang.Object obj) {
-        if (obj == this) {
-         return true;
-        }
-        if (!(obj instanceof com.gm.link.common.grpc.PushGrpc.BatchPushResponse.Result)) {
-          return super.equals(obj);
-        }
-        com.gm.link.common.grpc.PushGrpc.BatchPushResponse.Result other = (com.gm.link.common.grpc.PushGrpc.BatchPushResponse.Result) obj;
-
-        if (getToId()
-            != other.getToId()) return false;
-        if (getSuccess()
-            != other.getSuccess()) return false;
-        if (!getMsg()
-            .equals(other.getMsg())) return false;
-        if (!unknownFields.equals(other.unknownFields)) return false;
-        return true;
-      }
-
-      @java.lang.Override
-      public int hashCode() {
-        if (memoizedHashCode != 0) {
-          return memoizedHashCode;
-        }
-        int hash = 41;
-        hash = (19 * hash) + getDescriptor().hashCode();
-        hash = (37 * hash) + TOID_FIELD_NUMBER;
-        hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
-            getToId());
-        hash = (37 * hash) + SUCCESS_FIELD_NUMBER;
-        hash = (53 * hash) + com.google.protobuf.Internal.hashBoolean(
-            getSuccess());
-        hash = (37 * hash) + MSG_FIELD_NUMBER;
-        hash = (53 * hash) + getMsg().hashCode();
-        hash = (29 * hash) + unknownFields.hashCode();
-        memoizedHashCode = hash;
-        return hash;
-      }
-
-      public static com.gm.link.common.grpc.PushGrpc.BatchPushResponse.Result parseFrom(
-          java.nio.ByteBuffer data)
-          throws com.google.protobuf.InvalidProtocolBufferException {
-        return PARSER.parseFrom(data);
-      }
-      public static com.gm.link.common.grpc.PushGrpc.BatchPushResponse.Result parseFrom(
-          java.nio.ByteBuffer data,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws com.google.protobuf.InvalidProtocolBufferException {
-        return PARSER.parseFrom(data, extensionRegistry);
-      }
-      public static com.gm.link.common.grpc.PushGrpc.BatchPushResponse.Result parseFrom(
-          com.google.protobuf.ByteString data)
-          throws com.google.protobuf.InvalidProtocolBufferException {
-        return PARSER.parseFrom(data);
-      }
-      public static com.gm.link.common.grpc.PushGrpc.BatchPushResponse.Result parseFrom(
-          com.google.protobuf.ByteString data,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws com.google.protobuf.InvalidProtocolBufferException {
-        return PARSER.parseFrom(data, extensionRegistry);
-      }
-      public static com.gm.link.common.grpc.PushGrpc.BatchPushResponse.Result parseFrom(byte[] data)
-          throws com.google.protobuf.InvalidProtocolBufferException {
-        return PARSER.parseFrom(data);
-      }
-      public static com.gm.link.common.grpc.PushGrpc.BatchPushResponse.Result parseFrom(
-          byte[] data,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws com.google.protobuf.InvalidProtocolBufferException {
-        return PARSER.parseFrom(data, extensionRegistry);
-      }
-      public static com.gm.link.common.grpc.PushGrpc.BatchPushResponse.Result parseFrom(java.io.InputStream input)
-          throws java.io.IOException {
-        return com.google.protobuf.GeneratedMessageV3
-            .parseWithIOException(PARSER, input);
-      }
-      public static com.gm.link.common.grpc.PushGrpc.BatchPushResponse.Result parseFrom(
-          java.io.InputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws java.io.IOException {
-        return com.google.protobuf.GeneratedMessageV3
-            .parseWithIOException(PARSER, input, extensionRegistry);
-      }
-      public static com.gm.link.common.grpc.PushGrpc.BatchPushResponse.Result parseDelimitedFrom(java.io.InputStream input)
-          throws java.io.IOException {
-        return com.google.protobuf.GeneratedMessageV3
-            .parseDelimitedWithIOException(PARSER, input);
-      }
-      public static com.gm.link.common.grpc.PushGrpc.BatchPushResponse.Result parseDelimitedFrom(
-          java.io.InputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws java.io.IOException {
-        return com.google.protobuf.GeneratedMessageV3
-            .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
-      }
-      public static com.gm.link.common.grpc.PushGrpc.BatchPushResponse.Result parseFrom(
-          com.google.protobuf.CodedInputStream input)
-          throws java.io.IOException {
-        return com.google.protobuf.GeneratedMessageV3
-            .parseWithIOException(PARSER, input);
-      }
-      public static com.gm.link.common.grpc.PushGrpc.BatchPushResponse.Result parseFrom(
-          com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws java.io.IOException {
-        return com.google.protobuf.GeneratedMessageV3
-            .parseWithIOException(PARSER, input, extensionRegistry);
-      }
-
-      @java.lang.Override
-      public Builder newBuilderForType() { return newBuilder(); }
-      public static Builder newBuilder() {
-        return DEFAULT_INSTANCE.toBuilder();
-      }
-      public static Builder newBuilder(com.gm.link.common.grpc.PushGrpc.BatchPushResponse.Result prototype) {
-        return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
-      }
-      @java.lang.Override
-      public Builder toBuilder() {
-        return this == DEFAULT_INSTANCE
-            ? new Builder() : new Builder().mergeFrom(this);
-      }
-
-      @java.lang.Override
-      protected Builder newBuilderForType(
-          com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
-        Builder builder = new Builder(parent);
-        return builder;
-      }
-      /**
-       * Protobuf type {@code BatchPushResponse.Result}
-       */
-      public static final class Builder extends
-          com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
-          // @@protoc_insertion_point(builder_implements:BatchPushResponse.Result)
-          com.gm.link.common.grpc.PushGrpc.BatchPushResponse.ResultOrBuilder {
-        public static final com.google.protobuf.Descriptors.Descriptor
-            getDescriptor() {
-          return com.gm.link.common.grpc.PushGrpc.internal_static_BatchPushResponse_Result_descriptor;
-        }
-
-        @java.lang.Override
-        protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-            internalGetFieldAccessorTable() {
-          return com.gm.link.common.grpc.PushGrpc.internal_static_BatchPushResponse_Result_fieldAccessorTable
-              .ensureFieldAccessorsInitialized(
-                  com.gm.link.common.grpc.PushGrpc.BatchPushResponse.Result.class, com.gm.link.common.grpc.PushGrpc.BatchPushResponse.Result.Builder.class);
-        }
-
-        // Construct using com.gm.link.common.grpc.PushGrpc.BatchPushResponse.Result.newBuilder()
-        private Builder() {
-          maybeForceBuilderInitialization();
-        }
-
-        private Builder(
-            com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
-          super(parent);
-          maybeForceBuilderInitialization();
-        }
-        private void maybeForceBuilderInitialization() {
-          if (com.google.protobuf.GeneratedMessageV3
-                  .alwaysUseFieldBuilders) {
-          }
-        }
-        @java.lang.Override
-        public Builder clear() {
-          super.clear();
-          toId_ = 0L;
-
-          success_ = false;
-
-          msg_ = "";
-
-          return this;
-        }
-
-        @java.lang.Override
-        public com.google.protobuf.Descriptors.Descriptor
-            getDescriptorForType() {
-          return com.gm.link.common.grpc.PushGrpc.internal_static_BatchPushResponse_Result_descriptor;
-        }
-
-        @java.lang.Override
-        public com.gm.link.common.grpc.PushGrpc.BatchPushResponse.Result getDefaultInstanceForType() {
-          return com.gm.link.common.grpc.PushGrpc.BatchPushResponse.Result.getDefaultInstance();
-        }
-
-        @java.lang.Override
-        public com.gm.link.common.grpc.PushGrpc.BatchPushResponse.Result build() {
-          com.gm.link.common.grpc.PushGrpc.BatchPushResponse.Result result = buildPartial();
-          if (!result.isInitialized()) {
-            throw newUninitializedMessageException(result);
-          }
-          return result;
-        }
-
-        @java.lang.Override
-        public com.gm.link.common.grpc.PushGrpc.BatchPushResponse.Result buildPartial() {
-          com.gm.link.common.grpc.PushGrpc.BatchPushResponse.Result result = new com.gm.link.common.grpc.PushGrpc.BatchPushResponse.Result(this);
-          result.toId_ = toId_;
-          result.success_ = success_;
-          result.msg_ = msg_;
-          onBuilt();
-          return result;
-        }
-
-        @java.lang.Override
-        public Builder clone() {
-          return super.clone();
-        }
-        @java.lang.Override
-        public Builder setField(
-            com.google.protobuf.Descriptors.FieldDescriptor field,
-            java.lang.Object value) {
-          return super.setField(field, value);
-        }
-        @java.lang.Override
-        public Builder clearField(
-            com.google.protobuf.Descriptors.FieldDescriptor field) {
-          return super.clearField(field);
-        }
-        @java.lang.Override
-        public Builder clearOneof(
-            com.google.protobuf.Descriptors.OneofDescriptor oneof) {
-          return super.clearOneof(oneof);
-        }
-        @java.lang.Override
-        public Builder setRepeatedField(
-            com.google.protobuf.Descriptors.FieldDescriptor field,
-            int index, java.lang.Object value) {
-          return super.setRepeatedField(field, index, value);
-        }
-        @java.lang.Override
-        public Builder addRepeatedField(
-            com.google.protobuf.Descriptors.FieldDescriptor field,
-            java.lang.Object value) {
-          return super.addRepeatedField(field, value);
-        }
-        @java.lang.Override
-        public Builder mergeFrom(com.google.protobuf.Message other) {
-          if (other instanceof com.gm.link.common.grpc.PushGrpc.BatchPushResponse.Result) {
-            return mergeFrom((com.gm.link.common.grpc.PushGrpc.BatchPushResponse.Result)other);
-          } else {
-            super.mergeFrom(other);
-            return this;
-          }
-        }
-
-        public Builder mergeFrom(com.gm.link.common.grpc.PushGrpc.BatchPushResponse.Result other) {
-          if (other == com.gm.link.common.grpc.PushGrpc.BatchPushResponse.Result.getDefaultInstance()) return this;
-          if (other.getToId() != 0L) {
-            setToId(other.getToId());
-          }
-          if (other.getSuccess() != false) {
-            setSuccess(other.getSuccess());
-          }
-          if (!other.getMsg().isEmpty()) {
-            msg_ = other.msg_;
-            onChanged();
-          }
-          this.mergeUnknownFields(other.unknownFields);
-          onChanged();
-          return this;
-        }
-
-        @java.lang.Override
-        public final boolean isInitialized() {
-          return true;
-        }
-
-        @java.lang.Override
-        public Builder mergeFrom(
-            com.google.protobuf.CodedInputStream input,
-            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-            throws java.io.IOException {
-          com.gm.link.common.grpc.PushGrpc.BatchPushResponse.Result parsedMessage = null;
-          try {
-            parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
-          } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-            parsedMessage = (com.gm.link.common.grpc.PushGrpc.BatchPushResponse.Result) e.getUnfinishedMessage();
-            throw e.unwrapIOException();
-          } finally {
-            if (parsedMessage != null) {
-              mergeFrom(parsedMessage);
-            }
-          }
-          return this;
-        }
-
-        private long toId_ ;
-        /**
-         * <code>fixed64 toId = 1;</code>
-         * @return The toId.
-         */
-        @java.lang.Override
-        public long getToId() {
-          return toId_;
-        }
-        /**
-         * <code>fixed64 toId = 1;</code>
-         * @param value The toId to set.
-         * @return This builder for chaining.
-         */
-        public Builder setToId(long value) {
-          
-          toId_ = value;
-          onChanged();
-          return this;
-        }
-        /**
-         * <code>fixed64 toId = 1;</code>
-         * @return This builder for chaining.
-         */
-        public Builder clearToId() {
-          
-          toId_ = 0L;
-          onChanged();
-          return this;
-        }
-
-        private boolean success_ ;
-        /**
-         * <pre>
-         * 成功与否
-         * </pre>
-         *
-         * <code>bool success = 2;</code>
-         * @return The success.
-         */
-        @java.lang.Override
-        public boolean getSuccess() {
-          return success_;
-        }
-        /**
-         * <pre>
-         * 成功与否
-         * </pre>
-         *
-         * <code>bool success = 2;</code>
-         * @param value The success to set.
-         * @return This builder for chaining.
-         */
-        public Builder setSuccess(boolean value) {
-          
-          success_ = value;
-          onChanged();
-          return this;
-        }
-        /**
-         * <pre>
-         * 成功与否
-         * </pre>
-         *
-         * <code>bool success = 2;</code>
-         * @return This builder for chaining.
-         */
-        public Builder clearSuccess() {
-          
-          success_ = false;
-          onChanged();
-          return this;
-        }
-
-        private java.lang.Object msg_ = "";
-        /**
-         * <code>string msg = 3;</code>
-         * @return The msg.
-         */
-        public java.lang.String getMsg() {
-          java.lang.Object ref = msg_;
-          if (!(ref instanceof java.lang.String)) {
-            com.google.protobuf.ByteString bs =
-                (com.google.protobuf.ByteString) ref;
-            java.lang.String s = bs.toStringUtf8();
-            msg_ = s;
-            return s;
-          } else {
-            return (java.lang.String) ref;
-          }
-        }
-        /**
-         * <code>string msg = 3;</code>
-         * @return The bytes for msg.
-         */
-        public com.google.protobuf.ByteString
-            getMsgBytes() {
-          java.lang.Object ref = msg_;
-          if (ref instanceof String) {
-            com.google.protobuf.ByteString b = 
-                com.google.protobuf.ByteString.copyFromUtf8(
-                    (java.lang.String) ref);
-            msg_ = b;
-            return b;
-          } else {
-            return (com.google.protobuf.ByteString) ref;
-          }
-        }
-        /**
-         * <code>string msg = 3;</code>
-         * @param value The msg to set.
-         * @return This builder for chaining.
-         */
-        public Builder setMsg(
-            java.lang.String value) {
-          if (value == null) {
-    throw new NullPointerException();
-  }
-  
-          msg_ = value;
-          onChanged();
-          return this;
-        }
-        /**
-         * <code>string msg = 3;</code>
-         * @return This builder for chaining.
-         */
-        public Builder clearMsg() {
-          
-          msg_ = getDefaultInstance().getMsg();
-          onChanged();
-          return this;
-        }
-        /**
-         * <code>string msg = 3;</code>
-         * @param value The bytes for msg to set.
-         * @return This builder for chaining.
-         */
-        public Builder setMsgBytes(
-            com.google.protobuf.ByteString value) {
-          if (value == null) {
-    throw new NullPointerException();
-  }
-  checkByteStringIsUtf8(value);
-          
-          msg_ = value;
-          onChanged();
-          return this;
-        }
-        @java.lang.Override
-        public final Builder setUnknownFields(
-            final com.google.protobuf.UnknownFieldSet unknownFields) {
-          return super.setUnknownFields(unknownFields);
-        }
-
-        @java.lang.Override
-        public final Builder mergeUnknownFields(
-            final com.google.protobuf.UnknownFieldSet unknownFields) {
-          return super.mergeUnknownFields(unknownFields);
-        }
-
-
-        // @@protoc_insertion_point(builder_scope:BatchPushResponse.Result)
-      }
-
-      // @@protoc_insertion_point(class_scope:BatchPushResponse.Result)
-      private static final com.gm.link.common.grpc.PushGrpc.BatchPushResponse.Result DEFAULT_INSTANCE;
-      static {
-        DEFAULT_INSTANCE = new com.gm.link.common.grpc.PushGrpc.BatchPushResponse.Result();
-      }
-
-      public static com.gm.link.common.grpc.PushGrpc.BatchPushResponse.Result getDefaultInstance() {
-        return DEFAULT_INSTANCE;
-      }
-
-      private static final com.google.protobuf.Parser<Result>
-          PARSER = new com.google.protobuf.AbstractParser<Result>() {
-        @java.lang.Override
-        public Result parsePartialFrom(
-            com.google.protobuf.CodedInputStream input,
-            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-            throws com.google.protobuf.InvalidProtocolBufferException {
-          return new Result(input, extensionRegistry);
-        }
-      };
-
-      public static com.google.protobuf.Parser<Result> parser() {
-        return PARSER;
-      }
-
-      @java.lang.Override
-      public com.google.protobuf.Parser<Result> getParserForType() {
-        return PARSER;
-      }
-
-      @java.lang.Override
-      public com.gm.link.common.grpc.PushGrpc.BatchPushResponse.Result getDefaultInstanceForType() {
-        return DEFAULT_INSTANCE;
-      }
-
-    }
-
-    public static final int RESULTS_FIELD_NUMBER = 1;
-    private java.util.List<com.gm.link.common.grpc.PushGrpc.BatchPushResponse.Result> results_;
+    public static final int TOTAL_FIELD_NUMBER = 1;
+    private int total_;
     /**
      * <pre>
-     * 每个目标的推送结果
+     * 总推送数
      * </pre>
      *
-     * <code>repeated .BatchPushResponse.Result results = 1;</code>
+     * <code>int32 total = 1;</code>
+     * @return The total.
      */
     @java.lang.Override
-    public java.util.List<com.gm.link.common.grpc.PushGrpc.BatchPushResponse.Result> getResultsList() {
+    public int getTotal() {
+      return total_;
+    }
+
+    public static final int SUCCESS_COUNT_FIELD_NUMBER = 2;
+    private int successCount_;
+    /**
+     * <pre>
+     * 成功数
+     * </pre>
+     *
+     * <code>int32 success_count = 2;</code>
+     * @return The successCount.
+     */
+    @java.lang.Override
+    public int getSuccessCount() {
+      return successCount_;
+    }
+
+    public static final int FAIL_COUNT_FIELD_NUMBER = 3;
+    private int failCount_;
+    /**
+     * <pre>
+     * 失败数
+     * </pre>
+     *
+     * <code>int32 fail_count = 3;</code>
+     * @return The failCount.
+     */
+    @java.lang.Override
+    public int getFailCount() {
+      return failCount_;
+    }
+
+    public static final int RESULTS_FIELD_NUMBER = 4;
+    private java.util.List<com.gm.link.common.grpc.PushGrpc.PushResult> results_;
+    /**
+     * <code>repeated .PushResult results = 4;</code>
+     */
+    @java.lang.Override
+    public java.util.List<com.gm.link.common.grpc.PushGrpc.PushResult> getResultsList() {
       return results_;
     }
     /**
-     * <pre>
-     * 每个目标的推送结果
-     * </pre>
-     *
-     * <code>repeated .BatchPushResponse.Result results = 1;</code>
+     * <code>repeated .PushResult results = 4;</code>
      */
     @java.lang.Override
-    public java.util.List<? extends com.gm.link.common.grpc.PushGrpc.BatchPushResponse.ResultOrBuilder> 
+    public java.util.List<? extends com.gm.link.common.grpc.PushGrpc.PushResultOrBuilder> 
         getResultsOrBuilderList() {
       return results_;
     }
     /**
-     * <pre>
-     * 每个目标的推送结果
-     * </pre>
-     *
-     * <code>repeated .BatchPushResponse.Result results = 1;</code>
+     * <code>repeated .PushResult results = 4;</code>
      */
     @java.lang.Override
     public int getResultsCount() {
       return results_.size();
     }
     /**
-     * <pre>
-     * 每个目标的推送结果
-     * </pre>
-     *
-     * <code>repeated .BatchPushResponse.Result results = 1;</code>
+     * <code>repeated .PushResult results = 4;</code>
      */
     @java.lang.Override
-    public com.gm.link.common.grpc.PushGrpc.BatchPushResponse.Result getResults(int index) {
+    public com.gm.link.common.grpc.PushGrpc.PushResult getResults(int index) {
       return results_.get(index);
     }
     /**
-     * <pre>
-     * 每个目标的推送结果
-     * </pre>
-     *
-     * <code>repeated .BatchPushResponse.Result results = 1;</code>
+     * <code>repeated .PushResult results = 4;</code>
      */
     @java.lang.Override
-    public com.gm.link.common.grpc.PushGrpc.BatchPushResponse.ResultOrBuilder getResultsOrBuilder(
+    public com.gm.link.common.grpc.PushGrpc.PushResultOrBuilder getResultsOrBuilder(
         int index) {
       return results_.get(index);
     }
@@ -3561,8 +4080,17 @@ public final class PushGrpc {
     @java.lang.Override
     public void writeTo(com.google.protobuf.CodedOutputStream output)
                         throws java.io.IOException {
+      if (total_ != 0) {
+        output.writeInt32(1, total_);
+      }
+      if (successCount_ != 0) {
+        output.writeInt32(2, successCount_);
+      }
+      if (failCount_ != 0) {
+        output.writeInt32(3, failCount_);
+      }
       for (int i = 0; i < results_.size(); i++) {
-        output.writeMessage(1, results_.get(i));
+        output.writeMessage(4, results_.get(i));
       }
       unknownFields.writeTo(output);
     }
@@ -3573,9 +4101,21 @@ public final class PushGrpc {
       if (size != -1) return size;
 
       size = 0;
+      if (total_ != 0) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(1, total_);
+      }
+      if (successCount_ != 0) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(2, successCount_);
+      }
+      if (failCount_ != 0) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(3, failCount_);
+      }
       for (int i = 0; i < results_.size(); i++) {
         size += com.google.protobuf.CodedOutputStream
-          .computeMessageSize(1, results_.get(i));
+          .computeMessageSize(4, results_.get(i));
       }
       size += unknownFields.getSerializedSize();
       memoizedSize = size;
@@ -3587,11 +4127,17 @@ public final class PushGrpc {
       if (obj == this) {
        return true;
       }
-      if (!(obj instanceof com.gm.link.common.grpc.PushGrpc.BatchPushResponse)) {
+      if (!(obj instanceof com.gm.link.common.grpc.PushGrpc.Push2UsersResponse)) {
         return super.equals(obj);
       }
-      com.gm.link.common.grpc.PushGrpc.BatchPushResponse other = (com.gm.link.common.grpc.PushGrpc.BatchPushResponse) obj;
+      com.gm.link.common.grpc.PushGrpc.Push2UsersResponse other = (com.gm.link.common.grpc.PushGrpc.Push2UsersResponse) obj;
 
+      if (getTotal()
+          != other.getTotal()) return false;
+      if (getSuccessCount()
+          != other.getSuccessCount()) return false;
+      if (getFailCount()
+          != other.getFailCount()) return false;
       if (!getResultsList()
           .equals(other.getResultsList())) return false;
       if (!unknownFields.equals(other.unknownFields)) return false;
@@ -3605,6 +4151,12 @@ public final class PushGrpc {
       }
       int hash = 41;
       hash = (19 * hash) + getDescriptor().hashCode();
+      hash = (37 * hash) + TOTAL_FIELD_NUMBER;
+      hash = (53 * hash) + getTotal();
+      hash = (37 * hash) + SUCCESS_COUNT_FIELD_NUMBER;
+      hash = (53 * hash) + getSuccessCount();
+      hash = (37 * hash) + FAIL_COUNT_FIELD_NUMBER;
+      hash = (53 * hash) + getFailCount();
       if (getResultsCount() > 0) {
         hash = (37 * hash) + RESULTS_FIELD_NUMBER;
         hash = (53 * hash) + getResultsList().hashCode();
@@ -3614,69 +4166,69 @@ public final class PushGrpc {
       return hash;
     }
 
-    public static com.gm.link.common.grpc.PushGrpc.BatchPushResponse parseFrom(
+    public static com.gm.link.common.grpc.PushGrpc.Push2UsersResponse parseFrom(
         java.nio.ByteBuffer data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-    public static com.gm.link.common.grpc.PushGrpc.BatchPushResponse parseFrom(
+    public static com.gm.link.common.grpc.PushGrpc.Push2UsersResponse parseFrom(
         java.nio.ByteBuffer data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static com.gm.link.common.grpc.PushGrpc.BatchPushResponse parseFrom(
+    public static com.gm.link.common.grpc.PushGrpc.Push2UsersResponse parseFrom(
         com.google.protobuf.ByteString data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-    public static com.gm.link.common.grpc.PushGrpc.BatchPushResponse parseFrom(
+    public static com.gm.link.common.grpc.PushGrpc.Push2UsersResponse parseFrom(
         com.google.protobuf.ByteString data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static com.gm.link.common.grpc.PushGrpc.BatchPushResponse parseFrom(byte[] data)
+    public static com.gm.link.common.grpc.PushGrpc.Push2UsersResponse parseFrom(byte[] data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-    public static com.gm.link.common.grpc.PushGrpc.BatchPushResponse parseFrom(
+    public static com.gm.link.common.grpc.PushGrpc.Push2UsersResponse parseFrom(
         byte[] data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static com.gm.link.common.grpc.PushGrpc.BatchPushResponse parseFrom(java.io.InputStream input)
+    public static com.gm.link.common.grpc.PushGrpc.Push2UsersResponse parseFrom(java.io.InputStream input)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseWithIOException(PARSER, input);
     }
-    public static com.gm.link.common.grpc.PushGrpc.BatchPushResponse parseFrom(
+    public static com.gm.link.common.grpc.PushGrpc.Push2UsersResponse parseFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseWithIOException(PARSER, input, extensionRegistry);
     }
-    public static com.gm.link.common.grpc.PushGrpc.BatchPushResponse parseDelimitedFrom(java.io.InputStream input)
+    public static com.gm.link.common.grpc.PushGrpc.Push2UsersResponse parseDelimitedFrom(java.io.InputStream input)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseDelimitedWithIOException(PARSER, input);
     }
-    public static com.gm.link.common.grpc.PushGrpc.BatchPushResponse parseDelimitedFrom(
+    public static com.gm.link.common.grpc.PushGrpc.Push2UsersResponse parseDelimitedFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
     }
-    public static com.gm.link.common.grpc.PushGrpc.BatchPushResponse parseFrom(
+    public static com.gm.link.common.grpc.PushGrpc.Push2UsersResponse parseFrom(
         com.google.protobuf.CodedInputStream input)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseWithIOException(PARSER, input);
     }
-    public static com.gm.link.common.grpc.PushGrpc.BatchPushResponse parseFrom(
+    public static com.gm.link.common.grpc.PushGrpc.Push2UsersResponse parseFrom(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
@@ -3689,7 +4241,7 @@ public final class PushGrpc {
     public static Builder newBuilder() {
       return DEFAULT_INSTANCE.toBuilder();
     }
-    public static Builder newBuilder(com.gm.link.common.grpc.PushGrpc.BatchPushResponse prototype) {
+    public static Builder newBuilder(com.gm.link.common.grpc.PushGrpc.Push2UsersResponse prototype) {
       return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
     }
     @java.lang.Override
@@ -3705,30 +4257,26 @@ public final class PushGrpc {
       return builder;
     }
     /**
-     * <pre>
-     * 新增批量推送响应（返回每个目标的推送结果）
-     * </pre>
-     *
-     * Protobuf type {@code BatchPushResponse}
+     * Protobuf type {@code Push2UsersResponse}
      */
     public static final class Builder extends
         com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
-        // @@protoc_insertion_point(builder_implements:BatchPushResponse)
-        com.gm.link.common.grpc.PushGrpc.BatchPushResponseOrBuilder {
+        // @@protoc_insertion_point(builder_implements:Push2UsersResponse)
+        com.gm.link.common.grpc.PushGrpc.Push2UsersResponseOrBuilder {
       public static final com.google.protobuf.Descriptors.Descriptor
           getDescriptor() {
-        return com.gm.link.common.grpc.PushGrpc.internal_static_BatchPushResponse_descriptor;
+        return com.gm.link.common.grpc.PushGrpc.internal_static_Push2UsersResponse_descriptor;
       }
 
       @java.lang.Override
       protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
           internalGetFieldAccessorTable() {
-        return com.gm.link.common.grpc.PushGrpc.internal_static_BatchPushResponse_fieldAccessorTable
+        return com.gm.link.common.grpc.PushGrpc.internal_static_Push2UsersResponse_fieldAccessorTable
             .ensureFieldAccessorsInitialized(
-                com.gm.link.common.grpc.PushGrpc.BatchPushResponse.class, com.gm.link.common.grpc.PushGrpc.BatchPushResponse.Builder.class);
+                com.gm.link.common.grpc.PushGrpc.Push2UsersResponse.class, com.gm.link.common.grpc.PushGrpc.Push2UsersResponse.Builder.class);
       }
 
-      // Construct using com.gm.link.common.grpc.PushGrpc.BatchPushResponse.newBuilder()
+      // Construct using com.gm.link.common.grpc.PushGrpc.Push2UsersResponse.newBuilder()
       private Builder() {
         maybeForceBuilderInitialization();
       }
@@ -3747,6 +4295,12 @@ public final class PushGrpc {
       @java.lang.Override
       public Builder clear() {
         super.clear();
+        total_ = 0;
+
+        successCount_ = 0;
+
+        failCount_ = 0;
+
         if (resultsBuilder_ == null) {
           results_ = java.util.Collections.emptyList();
           bitField0_ = (bitField0_ & ~0x00000001);
@@ -3759,17 +4313,17 @@ public final class PushGrpc {
       @java.lang.Override
       public com.google.protobuf.Descriptors.Descriptor
           getDescriptorForType() {
-        return com.gm.link.common.grpc.PushGrpc.internal_static_BatchPushResponse_descriptor;
+        return com.gm.link.common.grpc.PushGrpc.internal_static_Push2UsersResponse_descriptor;
       }
 
       @java.lang.Override
-      public com.gm.link.common.grpc.PushGrpc.BatchPushResponse getDefaultInstanceForType() {
-        return com.gm.link.common.grpc.PushGrpc.BatchPushResponse.getDefaultInstance();
+      public com.gm.link.common.grpc.PushGrpc.Push2UsersResponse getDefaultInstanceForType() {
+        return com.gm.link.common.grpc.PushGrpc.Push2UsersResponse.getDefaultInstance();
       }
 
       @java.lang.Override
-      public com.gm.link.common.grpc.PushGrpc.BatchPushResponse build() {
-        com.gm.link.common.grpc.PushGrpc.BatchPushResponse result = buildPartial();
+      public com.gm.link.common.grpc.PushGrpc.Push2UsersResponse build() {
+        com.gm.link.common.grpc.PushGrpc.Push2UsersResponse result = buildPartial();
         if (!result.isInitialized()) {
           throw newUninitializedMessageException(result);
         }
@@ -3777,9 +4331,12 @@ public final class PushGrpc {
       }
 
       @java.lang.Override
-      public com.gm.link.common.grpc.PushGrpc.BatchPushResponse buildPartial() {
-        com.gm.link.common.grpc.PushGrpc.BatchPushResponse result = new com.gm.link.common.grpc.PushGrpc.BatchPushResponse(this);
+      public com.gm.link.common.grpc.PushGrpc.Push2UsersResponse buildPartial() {
+        com.gm.link.common.grpc.PushGrpc.Push2UsersResponse result = new com.gm.link.common.grpc.PushGrpc.Push2UsersResponse(this);
         int from_bitField0_ = bitField0_;
+        result.total_ = total_;
+        result.successCount_ = successCount_;
+        result.failCount_ = failCount_;
         if (resultsBuilder_ == null) {
           if (((bitField0_ & 0x00000001) != 0)) {
             results_ = java.util.Collections.unmodifiableList(results_);
@@ -3827,16 +4384,25 @@ public final class PushGrpc {
       }
       @java.lang.Override
       public Builder mergeFrom(com.google.protobuf.Message other) {
-        if (other instanceof com.gm.link.common.grpc.PushGrpc.BatchPushResponse) {
-          return mergeFrom((com.gm.link.common.grpc.PushGrpc.BatchPushResponse)other);
+        if (other instanceof com.gm.link.common.grpc.PushGrpc.Push2UsersResponse) {
+          return mergeFrom((com.gm.link.common.grpc.PushGrpc.Push2UsersResponse)other);
         } else {
           super.mergeFrom(other);
           return this;
         }
       }
 
-      public Builder mergeFrom(com.gm.link.common.grpc.PushGrpc.BatchPushResponse other) {
-        if (other == com.gm.link.common.grpc.PushGrpc.BatchPushResponse.getDefaultInstance()) return this;
+      public Builder mergeFrom(com.gm.link.common.grpc.PushGrpc.Push2UsersResponse other) {
+        if (other == com.gm.link.common.grpc.PushGrpc.Push2UsersResponse.getDefaultInstance()) return this;
+        if (other.getTotal() != 0) {
+          setTotal(other.getTotal());
+        }
+        if (other.getSuccessCount() != 0) {
+          setSuccessCount(other.getSuccessCount());
+        }
+        if (other.getFailCount() != 0) {
+          setFailCount(other.getFailCount());
+        }
         if (resultsBuilder_ == null) {
           if (!other.results_.isEmpty()) {
             if (results_.isEmpty()) {
@@ -3878,11 +4444,11 @@ public final class PushGrpc {
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
-        com.gm.link.common.grpc.PushGrpc.BatchPushResponse parsedMessage = null;
+        com.gm.link.common.grpc.PushGrpc.Push2UsersResponse parsedMessage = null;
         try {
           parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
         } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-          parsedMessage = (com.gm.link.common.grpc.PushGrpc.BatchPushResponse) e.getUnfinishedMessage();
+          parsedMessage = (com.gm.link.common.grpc.PushGrpc.Push2UsersResponse) e.getUnfinishedMessage();
           throw e.unwrapIOException();
         } finally {
           if (parsedMessage != null) {
@@ -3893,26 +4459,151 @@ public final class PushGrpc {
       }
       private int bitField0_;
 
-      private java.util.List<com.gm.link.common.grpc.PushGrpc.BatchPushResponse.Result> results_ =
+      private int total_ ;
+      /**
+       * <pre>
+       * 总推送数
+       * </pre>
+       *
+       * <code>int32 total = 1;</code>
+       * @return The total.
+       */
+      @java.lang.Override
+      public int getTotal() {
+        return total_;
+      }
+      /**
+       * <pre>
+       * 总推送数
+       * </pre>
+       *
+       * <code>int32 total = 1;</code>
+       * @param value The total to set.
+       * @return This builder for chaining.
+       */
+      public Builder setTotal(int value) {
+        
+        total_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <pre>
+       * 总推送数
+       * </pre>
+       *
+       * <code>int32 total = 1;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearTotal() {
+        
+        total_ = 0;
+        onChanged();
+        return this;
+      }
+
+      private int successCount_ ;
+      /**
+       * <pre>
+       * 成功数
+       * </pre>
+       *
+       * <code>int32 success_count = 2;</code>
+       * @return The successCount.
+       */
+      @java.lang.Override
+      public int getSuccessCount() {
+        return successCount_;
+      }
+      /**
+       * <pre>
+       * 成功数
+       * </pre>
+       *
+       * <code>int32 success_count = 2;</code>
+       * @param value The successCount to set.
+       * @return This builder for chaining.
+       */
+      public Builder setSuccessCount(int value) {
+        
+        successCount_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <pre>
+       * 成功数
+       * </pre>
+       *
+       * <code>int32 success_count = 2;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearSuccessCount() {
+        
+        successCount_ = 0;
+        onChanged();
+        return this;
+      }
+
+      private int failCount_ ;
+      /**
+       * <pre>
+       * 失败数
+       * </pre>
+       *
+       * <code>int32 fail_count = 3;</code>
+       * @return The failCount.
+       */
+      @java.lang.Override
+      public int getFailCount() {
+        return failCount_;
+      }
+      /**
+       * <pre>
+       * 失败数
+       * </pre>
+       *
+       * <code>int32 fail_count = 3;</code>
+       * @param value The failCount to set.
+       * @return This builder for chaining.
+       */
+      public Builder setFailCount(int value) {
+        
+        failCount_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <pre>
+       * 失败数
+       * </pre>
+       *
+       * <code>int32 fail_count = 3;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearFailCount() {
+        
+        failCount_ = 0;
+        onChanged();
+        return this;
+      }
+
+      private java.util.List<com.gm.link.common.grpc.PushGrpc.PushResult> results_ =
         java.util.Collections.emptyList();
       private void ensureResultsIsMutable() {
         if (!((bitField0_ & 0x00000001) != 0)) {
-          results_ = new java.util.ArrayList<com.gm.link.common.grpc.PushGrpc.BatchPushResponse.Result>(results_);
+          results_ = new java.util.ArrayList<com.gm.link.common.grpc.PushGrpc.PushResult>(results_);
           bitField0_ |= 0x00000001;
          }
       }
 
       private com.google.protobuf.RepeatedFieldBuilderV3<
-          com.gm.link.common.grpc.PushGrpc.BatchPushResponse.Result, com.gm.link.common.grpc.PushGrpc.BatchPushResponse.Result.Builder, com.gm.link.common.grpc.PushGrpc.BatchPushResponse.ResultOrBuilder> resultsBuilder_;
+          com.gm.link.common.grpc.PushGrpc.PushResult, com.gm.link.common.grpc.PushGrpc.PushResult.Builder, com.gm.link.common.grpc.PushGrpc.PushResultOrBuilder> resultsBuilder_;
 
       /**
-       * <pre>
-       * 每个目标的推送结果
-       * </pre>
-       *
-       * <code>repeated .BatchPushResponse.Result results = 1;</code>
+       * <code>repeated .PushResult results = 4;</code>
        */
-      public java.util.List<com.gm.link.common.grpc.PushGrpc.BatchPushResponse.Result> getResultsList() {
+      public java.util.List<com.gm.link.common.grpc.PushGrpc.PushResult> getResultsList() {
         if (resultsBuilder_ == null) {
           return java.util.Collections.unmodifiableList(results_);
         } else {
@@ -3920,11 +4611,7 @@ public final class PushGrpc {
         }
       }
       /**
-       * <pre>
-       * 每个目标的推送结果
-       * </pre>
-       *
-       * <code>repeated .BatchPushResponse.Result results = 1;</code>
+       * <code>repeated .PushResult results = 4;</code>
        */
       public int getResultsCount() {
         if (resultsBuilder_ == null) {
@@ -3934,13 +4621,9 @@ public final class PushGrpc {
         }
       }
       /**
-       * <pre>
-       * 每个目标的推送结果
-       * </pre>
-       *
-       * <code>repeated .BatchPushResponse.Result results = 1;</code>
+       * <code>repeated .PushResult results = 4;</code>
        */
-      public com.gm.link.common.grpc.PushGrpc.BatchPushResponse.Result getResults(int index) {
+      public com.gm.link.common.grpc.PushGrpc.PushResult getResults(int index) {
         if (resultsBuilder_ == null) {
           return results_.get(index);
         } else {
@@ -3948,14 +4631,10 @@ public final class PushGrpc {
         }
       }
       /**
-       * <pre>
-       * 每个目标的推送结果
-       * </pre>
-       *
-       * <code>repeated .BatchPushResponse.Result results = 1;</code>
+       * <code>repeated .PushResult results = 4;</code>
        */
       public Builder setResults(
-          int index, com.gm.link.common.grpc.PushGrpc.BatchPushResponse.Result value) {
+          int index, com.gm.link.common.grpc.PushGrpc.PushResult value) {
         if (resultsBuilder_ == null) {
           if (value == null) {
             throw new NullPointerException();
@@ -3969,14 +4648,10 @@ public final class PushGrpc {
         return this;
       }
       /**
-       * <pre>
-       * 每个目标的推送结果
-       * </pre>
-       *
-       * <code>repeated .BatchPushResponse.Result results = 1;</code>
+       * <code>repeated .PushResult results = 4;</code>
        */
       public Builder setResults(
-          int index, com.gm.link.common.grpc.PushGrpc.BatchPushResponse.Result.Builder builderForValue) {
+          int index, com.gm.link.common.grpc.PushGrpc.PushResult.Builder builderForValue) {
         if (resultsBuilder_ == null) {
           ensureResultsIsMutable();
           results_.set(index, builderForValue.build());
@@ -3987,13 +4662,9 @@ public final class PushGrpc {
         return this;
       }
       /**
-       * <pre>
-       * 每个目标的推送结果
-       * </pre>
-       *
-       * <code>repeated .BatchPushResponse.Result results = 1;</code>
+       * <code>repeated .PushResult results = 4;</code>
        */
-      public Builder addResults(com.gm.link.common.grpc.PushGrpc.BatchPushResponse.Result value) {
+      public Builder addResults(com.gm.link.common.grpc.PushGrpc.PushResult value) {
         if (resultsBuilder_ == null) {
           if (value == null) {
             throw new NullPointerException();
@@ -4007,14 +4678,10 @@ public final class PushGrpc {
         return this;
       }
       /**
-       * <pre>
-       * 每个目标的推送结果
-       * </pre>
-       *
-       * <code>repeated .BatchPushResponse.Result results = 1;</code>
+       * <code>repeated .PushResult results = 4;</code>
        */
       public Builder addResults(
-          int index, com.gm.link.common.grpc.PushGrpc.BatchPushResponse.Result value) {
+          int index, com.gm.link.common.grpc.PushGrpc.PushResult value) {
         if (resultsBuilder_ == null) {
           if (value == null) {
             throw new NullPointerException();
@@ -4028,14 +4695,10 @@ public final class PushGrpc {
         return this;
       }
       /**
-       * <pre>
-       * 每个目标的推送结果
-       * </pre>
-       *
-       * <code>repeated .BatchPushResponse.Result results = 1;</code>
+       * <code>repeated .PushResult results = 4;</code>
        */
       public Builder addResults(
-          com.gm.link.common.grpc.PushGrpc.BatchPushResponse.Result.Builder builderForValue) {
+          com.gm.link.common.grpc.PushGrpc.PushResult.Builder builderForValue) {
         if (resultsBuilder_ == null) {
           ensureResultsIsMutable();
           results_.add(builderForValue.build());
@@ -4046,14 +4709,10 @@ public final class PushGrpc {
         return this;
       }
       /**
-       * <pre>
-       * 每个目标的推送结果
-       * </pre>
-       *
-       * <code>repeated .BatchPushResponse.Result results = 1;</code>
+       * <code>repeated .PushResult results = 4;</code>
        */
       public Builder addResults(
-          int index, com.gm.link.common.grpc.PushGrpc.BatchPushResponse.Result.Builder builderForValue) {
+          int index, com.gm.link.common.grpc.PushGrpc.PushResult.Builder builderForValue) {
         if (resultsBuilder_ == null) {
           ensureResultsIsMutable();
           results_.add(index, builderForValue.build());
@@ -4064,14 +4723,10 @@ public final class PushGrpc {
         return this;
       }
       /**
-       * <pre>
-       * 每个目标的推送结果
-       * </pre>
-       *
-       * <code>repeated .BatchPushResponse.Result results = 1;</code>
+       * <code>repeated .PushResult results = 4;</code>
        */
       public Builder addAllResults(
-          java.lang.Iterable<? extends com.gm.link.common.grpc.PushGrpc.BatchPushResponse.Result> values) {
+          java.lang.Iterable<? extends com.gm.link.common.grpc.PushGrpc.PushResult> values) {
         if (resultsBuilder_ == null) {
           ensureResultsIsMutable();
           com.google.protobuf.AbstractMessageLite.Builder.addAll(
@@ -4083,11 +4738,7 @@ public final class PushGrpc {
         return this;
       }
       /**
-       * <pre>
-       * 每个目标的推送结果
-       * </pre>
-       *
-       * <code>repeated .BatchPushResponse.Result results = 1;</code>
+       * <code>repeated .PushResult results = 4;</code>
        */
       public Builder clearResults() {
         if (resultsBuilder_ == null) {
@@ -4100,11 +4751,7 @@ public final class PushGrpc {
         return this;
       }
       /**
-       * <pre>
-       * 每个目标的推送结果
-       * </pre>
-       *
-       * <code>repeated .BatchPushResponse.Result results = 1;</code>
+       * <code>repeated .PushResult results = 4;</code>
        */
       public Builder removeResults(int index) {
         if (resultsBuilder_ == null) {
@@ -4117,24 +4764,16 @@ public final class PushGrpc {
         return this;
       }
       /**
-       * <pre>
-       * 每个目标的推送结果
-       * </pre>
-       *
-       * <code>repeated .BatchPushResponse.Result results = 1;</code>
+       * <code>repeated .PushResult results = 4;</code>
        */
-      public com.gm.link.common.grpc.PushGrpc.BatchPushResponse.Result.Builder getResultsBuilder(
+      public com.gm.link.common.grpc.PushGrpc.PushResult.Builder getResultsBuilder(
           int index) {
         return getResultsFieldBuilder().getBuilder(index);
       }
       /**
-       * <pre>
-       * 每个目标的推送结果
-       * </pre>
-       *
-       * <code>repeated .BatchPushResponse.Result results = 1;</code>
+       * <code>repeated .PushResult results = 4;</code>
        */
-      public com.gm.link.common.grpc.PushGrpc.BatchPushResponse.ResultOrBuilder getResultsOrBuilder(
+      public com.gm.link.common.grpc.PushGrpc.PushResultOrBuilder getResultsOrBuilder(
           int index) {
         if (resultsBuilder_ == null) {
           return results_.get(index);  } else {
@@ -4142,13 +4781,9 @@ public final class PushGrpc {
         }
       }
       /**
-       * <pre>
-       * 每个目标的推送结果
-       * </pre>
-       *
-       * <code>repeated .BatchPushResponse.Result results = 1;</code>
+       * <code>repeated .PushResult results = 4;</code>
        */
-      public java.util.List<? extends com.gm.link.common.grpc.PushGrpc.BatchPushResponse.ResultOrBuilder> 
+      public java.util.List<? extends com.gm.link.common.grpc.PushGrpc.PushResultOrBuilder> 
            getResultsOrBuilderList() {
         if (resultsBuilder_ != null) {
           return resultsBuilder_.getMessageOrBuilderList();
@@ -4157,45 +4792,33 @@ public final class PushGrpc {
         }
       }
       /**
-       * <pre>
-       * 每个目标的推送结果
-       * </pre>
-       *
-       * <code>repeated .BatchPushResponse.Result results = 1;</code>
+       * <code>repeated .PushResult results = 4;</code>
        */
-      public com.gm.link.common.grpc.PushGrpc.BatchPushResponse.Result.Builder addResultsBuilder() {
+      public com.gm.link.common.grpc.PushGrpc.PushResult.Builder addResultsBuilder() {
         return getResultsFieldBuilder().addBuilder(
-            com.gm.link.common.grpc.PushGrpc.BatchPushResponse.Result.getDefaultInstance());
+            com.gm.link.common.grpc.PushGrpc.PushResult.getDefaultInstance());
       }
       /**
-       * <pre>
-       * 每个目标的推送结果
-       * </pre>
-       *
-       * <code>repeated .BatchPushResponse.Result results = 1;</code>
+       * <code>repeated .PushResult results = 4;</code>
        */
-      public com.gm.link.common.grpc.PushGrpc.BatchPushResponse.Result.Builder addResultsBuilder(
+      public com.gm.link.common.grpc.PushGrpc.PushResult.Builder addResultsBuilder(
           int index) {
         return getResultsFieldBuilder().addBuilder(
-            index, com.gm.link.common.grpc.PushGrpc.BatchPushResponse.Result.getDefaultInstance());
+            index, com.gm.link.common.grpc.PushGrpc.PushResult.getDefaultInstance());
       }
       /**
-       * <pre>
-       * 每个目标的推送结果
-       * </pre>
-       *
-       * <code>repeated .BatchPushResponse.Result results = 1;</code>
+       * <code>repeated .PushResult results = 4;</code>
        */
-      public java.util.List<com.gm.link.common.grpc.PushGrpc.BatchPushResponse.Result.Builder> 
+      public java.util.List<com.gm.link.common.grpc.PushGrpc.PushResult.Builder> 
            getResultsBuilderList() {
         return getResultsFieldBuilder().getBuilderList();
       }
       private com.google.protobuf.RepeatedFieldBuilderV3<
-          com.gm.link.common.grpc.PushGrpc.BatchPushResponse.Result, com.gm.link.common.grpc.PushGrpc.BatchPushResponse.Result.Builder, com.gm.link.common.grpc.PushGrpc.BatchPushResponse.ResultOrBuilder> 
+          com.gm.link.common.grpc.PushGrpc.PushResult, com.gm.link.common.grpc.PushGrpc.PushResult.Builder, com.gm.link.common.grpc.PushGrpc.PushResultOrBuilder> 
           getResultsFieldBuilder() {
         if (resultsBuilder_ == null) {
           resultsBuilder_ = new com.google.protobuf.RepeatedFieldBuilderV3<
-              com.gm.link.common.grpc.PushGrpc.BatchPushResponse.Result, com.gm.link.common.grpc.PushGrpc.BatchPushResponse.Result.Builder, com.gm.link.common.grpc.PushGrpc.BatchPushResponse.ResultOrBuilder>(
+              com.gm.link.common.grpc.PushGrpc.PushResult, com.gm.link.common.grpc.PushGrpc.PushResult.Builder, com.gm.link.common.grpc.PushGrpc.PushResultOrBuilder>(
                   results_,
                   ((bitField0_ & 0x00000001) != 0),
                   getParentForChildren(),
@@ -4217,71 +4840,906 @@ public final class PushGrpc {
       }
 
 
-      // @@protoc_insertion_point(builder_scope:BatchPushResponse)
+      // @@protoc_insertion_point(builder_scope:Push2UsersResponse)
     }
 
-    // @@protoc_insertion_point(class_scope:BatchPushResponse)
-    private static final com.gm.link.common.grpc.PushGrpc.BatchPushResponse DEFAULT_INSTANCE;
+    // @@protoc_insertion_point(class_scope:Push2UsersResponse)
+    private static final com.gm.link.common.grpc.PushGrpc.Push2UsersResponse DEFAULT_INSTANCE;
     static {
-      DEFAULT_INSTANCE = new com.gm.link.common.grpc.PushGrpc.BatchPushResponse();
+      DEFAULT_INSTANCE = new com.gm.link.common.grpc.PushGrpc.Push2UsersResponse();
     }
 
-    public static com.gm.link.common.grpc.PushGrpc.BatchPushResponse getDefaultInstance() {
+    public static com.gm.link.common.grpc.PushGrpc.Push2UsersResponse getDefaultInstance() {
       return DEFAULT_INSTANCE;
     }
 
-    private static final com.google.protobuf.Parser<BatchPushResponse>
-        PARSER = new com.google.protobuf.AbstractParser<BatchPushResponse>() {
+    private static final com.google.protobuf.Parser<Push2UsersResponse>
+        PARSER = new com.google.protobuf.AbstractParser<Push2UsersResponse>() {
       @java.lang.Override
-      public BatchPushResponse parsePartialFrom(
+      public Push2UsersResponse parsePartialFrom(
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws com.google.protobuf.InvalidProtocolBufferException {
-        return new BatchPushResponse(input, extensionRegistry);
+        return new Push2UsersResponse(input, extensionRegistry);
       }
     };
 
-    public static com.google.protobuf.Parser<BatchPushResponse> parser() {
+    public static com.google.protobuf.Parser<Push2UsersResponse> parser() {
       return PARSER;
     }
 
     @java.lang.Override
-    public com.google.protobuf.Parser<BatchPushResponse> getParserForType() {
+    public com.google.protobuf.Parser<Push2UsersResponse> getParserForType() {
       return PARSER;
     }
 
     @java.lang.Override
-    public com.gm.link.common.grpc.PushGrpc.BatchPushResponse getDefaultInstanceForType() {
+    public com.gm.link.common.grpc.PushGrpc.Push2UsersResponse getDefaultInstanceForType() {
+      return DEFAULT_INSTANCE;
+    }
+
+  }
+
+  public interface PushResultOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:PushResult)
+      com.google.protobuf.MessageOrBuilder {
+
+    /**
+     * <code>int64 to_id = 1;</code>
+     * @return The toId.
+     */
+    long getToId();
+
+    /**
+     * <code>.ResponseCode code = 2;</code>
+     * @return The enum numeric value on the wire for code.
+     */
+    int getCodeValue();
+    /**
+     * <code>.ResponseCode code = 2;</code>
+     * @return The code.
+     */
+    com.gm.link.common.grpc.PushGrpc.ResponseCode getCode();
+
+    /**
+     * <code>bool success = 3;</code>
+     * @return The success.
+     */
+    boolean getSuccess();
+
+    /**
+     * <code>string msg = 4;</code>
+     * @return The msg.
+     */
+    java.lang.String getMsg();
+    /**
+     * <code>string msg = 4;</code>
+     * @return The bytes for msg.
+     */
+    com.google.protobuf.ByteString
+        getMsgBytes();
+  }
+  /**
+   * <pre>
+   * 单个用户的推送结果
+   * </pre>
+   *
+   * Protobuf type {@code PushResult}
+   */
+  public static final class PushResult extends
+      com.google.protobuf.GeneratedMessageV3 implements
+      // @@protoc_insertion_point(message_implements:PushResult)
+      PushResultOrBuilder {
+  private static final long serialVersionUID = 0L;
+    // Use PushResult.newBuilder() to construct.
+    private PushResult(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
+      super(builder);
+    }
+    private PushResult() {
+      code_ = 0;
+      msg_ = "";
+    }
+
+    @java.lang.Override
+    @SuppressWarnings({"unused"})
+    protected java.lang.Object newInstance(
+        UnusedPrivateParameter unused) {
+      return new PushResult();
+    }
+
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+    getUnknownFields() {
+      return this.unknownFields;
+    }
+    private PushResult(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      this();
+      if (extensionRegistry == null) {
+        throw new java.lang.NullPointerException();
+      }
+      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+          com.google.protobuf.UnknownFieldSet.newBuilder();
+      try {
+        boolean done = false;
+        while (!done) {
+          int tag = input.readTag();
+          switch (tag) {
+            case 0:
+              done = true;
+              break;
+            case 8: {
+
+              toId_ = input.readInt64();
+              break;
+            }
+            case 16: {
+              int rawValue = input.readEnum();
+
+              code_ = rawValue;
+              break;
+            }
+            case 24: {
+
+              success_ = input.readBool();
+              break;
+            }
+            case 34: {
+              java.lang.String s = input.readStringRequireUtf8();
+
+              msg_ = s;
+              break;
+            }
+            default: {
+              if (!parseUnknownField(
+                  input, unknownFields, extensionRegistry, tag)) {
+                done = true;
+              }
+              break;
+            }
+          }
+        }
+      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+        throw e.setUnfinishedMessage(this);
+      } catch (java.io.IOException e) {
+        throw new com.google.protobuf.InvalidProtocolBufferException(
+            e).setUnfinishedMessage(this);
+      } finally {
+        this.unknownFields = unknownFields.build();
+        makeExtensionsImmutable();
+      }
+    }
+    public static final com.google.protobuf.Descriptors.Descriptor
+        getDescriptor() {
+      return com.gm.link.common.grpc.PushGrpc.internal_static_PushResult_descriptor;
+    }
+
+    @java.lang.Override
+    protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+        internalGetFieldAccessorTable() {
+      return com.gm.link.common.grpc.PushGrpc.internal_static_PushResult_fieldAccessorTable
+          .ensureFieldAccessorsInitialized(
+              com.gm.link.common.grpc.PushGrpc.PushResult.class, com.gm.link.common.grpc.PushGrpc.PushResult.Builder.class);
+    }
+
+    public static final int TO_ID_FIELD_NUMBER = 1;
+    private long toId_;
+    /**
+     * <code>int64 to_id = 1;</code>
+     * @return The toId.
+     */
+    @java.lang.Override
+    public long getToId() {
+      return toId_;
+    }
+
+    public static final int CODE_FIELD_NUMBER = 2;
+    private int code_;
+    /**
+     * <code>.ResponseCode code = 2;</code>
+     * @return The enum numeric value on the wire for code.
+     */
+    @java.lang.Override public int getCodeValue() {
+      return code_;
+    }
+    /**
+     * <code>.ResponseCode code = 2;</code>
+     * @return The code.
+     */
+    @java.lang.Override public com.gm.link.common.grpc.PushGrpc.ResponseCode getCode() {
+      @SuppressWarnings("deprecation")
+      com.gm.link.common.grpc.PushGrpc.ResponseCode result = com.gm.link.common.grpc.PushGrpc.ResponseCode.valueOf(code_);
+      return result == null ? com.gm.link.common.grpc.PushGrpc.ResponseCode.UNRECOGNIZED : result;
+    }
+
+    public static final int SUCCESS_FIELD_NUMBER = 3;
+    private boolean success_;
+    /**
+     * <code>bool success = 3;</code>
+     * @return The success.
+     */
+    @java.lang.Override
+    public boolean getSuccess() {
+      return success_;
+    }
+
+    public static final int MSG_FIELD_NUMBER = 4;
+    private volatile java.lang.Object msg_;
+    /**
+     * <code>string msg = 4;</code>
+     * @return The msg.
+     */
+    @java.lang.Override
+    public java.lang.String getMsg() {
+      java.lang.Object ref = msg_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        msg_ = s;
+        return s;
+      }
+    }
+    /**
+     * <code>string msg = 4;</code>
+     * @return The bytes for msg.
+     */
+    @java.lang.Override
+    public com.google.protobuf.ByteString
+        getMsgBytes() {
+      java.lang.Object ref = msg_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        msg_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
+    private byte memoizedIsInitialized = -1;
+    @java.lang.Override
+    public final boolean isInitialized() {
+      byte isInitialized = memoizedIsInitialized;
+      if (isInitialized == 1) return true;
+      if (isInitialized == 0) return false;
+
+      memoizedIsInitialized = 1;
+      return true;
+    }
+
+    @java.lang.Override
+    public void writeTo(com.google.protobuf.CodedOutputStream output)
+                        throws java.io.IOException {
+      if (toId_ != 0L) {
+        output.writeInt64(1, toId_);
+      }
+      if (code_ != com.gm.link.common.grpc.PushGrpc.ResponseCode.SUCCESS.getNumber()) {
+        output.writeEnum(2, code_);
+      }
+      if (success_ != false) {
+        output.writeBool(3, success_);
+      }
+      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(msg_)) {
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 4, msg_);
+      }
+      unknownFields.writeTo(output);
+    }
+
+    @java.lang.Override
+    public int getSerializedSize() {
+      int size = memoizedSize;
+      if (size != -1) return size;
+
+      size = 0;
+      if (toId_ != 0L) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt64Size(1, toId_);
+      }
+      if (code_ != com.gm.link.common.grpc.PushGrpc.ResponseCode.SUCCESS.getNumber()) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeEnumSize(2, code_);
+      }
+      if (success_ != false) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBoolSize(3, success_);
+      }
+      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(msg_)) {
+        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(4, msg_);
+      }
+      size += unknownFields.getSerializedSize();
+      memoizedSize = size;
+      return size;
+    }
+
+    @java.lang.Override
+    public boolean equals(final java.lang.Object obj) {
+      if (obj == this) {
+       return true;
+      }
+      if (!(obj instanceof com.gm.link.common.grpc.PushGrpc.PushResult)) {
+        return super.equals(obj);
+      }
+      com.gm.link.common.grpc.PushGrpc.PushResult other = (com.gm.link.common.grpc.PushGrpc.PushResult) obj;
+
+      if (getToId()
+          != other.getToId()) return false;
+      if (code_ != other.code_) return false;
+      if (getSuccess()
+          != other.getSuccess()) return false;
+      if (!getMsg()
+          .equals(other.getMsg())) return false;
+      if (!unknownFields.equals(other.unknownFields)) return false;
+      return true;
+    }
+
+    @java.lang.Override
+    public int hashCode() {
+      if (memoizedHashCode != 0) {
+        return memoizedHashCode;
+      }
+      int hash = 41;
+      hash = (19 * hash) + getDescriptor().hashCode();
+      hash = (37 * hash) + TO_ID_FIELD_NUMBER;
+      hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
+          getToId());
+      hash = (37 * hash) + CODE_FIELD_NUMBER;
+      hash = (53 * hash) + code_;
+      hash = (37 * hash) + SUCCESS_FIELD_NUMBER;
+      hash = (53 * hash) + com.google.protobuf.Internal.hashBoolean(
+          getSuccess());
+      hash = (37 * hash) + MSG_FIELD_NUMBER;
+      hash = (53 * hash) + getMsg().hashCode();
+      hash = (29 * hash) + unknownFields.hashCode();
+      memoizedHashCode = hash;
+      return hash;
+    }
+
+    public static com.gm.link.common.grpc.PushGrpc.PushResult parseFrom(
+        java.nio.ByteBuffer data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static com.gm.link.common.grpc.PushGrpc.PushResult parseFrom(
+        java.nio.ByteBuffer data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static com.gm.link.common.grpc.PushGrpc.PushResult parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static com.gm.link.common.grpc.PushGrpc.PushResult parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static com.gm.link.common.grpc.PushGrpc.PushResult parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static com.gm.link.common.grpc.PushGrpc.PushResult parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static com.gm.link.common.grpc.PushGrpc.PushResult parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
+    }
+    public static com.gm.link.common.grpc.PushGrpc.PushResult parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
+    }
+    public static com.gm.link.common.grpc.PushGrpc.PushResult parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input);
+    }
+    public static com.gm.link.common.grpc.PushGrpc.PushResult parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
+    }
+    public static com.gm.link.common.grpc.PushGrpc.PushResult parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
+    }
+    public static com.gm.link.common.grpc.PushGrpc.PushResult parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
+    }
+
+    @java.lang.Override
+    public Builder newBuilderForType() { return newBuilder(); }
+    public static Builder newBuilder() {
+      return DEFAULT_INSTANCE.toBuilder();
+    }
+    public static Builder newBuilder(com.gm.link.common.grpc.PushGrpc.PushResult prototype) {
+      return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
+    }
+    @java.lang.Override
+    public Builder toBuilder() {
+      return this == DEFAULT_INSTANCE
+          ? new Builder() : new Builder().mergeFrom(this);
+    }
+
+    @java.lang.Override
+    protected Builder newBuilderForType(
+        com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+      Builder builder = new Builder(parent);
+      return builder;
+    }
+    /**
+     * <pre>
+     * 单个用户的推送结果
+     * </pre>
+     *
+     * Protobuf type {@code PushResult}
+     */
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
+        // @@protoc_insertion_point(builder_implements:PushResult)
+        com.gm.link.common.grpc.PushGrpc.PushResultOrBuilder {
+      public static final com.google.protobuf.Descriptors.Descriptor
+          getDescriptor() {
+        return com.gm.link.common.grpc.PushGrpc.internal_static_PushResult_descriptor;
+      }
+
+      @java.lang.Override
+      protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+          internalGetFieldAccessorTable() {
+        return com.gm.link.common.grpc.PushGrpc.internal_static_PushResult_fieldAccessorTable
+            .ensureFieldAccessorsInitialized(
+                com.gm.link.common.grpc.PushGrpc.PushResult.class, com.gm.link.common.grpc.PushGrpc.PushResult.Builder.class);
+      }
+
+      // Construct using com.gm.link.common.grpc.PushGrpc.PushResult.newBuilder()
+      private Builder() {
+        maybeForceBuilderInitialization();
+      }
+
+      private Builder(
+          com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+        super(parent);
+        maybeForceBuilderInitialization();
+      }
+      private void maybeForceBuilderInitialization() {
+        if (com.google.protobuf.GeneratedMessageV3
+                .alwaysUseFieldBuilders) {
+        }
+      }
+      @java.lang.Override
+      public Builder clear() {
+        super.clear();
+        toId_ = 0L;
+
+        code_ = 0;
+
+        success_ = false;
+
+        msg_ = "";
+
+        return this;
+      }
+
+      @java.lang.Override
+      public com.google.protobuf.Descriptors.Descriptor
+          getDescriptorForType() {
+        return com.gm.link.common.grpc.PushGrpc.internal_static_PushResult_descriptor;
+      }
+
+      @java.lang.Override
+      public com.gm.link.common.grpc.PushGrpc.PushResult getDefaultInstanceForType() {
+        return com.gm.link.common.grpc.PushGrpc.PushResult.getDefaultInstance();
+      }
+
+      @java.lang.Override
+      public com.gm.link.common.grpc.PushGrpc.PushResult build() {
+        com.gm.link.common.grpc.PushGrpc.PushResult result = buildPartial();
+        if (!result.isInitialized()) {
+          throw newUninitializedMessageException(result);
+        }
+        return result;
+      }
+
+      @java.lang.Override
+      public com.gm.link.common.grpc.PushGrpc.PushResult buildPartial() {
+        com.gm.link.common.grpc.PushGrpc.PushResult result = new com.gm.link.common.grpc.PushGrpc.PushResult(this);
+        result.toId_ = toId_;
+        result.code_ = code_;
+        result.success_ = success_;
+        result.msg_ = msg_;
+        onBuilt();
+        return result;
+      }
+
+      @java.lang.Override
+      public Builder clone() {
+        return super.clone();
+      }
+      @java.lang.Override
+      public Builder setField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.setField(field, value);
+      }
+      @java.lang.Override
+      public Builder clearField(
+          com.google.protobuf.Descriptors.FieldDescriptor field) {
+        return super.clearField(field);
+      }
+      @java.lang.Override
+      public Builder clearOneof(
+          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+        return super.clearOneof(oneof);
+      }
+      @java.lang.Override
+      public Builder setRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          int index, java.lang.Object value) {
+        return super.setRepeatedField(field, index, value);
+      }
+      @java.lang.Override
+      public Builder addRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.addRepeatedField(field, value);
+      }
+      @java.lang.Override
+      public Builder mergeFrom(com.google.protobuf.Message other) {
+        if (other instanceof com.gm.link.common.grpc.PushGrpc.PushResult) {
+          return mergeFrom((com.gm.link.common.grpc.PushGrpc.PushResult)other);
+        } else {
+          super.mergeFrom(other);
+          return this;
+        }
+      }
+
+      public Builder mergeFrom(com.gm.link.common.grpc.PushGrpc.PushResult other) {
+        if (other == com.gm.link.common.grpc.PushGrpc.PushResult.getDefaultInstance()) return this;
+        if (other.getToId() != 0L) {
+          setToId(other.getToId());
+        }
+        if (other.code_ != 0) {
+          setCodeValue(other.getCodeValue());
+        }
+        if (other.getSuccess() != false) {
+          setSuccess(other.getSuccess());
+        }
+        if (!other.getMsg().isEmpty()) {
+          msg_ = other.msg_;
+          onChanged();
+        }
+        this.mergeUnknownFields(other.unknownFields);
+        onChanged();
+        return this;
+      }
+
+      @java.lang.Override
+      public final boolean isInitialized() {
+        return true;
+      }
+
+      @java.lang.Override
+      public Builder mergeFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        com.gm.link.common.grpc.PushGrpc.PushResult parsedMessage = null;
+        try {
+          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          parsedMessage = (com.gm.link.common.grpc.PushGrpc.PushResult) e.getUnfinishedMessage();
+          throw e.unwrapIOException();
+        } finally {
+          if (parsedMessage != null) {
+            mergeFrom(parsedMessage);
+          }
+        }
+        return this;
+      }
+
+      private long toId_ ;
+      /**
+       * <code>int64 to_id = 1;</code>
+       * @return The toId.
+       */
+      @java.lang.Override
+      public long getToId() {
+        return toId_;
+      }
+      /**
+       * <code>int64 to_id = 1;</code>
+       * @param value The toId to set.
+       * @return This builder for chaining.
+       */
+      public Builder setToId(long value) {
+        
+        toId_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>int64 to_id = 1;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearToId() {
+        
+        toId_ = 0L;
+        onChanged();
+        return this;
+      }
+
+      private int code_ = 0;
+      /**
+       * <code>.ResponseCode code = 2;</code>
+       * @return The enum numeric value on the wire for code.
+       */
+      @java.lang.Override public int getCodeValue() {
+        return code_;
+      }
+      /**
+       * <code>.ResponseCode code = 2;</code>
+       * @param value The enum numeric value on the wire for code to set.
+       * @return This builder for chaining.
+       */
+      public Builder setCodeValue(int value) {
+        
+        code_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>.ResponseCode code = 2;</code>
+       * @return The code.
+       */
+      @java.lang.Override
+      public com.gm.link.common.grpc.PushGrpc.ResponseCode getCode() {
+        @SuppressWarnings("deprecation")
+        com.gm.link.common.grpc.PushGrpc.ResponseCode result = com.gm.link.common.grpc.PushGrpc.ResponseCode.valueOf(code_);
+        return result == null ? com.gm.link.common.grpc.PushGrpc.ResponseCode.UNRECOGNIZED : result;
+      }
+      /**
+       * <code>.ResponseCode code = 2;</code>
+       * @param value The code to set.
+       * @return This builder for chaining.
+       */
+      public Builder setCode(com.gm.link.common.grpc.PushGrpc.ResponseCode value) {
+        if (value == null) {
+          throw new NullPointerException();
+        }
+        
+        code_ = value.getNumber();
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>.ResponseCode code = 2;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearCode() {
+        
+        code_ = 0;
+        onChanged();
+        return this;
+      }
+
+      private boolean success_ ;
+      /**
+       * <code>bool success = 3;</code>
+       * @return The success.
+       */
+      @java.lang.Override
+      public boolean getSuccess() {
+        return success_;
+      }
+      /**
+       * <code>bool success = 3;</code>
+       * @param value The success to set.
+       * @return This builder for chaining.
+       */
+      public Builder setSuccess(boolean value) {
+        
+        success_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>bool success = 3;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearSuccess() {
+        
+        success_ = false;
+        onChanged();
+        return this;
+      }
+
+      private java.lang.Object msg_ = "";
+      /**
+       * <code>string msg = 4;</code>
+       * @return The msg.
+       */
+      public java.lang.String getMsg() {
+        java.lang.Object ref = msg_;
+        if (!(ref instanceof java.lang.String)) {
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          msg_ = s;
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+      /**
+       * <code>string msg = 4;</code>
+       * @return The bytes for msg.
+       */
+      public com.google.protobuf.ByteString
+          getMsgBytes() {
+        java.lang.Object ref = msg_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          msg_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>string msg = 4;</code>
+       * @param value The msg to set.
+       * @return This builder for chaining.
+       */
+      public Builder setMsg(
+          java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  
+        msg_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>string msg = 4;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearMsg() {
+        
+        msg_ = getDefaultInstance().getMsg();
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>string msg = 4;</code>
+       * @param value The bytes for msg to set.
+       * @return This builder for chaining.
+       */
+      public Builder setMsgBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  checkByteStringIsUtf8(value);
+        
+        msg_ = value;
+        onChanged();
+        return this;
+      }
+      @java.lang.Override
+      public final Builder setUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return super.setUnknownFields(unknownFields);
+      }
+
+      @java.lang.Override
+      public final Builder mergeUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return super.mergeUnknownFields(unknownFields);
+      }
+
+
+      // @@protoc_insertion_point(builder_scope:PushResult)
+    }
+
+    // @@protoc_insertion_point(class_scope:PushResult)
+    private static final com.gm.link.common.grpc.PushGrpc.PushResult DEFAULT_INSTANCE;
+    static {
+      DEFAULT_INSTANCE = new com.gm.link.common.grpc.PushGrpc.PushResult();
+    }
+
+    public static com.gm.link.common.grpc.PushGrpc.PushResult getDefaultInstance() {
+      return DEFAULT_INSTANCE;
+    }
+
+    private static final com.google.protobuf.Parser<PushResult>
+        PARSER = new com.google.protobuf.AbstractParser<PushResult>() {
+      @java.lang.Override
+      public PushResult parsePartialFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return new PushResult(input, extensionRegistry);
+      }
+    };
+
+    public static com.google.protobuf.Parser<PushResult> parser() {
+      return PARSER;
+    }
+
+    @java.lang.Override
+    public com.google.protobuf.Parser<PushResult> getParserForType() {
+      return PARSER;
+    }
+
+    @java.lang.Override
+    public com.gm.link.common.grpc.PushGrpc.PushResult getDefaultInstanceForType() {
       return DEFAULT_INSTANCE;
     }
 
   }
 
   private static final com.google.protobuf.Descriptors.Descriptor
-    internal_static_PushRequest_descriptor;
+    internal_static_PushMessageBody_descriptor;
   private static final 
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-      internal_static_PushRequest_fieldAccessorTable;
+      internal_static_PushMessageBody_fieldAccessorTable;
   private static final com.google.protobuf.Descriptors.Descriptor
-    internal_static_PushResponse_descriptor;
+    internal_static_PushMessageBody_ExtEntry_descriptor;
   private static final 
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-      internal_static_PushResponse_fieldAccessorTable;
+      internal_static_PushMessageBody_ExtEntry_fieldAccessorTable;
   private static final com.google.protobuf.Descriptors.Descriptor
-    internal_static_BatchPushRequest_descriptor;
+    internal_static_Push2UserRequest_descriptor;
   private static final 
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-      internal_static_BatchPushRequest_fieldAccessorTable;
+      internal_static_Push2UserRequest_fieldAccessorTable;
   private static final com.google.protobuf.Descriptors.Descriptor
-    internal_static_BatchPushResponse_descriptor;
+    internal_static_Push2UserResponse_descriptor;
   private static final 
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-      internal_static_BatchPushResponse_fieldAccessorTable;
+      internal_static_Push2UserResponse_fieldAccessorTable;
   private static final com.google.protobuf.Descriptors.Descriptor
-    internal_static_BatchPushResponse_Result_descriptor;
+    internal_static_Push2UsersRequest_descriptor;
   private static final 
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-      internal_static_BatchPushResponse_Result_fieldAccessorTable;
+      internal_static_Push2UsersRequest_fieldAccessorTable;
+  private static final com.google.protobuf.Descriptors.Descriptor
+    internal_static_Push2UsersResponse_descriptor;
+  private static final 
+    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      internal_static_Push2UsersResponse_fieldAccessorTable;
+  private static final com.google.protobuf.Descriptors.Descriptor
+    internal_static_PushResult_descriptor;
+  private static final 
+    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      internal_static_PushResult_fieldAccessorTable;
 
   public static com.google.protobuf.Descriptors.FileDescriptor
       getDescriptor() {
@@ -4291,55 +5749,77 @@ public final class PushGrpc {
       descriptor;
   static {
     java.lang.String[] descriptorData = {
-      "\n\017push_grpc.proto\"h\n\013PushRequest\022\022\n\nfrom" +
-      "UserId\030\001 \001(\006\022\021\n\ttimeStamp\030\002 \001(\006\022\014\n\004toId\030" +
-      "\003 \001(\006\022\023\n\013messageType\030\004 \001(\005\022\017\n\007content\030\005 " +
-      "\001(\t\",\n\014PushResponse\022\017\n\007success\030\001 \001(\010\022\013\n\003" +
-      "msg\030\002 \001(\t\"n\n\020BatchPushRequest\022\022\n\nfromUse" +
-      "rId\030\001 \001(\006\022\021\n\ttimeStamp\030\002 \001(\006\022\r\n\005toIds\030\003 " +
-      "\003(\006\022\023\n\013messageType\030\004 \001(\005\022\017\n\007content\030\005 \001(" +
-      "\t\"u\n\021BatchPushResponse\022*\n\007results\030\001 \003(\0132" +
-      "\031.BatchPushResponse.Result\0324\n\006Result\022\014\n\004" +
-      "toId\030\001 \001(\006\022\017\n\007success\030\002 \001(\010\022\013\n\003msg\030\003 \001(\t" +
-      "2p\n\013PushService\022(\n\tPush2Link\022\014.PushReque" +
-      "st\032\r.PushResponse\0227\n\016BatchPush2Link\022\021.Ba" +
-      "tchPushRequest\032\022.BatchPushResponseB\031\n\027co" +
-      "m.gm.link.common.grpcb\006proto3"
+      "\n\017push_grpc.proto\"\333\001\n\017PushMessageBody\022\024\n" +
+      "\014from_user_id\030\001 \001(\003\022\022\n\ntime_stamp\030\002 \001(\003\022" +
+      "\024\n\014message_type\030\003 \001(\005\022\017\n\007content\030\004 \001(\t\022\020" +
+      "\n\010priority\030\005 \001(\005\022\021\n\texpire_at\030\006 \001(\003\022&\n\003e" +
+      "xt\030\007 \003(\0132\031.PushMessageBody.ExtEntry\032*\n\010E" +
+      "xtEntry\022\013\n\003key\030\001 \001(\t\022\r\n\005value\030\002 \001(\t:\0028\001\"" +
+      "D\n\020Push2UserRequest\022\r\n\005to_id\030\001 \001(\003\022!\n\007me" +
+      "ssage\030\002 \001(\0132\020.PushMessageBody\"N\n\021Push2Us" +
+      "erResponse\022\033\n\004code\030\001 \001(\0162\r.ResponseCode\022" +
+      "\017\n\007success\030\002 \001(\010\022\013\n\003msg\030\003 \001(\t\"F\n\021Push2Us" +
+      "ersRequest\022\016\n\006to_ids\030\001 \003(\003\022!\n\007message\030\002 " +
+      "\001(\0132\020.PushMessageBody\"l\n\022Push2UsersRespo" +
+      "nse\022\r\n\005total\030\001 \001(\005\022\025\n\rsuccess_count\030\002 \001(" +
+      "\005\022\022\n\nfail_count\030\003 \001(\005\022\034\n\007results\030\004 \003(\0132\013" +
+      ".PushResult\"V\n\nPushResult\022\r\n\005to_id\030\001 \001(\003" +
+      "\022\033\n\004code\030\002 \001(\0162\r.ResponseCode\022\017\n\007success" +
+      "\030\003 \001(\010\022\013\n\003msg\030\004 \001(\t*k\n\014ResponseCode\022\013\n\007S" +
+      "UCCESS\020\000\022\020\n\014USER_OFFLINE\020\001\022\024\n\020CHANNEL_IN" +
+      "ACTIVE\020\002\022\022\n\016FORWARD_FAILED\020\003\022\022\n\016INTERNAL" +
+      "_ERROR\020\0042x\n\013PushService\0222\n\tPush2User\022\021.P" +
+      "ush2UserRequest\032\022.Push2UserResponse\0225\n\nP" +
+      "ush2Users\022\022.Push2UsersRequest\032\023.Push2Use" +
+      "rsResponseB\031\n\027com.gm.link.common.grpcb\006p" +
+      "roto3"
     };
     descriptor = com.google.protobuf.Descriptors.FileDescriptor
       .internalBuildGeneratedFileFrom(descriptorData,
         new com.google.protobuf.Descriptors.FileDescriptor[] {
         });
-    internal_static_PushRequest_descriptor =
+    internal_static_PushMessageBody_descriptor =
       getDescriptor().getMessageTypes().get(0);
-    internal_static_PushRequest_fieldAccessorTable = new
+    internal_static_PushMessageBody_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
-        internal_static_PushRequest_descriptor,
-        new java.lang.String[] { "FromUserId", "TimeStamp", "ToId", "MessageType", "Content", });
-    internal_static_PushResponse_descriptor =
+        internal_static_PushMessageBody_descriptor,
+        new java.lang.String[] { "FromUserId", "TimeStamp", "MessageType", "Content", "Priority", "ExpireAt", "Ext", });
+    internal_static_PushMessageBody_ExtEntry_descriptor =
+      internal_static_PushMessageBody_descriptor.getNestedTypes().get(0);
+    internal_static_PushMessageBody_ExtEntry_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+        internal_static_PushMessageBody_ExtEntry_descriptor,
+        new java.lang.String[] { "Key", "Value", });
+    internal_static_Push2UserRequest_descriptor =
       getDescriptor().getMessageTypes().get(1);
-    internal_static_PushResponse_fieldAccessorTable = new
+    internal_static_Push2UserRequest_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
-        internal_static_PushResponse_descriptor,
-        new java.lang.String[] { "Success", "Msg", });
-    internal_static_BatchPushRequest_descriptor =
+        internal_static_Push2UserRequest_descriptor,
+        new java.lang.String[] { "ToId", "Message", });
+    internal_static_Push2UserResponse_descriptor =
       getDescriptor().getMessageTypes().get(2);
-    internal_static_BatchPushRequest_fieldAccessorTable = new
+    internal_static_Push2UserResponse_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
-        internal_static_BatchPushRequest_descriptor,
-        new java.lang.String[] { "FromUserId", "TimeStamp", "ToIds", "MessageType", "Content", });
-    internal_static_BatchPushResponse_descriptor =
+        internal_static_Push2UserResponse_descriptor,
+        new java.lang.String[] { "Code", "Success", "Msg", });
+    internal_static_Push2UsersRequest_descriptor =
       getDescriptor().getMessageTypes().get(3);
-    internal_static_BatchPushResponse_fieldAccessorTable = new
+    internal_static_Push2UsersRequest_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
-        internal_static_BatchPushResponse_descriptor,
-        new java.lang.String[] { "Results", });
-    internal_static_BatchPushResponse_Result_descriptor =
-      internal_static_BatchPushResponse_descriptor.getNestedTypes().get(0);
-    internal_static_BatchPushResponse_Result_fieldAccessorTable = new
+        internal_static_Push2UsersRequest_descriptor,
+        new java.lang.String[] { "ToIds", "Message", });
+    internal_static_Push2UsersResponse_descriptor =
+      getDescriptor().getMessageTypes().get(4);
+    internal_static_Push2UsersResponse_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
-        internal_static_BatchPushResponse_Result_descriptor,
-        new java.lang.String[] { "ToId", "Success", "Msg", });
+        internal_static_Push2UsersResponse_descriptor,
+        new java.lang.String[] { "Total", "SuccessCount", "FailCount", "Results", });
+    internal_static_PushResult_descriptor =
+      getDescriptor().getMessageTypes().get(5);
+    internal_static_PushResult_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+        internal_static_PushResult_descriptor,
+        new java.lang.String[] { "ToId", "Code", "Success", "Msg", });
   }
 
   // @@protoc_insertion_point(outer_class_scope)
